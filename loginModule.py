@@ -37,10 +37,15 @@ def index():
         return redirect('login')
 
 def employeeMenu():
+    messageTable = {}
+    messageTable['author'] = databaseFunctions.getTop100MessageAuthors()
+    messageTable['time'] = databaseFunctions.getTop100MessageTimes()
+    messageTable['content'] = databaseFunctions.getTop100MessageContents()
+    messageTable = [dict(author=a, time=t, content=c) for a, t, c in zip(messageTable['author'], messageTable['time'], messageTable['content'])]
 
     if session.get('isLoggedIn'):
         if session.get('sessionType') == 'employee':
-            return render_template('employeeMenu.html', currentUserFirstName = session.get('currentUserFirstName'))
+            return render_template('employeeMenu.html', currentUserFirstName = session.get('currentUserFirstName'), messageTable = messageTable)
         elif session.get('sessionType') == 'administrator':
             return redirect('administratorMenu')
         elif session.get('sessionType') == 'master':
@@ -56,14 +61,13 @@ def administratorMenu():
         if session.get('sessionType') == 'employee':
             return redirect('employeeMenu')
         elif session.get('sessionType') == 'administrator':
-            return "Hello Administrator!  <a href='/logout'>Logout</a>"
+            return render_template('adminMenu.html')
+        #"Hello Administrator!  <a href='/logout'>Logout</a>"
         elif session.get('sessionType') == 'master':
             return redirect('masterMenu')
         else: 
             logMessage('Unhandled Expection @ administratorMenu()')
             return redirect('login')
-
-
     else:
         return redirect('login')
 

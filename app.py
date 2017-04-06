@@ -3,7 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 from sqlalchemy.orm import sessionmaker, scoped_session
 import datetime
 from sqlalchemy import text, create_engine
-import sqlalchemy
+import sqlalchemy 
 import sys
 import databaseFunctions
 import loginModule
@@ -16,13 +16,14 @@ import patronViewModule
 
 
 app = Flask(__name__)
-app.secret_key = os.urandom(12)
+
+engine = create_engine('sqlite:///RockWall.db', echo=True)
 
 #########################################################################
 ###                                                                   ###
 ###                         Login                                     ###
 ###                                                                   ###
-#########################################################################
+######################################################################### 
 
 @app.route('/')
 def index():
@@ -31,6 +32,10 @@ def index():
 @app.route('/employeeMenu')
 def employeeMenu():
     return loginModule.employeeMenu()
+
+@app.route('/employeeAddMessage', methods=['GET', 'POST'])
+def addMessage():
+    return messageModule.addMessage()
 
 @app.route('/administratorMenu')
 def administratorMenu():
@@ -51,15 +56,15 @@ def login():
 @app.route('/loginRoute', methods=['POST'])
 def loginRoute():
     return loginModule.loginRoute()
-
+ 
 @app.route('/createAccount')
 def createAccount():
     return loginModule.createAccount()
 
 @app.route('/createAccountRoute', methods=['POST'])
-def createAccountRoute():
+def createAccountRoute(): 
     return loginModule.createAccountRoute()
-
+    
 @app.route('/authenticateCreateAccount', methods=['POST'])
 def authenticateCreateAccount():
     return loginModule.authenticateCreateAccount()
@@ -80,7 +85,7 @@ def authenticateChangePassword():
 ###                                                                   ###
 ###                        Inventory                                  ###
 ###                                                                   ###
-#########################################################################
+######################################################################### 
 
 @app.route('/inventory')
 def inventory():
@@ -110,11 +115,11 @@ def inventoryEdit():
 ###                                                                   ###
 ###                         Calendar                                  ###
 ###                                                                   ###
-#########################################################################
+######################################################################### 
 
 @app.route('/calendar')
 def calendar():
-    return calendarModule.calendar()
+    return calendarModule.calendar() 
 
 @app.route('/calendarUpdate', methods=['GET', 'POST'])
 def calendarUpdate():
@@ -132,21 +137,21 @@ def calendarInsert():
 ###                                                                   ###
 ###                           Message                                 ###
 ###                                                                   ###
-#########################################################################
+######################################################################### 
 
-@app.route('/message')
-def message():
-    return messageModule.message()
+#@app.route('/message')
+#def message():
+#    return messageModule.message()
 
-@app.route('/addMessage', methods=['GET', 'POST'])
-def addMessage():
-    return messageModule.addMessage()
+#@app.route('/addMessage', methods=['GET', 'POST'])
+#def addMessage():
+#    return messageModule.addMessage()
 
 #########################################################################
 ###                                                                   ###
 ###                            Patron                                 ###
 ###                                                                   ###
-#########################################################################
+######################################################################### 
 
 @app.route('/patronSignUp')
 def patronSignUp():
@@ -193,7 +198,7 @@ def storeImage():
 ###                                                                   ###
 ###                          Reporting                                ###
 ###                                                                   ###
-#########################################################################
+######################################################################### 
 @app.route('/reporting')
 def reporting():
     return reportingModule.reporting()
@@ -206,11 +211,11 @@ def addIncidentRoute():
 ###                                                                   ###
 ###                        Patron View                                ###
 ###                                                                   ###
-#########################################################################
+######################################################################### 
 @app.route('/patronViewEmployee')
 def patronViewEmployee():
     return patronViewModule.patronViewEmployee()
 
-if __name__ == '__main__':
-    app.debug = True
-    app.run()
+if __name__ == "__main__":
+    app.secret_key = os.urandom(12)
+    app.run(debug=False,host='0.0.0.0', port=4000)

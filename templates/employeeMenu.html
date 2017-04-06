@@ -78,59 +78,54 @@
             You do not need to use widgets if you dont want to. Simply remove
             the <section></section> and you can use wells or panels instead
             -->
+        <section id="widget-grid" class="">
+            <div class="row">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-envelope"></i> </span>
+                            <h2 style="line-height:15px"><strong>Message Center</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body">
+                                <div id="chat-body" class="chat-body custom-scroll" style="height: 500px;">
+                                    <ul>
+                                        {% for row in messageTable %}
+                                        <li class="message">
+                                            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+                                            <br />
+                                            <div class="message-text">
+                                                <time style="color:yellow; font-size: 13px; font-weight:bolder">
+                                                    {{ row['time'] }}
+                                                </time> <a href="javascript:void(0);" style="color:yellow; font-size: 15px; font-weight:bolder" class="username">{{ row['author'] }}</a> <br />{{ row['content'] }}
+                                            </div>
+                                            <hr>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="chat-footer">
+                                    <div class="textarea-div">
+                                        <div class="typearea">
+                                            <textarea class="form-control" placeholder="Write a message..." rows="3" maxlength="2500" id="content" name="content"></textarea>
+                                        </div>
+                                    </div>
+                                    <span class="textarea-controls">
+                                        <button class="btn btn-sm btn-primary pull-right" id="addMessage">
+                                            Send
+                                        </button> <span class="pull-right smart-form" style="margin-top: 3px; margin-right: 10px;"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
     </div>
     <!-- END MAIN CONTENT -->
 </div>
 <!-- END MAIN PANEL -->
-<!-- PAGE FOOTER -->
-<div class="page-footer">
-    <div class="row">
-        <div class="col-xs-6 col-sm-6 text-right hidden-xs">
-            <div class="txt-color-white inline-block">
-                <i class="txt-color-blueLight hidden-mobile">Last account activity <i class="fa fa-clock-o"></i> <strong>52 mins ago &nbsp;</strong> </i>
-                <div class="btn-group dropup">
-                    <button class="btn btn-xs dropdown-toggle bg-color-blue txt-color-white" data-toggle="dropdown">
-                        <i class="fa fa-link"></i> <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu pull-right text-left">
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Download Progress</p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-success" style="width: 50%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Server Load</p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-success" style="width: 20%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <p class="txt-color-darken font-sm no-margin">Memory Load <span class="text-danger">*critical*</span></p>
-                                <div class="progress progress-micro no-margin">
-                                    <div class="progress-bar progress-bar-danger" style="width: 70%;"></div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <div class="padding-5">
-                                <button class="btn btn-block btn-default">refresh</button>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <div id="bigBox" class="bigBox animated fadeIn fast" style="background-color: rgb(50, 118, 177);">
     <div id="bigBoxColor2">
@@ -166,6 +161,22 @@
     $(document).keypress(function () {
         $(".pageError").remove();
     });
+
+    $('#addMessage').click(function () {
+        let content = document.getElementsByName("content")[0].value;
+        runAddMessagePython(content);
+        location.reload();
+    });
+
+    function runAddMessagePython(aContent) {
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "/employeeAddMessage",
+            data: { content: aContent },
+            async: false
+        });
+        return jqXHR.responseText;
+    }
 
 </script>
 

@@ -26,7 +26,7 @@ def message():
     messageTable['time'] = databaseFunctions.getTop100MessageTimes()
     messageTable['content'] = databaseFunctions.getTop100MessageContents()
     messageTable = [dict(author=a, time=t, content=c) for a, t, c in zip(messageTable['author'], messageTable['time'], messageTable['content'])]
-    return render_template("message.html", messageTable = messageTable)
+    return render_template("employeeMenu.html", messageTable = messageTable)
 
 def addMessage():
     currentUserFullName = session.get('currentUserFirstName') + ' ' + session.get('currentUserLastName')
