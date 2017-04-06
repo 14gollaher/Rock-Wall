@@ -16,8 +16,7 @@ import patronViewModule
 
 
 app = Flask(__name__)
-
-engine = create_engine('sqlite:///RockWall.db', echo=True)
+app.secret_key = os.urandom(12)
 
 #########################################################################
 ###                                                                   ###
