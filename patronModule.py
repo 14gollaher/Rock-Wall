@@ -10,7 +10,7 @@ import databaseFunctions
 import simplejson as json
 
 class Patron:
-    def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state):
+    def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, isSoloClimbCertified):
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -22,6 +22,8 @@ class Patron:
         self.zipCode = zipCode
         self.waiverFile = waiverFile
         self.state = state
+        self.isBelayCertified = isBelayCertified
+        self.isSoloClimbCertified = isSoloClimbCertified
 
 def patronSignUp():
     return render_template('patron/patronSignUp.html')
@@ -36,7 +38,7 @@ def patronCheckInRoute():
     pass2 = []
     pass2.append('F')
     pass2 = json.dumps(pass2)
-    patronAccount = Patron(str(request.form['patronId']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"")
+    patronAccount = Patron(str(request.form['patronId']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"", False, False)
     session['currentPatronId'] = patronAccount.id
     if validateCredentials(patronAccount): 
         session['isCheckedIn'] = True
@@ -60,7 +62,7 @@ def patronCheckInRoute():
 
 
 def patronCheckInRoute2():
-    patronAccount = Patron(str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), str(request.form['email']), str(request.form['phoneNumber']), str(request.form['gender']), str(request.form['address']),  str(request.form['city']), str(request.form['zipCode']), '', str(request.form['state']))
+    patronAccount = Patron(str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), str(request.form['email']), str(request.form['phoneNumber']), str(request.form['gender']), str(request.form['address']),  str(request.form['city']), str(request.form['zipCode']), '', str(request.form['state']), False, False)
     databaseFunctions.editPatronAccount(patronAccount)
     return redirect('patronCheckIn')
 
@@ -73,7 +75,7 @@ def validateCredentials(patronAccount):
 def patronSignUpRoute(): 
     session['messagePatronSignUp'] = ""
 
-    patronAccount = Patron(str(request.form['id']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"")
+    patronAccount = Patron(str(request.form['id']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"", False, False)
 
     if databaseFunctions.getPatronId(patronAccount):
         session['messagePatronSignUp'] = 'Id already exists!'
@@ -99,7 +101,7 @@ def createPatronAccountRoute():
     
     file = open("sysSig.bteam", "r")
     waiverUrl = file.read()
-    newPatron = Patron(session.get('newPatronId'), session.get('newPatronFirstName'), session.get('newPatronLastName'), session.get('newPatronEmail'), session.get('newPatronPhoneNumber'), session.get('newPatronGender'), session.get('newPatronAddress'), session.get('newPatronCity'), session.get('newPatronZipCode'), waiverUrl, session.get('newPatronState'))
+    newPatron = Patron(session.get('newPatronId'), session.get('newPatronFirstName'), session.get('newPatronLastName'), session.get('newPatronEmail'), session.get('newPatronPhoneNumber'), session.get('newPatronGender'), session.get('newPatronAddress'), session.get('newPatronCity'), session.get('newPatronZipCode'), waiverUrl, session.get('newPatronState'), False, False)
     databaseFunctions.insertNewPatron(newPatron)
     file.close()
 

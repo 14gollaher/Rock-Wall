@@ -8,7 +8,7 @@
                 <a href="employeeMenu"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Dashboard</span></a>
             </li>
             <li>
-                <a href="patronEmployee"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
+                <a href="patronViewEmployee"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
             </li>
             <li class="active">
                 <a href="inventory"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Inventory</span></a>
@@ -379,23 +379,6 @@
             else {
                 let splitResult = $(this).context.innerText.split("\"");
                 selectedId = splitResult[1];
-                var checkOutSplit = splitResult[2].split(/\s+/);
-                selectedIsCheckOut = checkOutSplit[checkOutSplit.length - 1];
-
-                var otherSplit = splitResult[2].split(/\s+/);
-                selectedName = otherSplit[1];
-                selectedDescription = otherSplit[2];
-
-
-                if (otherSplit.length == 4) {
-                    selectedRetirementDate = "";
-
-                }
-                else if (otherSplit.length == 5) {
-                    selectedRetirementDate = otherSplit[3];
-                }
-
-                debugger;
 
                 table.$('tr.selected').removeClass('rowSelect');
                 table.$('tr.selected').removeClass('selected');
@@ -416,6 +399,16 @@
         })
 
         $('#editInventoryItem').click(function () {
+            let selectedRow = document.querySelectorAll(".selected");
+            selectedRow = selectedRow[0].textContent.split("\n");
+
+            selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
+            selectedName = selectedRow[2].trim(" ");
+            selectedDescription = selectedRow[3].trim(" ");
+            selectedRetirementDate = selectedRow[4].trim(" ");
+            selectedIsCheckOut = selectedRow[6].trim(" ");
+
+            debugger;
             document.getElementById("selectedId").value = selectedId;
             document.getElementById("selectedName").value = selectedName;
             document.getElementById("selectedDescription").value = selectedDescription;

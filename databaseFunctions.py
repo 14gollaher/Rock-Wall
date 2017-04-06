@@ -101,8 +101,8 @@ def getHighestMessageId():
 ###                                                                   ###
 #########################################################################
 def insertNewPatron(Patron):
-    sqlText = text("INSERT INTO Patron VALUES (:id, :firstName, :lastName, :email, :phoneNumber, :gender, :address, :city, :zipCode, :waiverFile, :state)")
-    engine.execute(sqlText, {"id": Patron.id, "firstName": Patron.firstName, "lastName": Patron.lastName, "email": Patron.email, "phoneNumber": Patron.phoneNumber, "gender": Patron.gender, "address": Patron.address, "city": Patron.city, "zipCode": Patron.zipCode, "waiverFile": Patron.waiverFile, "state": Patron.state})
+    sqlText = text("INSERT INTO Patron VALUES (:id, :firstName, :lastName, :email, :phoneNumber, :gender, :address, :city, :zipCode, :waiverFile, :state, :isBelayCertified, :isSoloClimbCertified)")
+    engine.execute(sqlText, {"id": Patron.id, "firstName": Patron.firstName, "lastName": Patron.lastName, "email": Patron.email, "phoneNumber": Patron.phoneNumber, "gender": Patron.gender, "address": Patron.address, "city": Patron.city, "zipCode": Patron.zipCode, "waiverFile": Patron.waiverFile, "state": Patron.state, "isBelayCertified": "False", "isSoloClimbCertified": "False"})
 
 
 def getPatronId(Patron):
@@ -130,7 +130,7 @@ def getAllPatronIds():
 
 def getAllPatronFirstNames():
     with engine.connect() as connection:
-        sqlText = text("SELECT FirstName FROM Patron ORDER by FirstName")
+        sqlText = text("SELECT FirstName FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         firstNames = []
     
@@ -144,7 +144,7 @@ def getAllPatronFirstNames():
 
 def getAllPatronLastNames():
     with engine.connect() as connection:
-        sqlText = text("SELECT LastName FROM Patron ORDER by LastName")
+        sqlText = text("SELECT LastName FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         lastNames = []
     
@@ -158,7 +158,7 @@ def getAllPatronLastNames():
 
 def getAllPatronEmails():
     with engine.connect() as connection:
-        sqlText = text("SELECT Email FROM Patron ORDER by Email")
+        sqlText = text("SELECT Email FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         emails = []
     
@@ -172,7 +172,7 @@ def getAllPatronEmails():
 
 def getAllPatronPhoneNumbers():
     with engine.connect() as connection:
-        sqlText = text("SELECT PhoneNumber FROM Patron ORDER by PhoneNumber")
+        sqlText = text("SELECT PhoneNumber FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         phoneNumbers = []
     
@@ -186,7 +186,7 @@ def getAllPatronPhoneNumbers():
 
 def getAllPatronGenders():
     with engine.connect() as connection:
-        sqlText = text("SELECT Gender FROM Patron ORDER by Gender")
+        sqlText = text("SELECT Gender FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         genders = []
     
@@ -200,7 +200,7 @@ def getAllPatronGenders():
 
 def getAllPatronAddresses():
     with engine.connect() as connection:
-        sqlText = text("SELECT Address FROM Patron ORDER by Address")
+        sqlText = text("SELECT Address FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         addresses = []
     
@@ -214,7 +214,7 @@ def getAllPatronAddresses():
 
 def getAllPatronCities():
     with engine.connect() as connection:
-        sqlText = text("SELECT City FROM Patron ORDER by City")
+        sqlText = text("SELECT City FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         cities = []
     
@@ -228,7 +228,7 @@ def getAllPatronCities():
 
 def getAllPatronZipCodes():
     with engine.connect() as connection:
-        sqlText = text("SELECT Zip FROM Patron ORDER by Zip")
+        sqlText = text("SELECT Zip FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         zips = []
     
@@ -242,7 +242,7 @@ def getAllPatronZipCodes():
 
 def getAllPatronStates():
     with engine.connect() as connection:
-        sqlText = text("SELECT State FROM Patron ORDER by State")
+        sqlText = text("SELECT State FROM Patron ORDER by Id")
         result = engine.execute(sqlText)
         states = []
     
@@ -253,6 +253,34 @@ def getAllPatronStates():
             return None
         else:	
             return states
+
+def getAllPatronBelayCertifications():
+    with engine.connect() as connection:
+        sqlText = text("SELECT IsBelayCertified FROM Patron ORDER by Id")
+        result = engine.execute(sqlText)
+        isBelayCertifications = []
+    
+        for row in result:
+            isBelayCertifications.append(row[0])    
+
+        if not isBelayCertifications:
+            return None
+        else:	
+            return isBelayCertifications
+
+def getAllPatronSoloClimbCertifications():
+    with engine.connect() as connection:
+        sqlText = text("SELECT IsSoloClimbCertified FROM Patron ORDER by Id")
+        result = engine.execute(sqlText)
+        isSoloClimbCertifications = []
+    
+        for row in result:
+            isSoloClimbCertifications.append(row[0])    
+
+        if not isSoloClimbCertifications:
+            return None
+        else:	
+            return isSoloClimbCertifications
 
 def editPatronAccount(PatronItem):
     sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber , Gender = :gender , Address = :address , City = :city , Zip = :zipCode, State =:state  WHERE Id = :id")

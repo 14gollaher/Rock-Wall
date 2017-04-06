@@ -143,7 +143,7 @@
     $(document).ready(function () {
         pageSetUp();
         let previousUrl = document.referrer;
-        if (previousUrl == "http://localhost:4000/login") {
+        if (previousUrl == "http://localhost:4000/login" || previousUrl == "http://www.matthewgollaher/login") {
             $('.bigBox').show();
             setTimeout(function () {
                 $('.bigBox').hide();
