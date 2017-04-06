@@ -1,0 +1,121 @@
+html{
+	position:relative; /* sets the whole page to be relative so the footer can stick to the bottom */
+	min-height:100%; /* used for sticky footer; makes the whole page take up the full window height */
+}
+
+body {
+  background-color: #eee;
+  padding-bottom:140px; /* the height of the sticky footer */
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: normal;
+}
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.page-header{
+	background-image: url(../images/bg.jpg);
+	background-color: #104288;
+    background-position: center 0;
+    background-repeat: no-repeat;	
+	height: 140px;
+	margin: 0;
+	/*padding:70px; */ /* removed per moving the logo into a img tag */
+}
+.check {
+    margin-bottom: 10px;
+}
+
+.fl-label {
+    padding-top: 8px;
+}
+
+#logo  img{
+	margin: 40px 0 0 80px;
+}
+
+.ir {
+height: 80px;
+}
+
+.well {
+	margin-top: 40px;
+	/*width: 400px; */ /*removed 7/5/16 in order to make well to be dynamic */
+	margin-bottom: 40px;
+	
+}
+.sub-container {
+	width:80%;
+    max-width: 400px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+footer {
+	background: #104288 url(../images/bg-footer.png) repeat-x 0 0;
+	height:140px;
+	color:#FFFFFF !important;
+	position:absolute !important;
+	bottom:0 !important;
+}
+
+footer a{
+	color:#FFFFFF !important;
+}
+
+footer p{
+	padding:20px 70px;
+}
+
+/* add yellow button color */
+.btn-yellow{
+	background-color: #ffa300 !important;
+	border: 2px solid #ff9101 !important;
+}
+
+.btn-yellow:hover{
+	background-color: #e47f0d !important;
+    border-color: transparent transparent #da790c !important;
+}
+
+/* overwrite error text, remove backgorund and make red */
+.errors {
+    background-color: transparent !important;
+    color: red;
+}
+
+/* logout page */
+.sub-container .success{
+	background-color:transparent !important; /*overwrites the addes dynamic styles to the success class */
+}
+
+/* end of logout page */

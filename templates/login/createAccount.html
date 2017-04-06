@@ -1,0 +1,151 @@
+{% extends "layout.html" %}
+{%block body %}
+
+<!-- MAIN CONTENT -->
+<div id="content" class="container" style="padding-top: 100px; margin-left: 30%;">
+    <div class="col-md-8">
+        <div class="well no-padding">
+            <form action="createAccountRoute" method="post" id="form-createAccount" class="smart-form client-form">
+                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+                    Account Creation
+                </header>
+                <fieldset>
+                    <section>
+                        {% if messageCreateAccount %}
+                        <div class="pageError" style="color: white">
+                            {{ messageCreateAccount }}
+                        </div>
+                        {% endif %}
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-envelope"></i>
+                            <input type="email" name="firstName" id="firstName" placeholder="First Name">
+                            <b class="tooltip tooltip-bottom-right">Needed to identify you</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-envelope"></i>
+                            <input type="text" name="lastName" id="lastName" placeholder="Last Name">
+                            <b class="tooltip tooltip-bottom-right">Needed to identify you</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-envelope"></i>
+                            <input type="email" name="email" id="email" placeholder="Email Address">
+                            <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-lock"></i>
+                            <input type="password" name="password" id="password" placeholder="Password">
+                            <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-lock"></i>
+                            <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm password">
+                            <b class="tooltip tooltip-bottom-right">Don't forget to confirm password</b>
+                        </label>
+                    </section>
+                    <section>
+                        <select class="form-control" name="accountType" id="accountType">
+                            <option value="">Choose an Account Type</option>
+                            <option value="employee">Employee</option>
+                            <option value="administrator">Administrator</option>
+                        </select>
+                    </section>
+                </fieldset>
+                <footer>
+                    <button type="submit" class="btn btn-primary" style="float: left">
+                        Request Account
+                    </button>
+                    <a href="login">
+                        <input type="button" class="btn btn-primary" value="Back to Login" style="float: right" />
+                    </a>
+                    <a href="changePassword">
+                        <input type="button" class="btn btn-primary" value="Forgot/Change Password" style="float: right" />
+                    </a>
+                </footer>
+                <div class="message">
+                    <i class="fa fa-check"></i>
+                    <p>
+                        Thank you for your registration!
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).keypress(function () {
+        $(".pageError").remove();
+    });
+
+    runAllForms();
+
+    $(function () {
+        $("#form-createAccount").validate({
+            rules: {
+                firstName: {
+                    required: true,
+                },
+                lastName: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                password: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 20
+                },
+                confirmPassword: {
+                    required: true,
+                    equalTo: '#password'
+                },
+                accountType: {
+                    required: true
+                }
+            },
+
+            messages: {
+                firstName: {
+                    required: 'Please enter your first name'
+                },
+                lastName: {
+                    required: 'Please enter your last name'
+                },
+                email: {
+                    required: 'Please enter your email address',
+                    email: 'Please enter a VALID email address'
+                },
+                password: {
+                    required: 'Please enter your password',
+                    minLength: 'Password may not be less than 6 characters',
+                    maxlength: 'Password may not be longer than 20 characters'
+                },
+                confirmPassword: {
+                    required: 'Please enter your password one more time',
+                    equalTo: 'Please enter the same password as above'
+                },
+                accountType: {
+                    required: 'Please select an account type'
+                }
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+</script>
+
+{% endblock %}

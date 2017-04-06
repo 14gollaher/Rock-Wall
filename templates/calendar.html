@@ -1,0 +1,528 @@
+﻿{% extends "layout.html" %}
+{% block body %}
+
+<aside id="left-panel" style="height:280px; min-height:0px;">
+    <nav>
+        <ul>
+            <li>
+                <a href="employeeMenu"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Dashboard</span></a>
+            </li>
+            <li>
+                <a href="patronEmployee"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
+            </li>
+            <li>
+                <a href="inventory"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Inventory</span></a>
+            </li>
+            <li>
+                <a href="reportingEmployee"><i class="fa fa-lg fa-fw fa-exclamation"></i> <span class="menu-item-parent">Reporting</span></a>
+            </li>
+            <li class="active">
+                <a href="calendar"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Calendar</span></a>
+            </li>
+            <li>
+                <a href="message"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Messages</span> <span class="badge pull-right inbox-badge margin-right-13">14</span></a>
+            </li>
+            <li>
+                <a href="logout"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Logout</span></a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+<!-- MAIN PANEL -->
+<div id="main" role="main">
+    <!-- MAIN CONTENT -->
+    <div id="content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                <h1 class="page-title txt-color-blueDark">
+                    <break>
+                        <i class="fa fa-calendar fa-fw "></i>
+                    </break>
+                    Calendar
+                </h1>
+            </div>
+        </div>
+        <!-- row -->
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-3">
+                <!-- new widget -->
+                <div class="jarviswidget jarviswidget-color-blueDark">
+                    <!-- widget div-->
+                    <div>
+                        <div class="widget-body">
+                            <!-- content goes here -->
+                            <style>
+                                label.btn.btn-default.active {
+                                    background-color: lightblue;
+                                }
+                            </style>
+                            <form id="add-event-form">
+                                <fieldset>
+                                    <div class="form-group">
+                                        <label>Select Event Icon</label>
+                                        <div class="btn-group btn-group-sm btn-group-justified" data-toggle="buttons">
+                                            <label class="btn btn-default active">
+                                                <input type="radio" name="iconselect" id="icon-1" value="fa-info" checked>
+                                                <i class="fa fa-info text-muted"></i>
+                                            </label>
+                                            <label class="btn btn-default">
+                                                <input type="radio" name="iconselect" id="icon-2" value="fa-warning">
+                                                <i class="fa fa-warning text-muted"></i>
+                                            </label>
+                                            <label class="btn btn-default">
+                                                <input type="radio" name="iconselect" id="icon-3" value="fa-check">
+                                                <i class="fa fa-check text-muted"></i>
+                                            </label>
+                                            <label class="btn btn-default">
+                                                <input type="radio" name="iconselect" id="icon-4" value="fa-user">
+                                                <i class="fa fa-user text-muted"></i>
+                                            </label>
+                                            <label class="btn btn-default">
+                                                <input type="radio" name="iconselect" id="icon-5" value="fa-lock">
+                                                <i class="fa fa-lock text-muted"></i>
+                                            </label>
+                                            <label class="btn btn-default">
+                                                <input type="radio" name="iconselect" id="icon-6" value="fa-clock-o">
+                                                <i class="fa fa-clock-o text-muted"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Event Title</label>
+                                        <input class="form-control" id="title" name="title" maxlength="40" type="text" placeholder="Title">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Event Date</label>
+                                        <input class="form-control" id="datepicker" name="datepicker" type="text" placeholder="Date">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Event Time</label>
+                                        <input class="form-control" id="timepicker" name="timepicker" type="text" placeholder="Time">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Event Description</label>
+                                        <textarea class="form-control" placeholder="Please be brief" rows="3" maxlength="40" id="description"></textarea>
+                                        <p class="note">Max description is 40 characters</p>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Select Event Color</label>
+                                        <div class="btn-group btn-group-justified btn-select-tick" data-toggle="buttons">
+                                            <label class="btn bg-color-darken active">
+                                                <input type="radio" name="priority" id="option1" value="bg-color-darken txt-color-white" checked>
+                                                <i class="fa fa-check txt-color-white"></i>
+                                            </label>
+                                            <label class="btn bg-color-blue">
+                                                <input type="radio" name="priority" id="option2" value="bg-color-blue txt-color-white">
+                                                <i class="fa fa-check txt-color-white"></i>
+                                            </label>
+                                            <label class="btn bg-color-orange">
+                                                <input type="radio" name="priority" id="option3" value="bg-color-orange txt-color-white">
+                                                <i class="fa fa-check txt-color-white"></i>
+                                            </label>
+                                            <label class="btn bg-color-greenLight">
+                                                <input type="radio" name="priority" id="option4" value="bg-color-greenLight txt-color-white">
+                                                <i class="fa fa-check txt-color-white"></i>
+                                            </label>
+                                            <label class="btn bg-color-blueLight">
+                                                <input type="radio" name="priority" id="option5" value="bg-color-blueLight txt-color-white">
+                                                <i class="fa fa-check txt-color-white"></i>
+                                            </label>
+                                            <label class="btn bg-color-red">
+                                                <input type="radio" name="priority" id="option6" value="bg-color-red txt-color-white">
+                                                <i class="fa fa-check txt-color-white"></i>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <button class="btn btn-default" type="button" id="add-event">
+                                                Add Event
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <style>
+                    .fc-view {
+                        width: 100%;
+                        overflow: visible;
+                    }
+                </style>
+                <div class="well well-sm" id="calendarTrash">
+                    Delete Events
+                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    <br />
+                    <div class="note">
+                        <strong>Note:</strong> Drag and drop events here to delete them<br /><br /><br /><br />&nbsp;
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-9">
+                <div class="jarviswidget jarviswidget-color-blueDark">
+                    <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+                        <!-- widget options:
+                        usage: <div class="jarviswidget" id="wid-id-0" data-widget-editbutton="false">
+
+                        data-widget-colorbutton="false"
+                        data-widget-editbutton="false"
+                        data-widget-togglebutton="false"
+                        data-widget-deletebutton="false"
+                        data-widget-fullscreenbutton="false"
+                        data-widget-custombutton="false"
+                        data-widget-collapsed="true"
+                        data-widget-sortable="false"
+
+                        <!-- widget div-->
+                        <div>
+                            <div class="widget-body no-padding">
+                                <!-- content goes here -->
+                                <div class="widget-body-toolbar">
+                                    <div id="calendar-buttons">
+                                        <div class="btn-group">
+                                            <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-prev"><i class="fa fa-chevron-left"></i></a>
+                                            <a href="javascript:void(0)" class="btn btn-default btn-xs" id="btn-next"><i class="fa fa-chevron-right"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="calendar"></div>
+                                <!-- end content -->
+                            </div>
+                        </div>
+                        <!-- end widget div -->
+                    </div>
+                </div>
+                <!-- end widget -->
+            </div>
+        </div>
+        <!-- end row -->
+    </div>
+    <!-- END MAIN CONTENT -->
+</div>
+<!-- END MAIN PANEL -->
+<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
+Note: These tiles are completely responsive,
+you can add as many as you like
+-->
+<div id="shortcut">
+    <ul>
+        <li>
+            <a href="inbox.html" class="jarvismetro-tile big-cubes bg-color-blue"> <span class="iconbox"> <i class="fa fa-envelope fa-4x"></i> <span>Mail <span class="label pull-right bg-color-darken">14</span></span> </span> </a>
+        </li>
+        <li>
+            <a href="calendar.html" class="jarvismetro-tile big-cubes bg-color-orangeDark"> <span class="iconbox"> <i class="fa fa-calendar fa-4x"></i> <span>Calendar</span> </span> </a>
+        </li>
+        <li>
+            <a href="gmap-xml.html" class="jarvismetro-tile big-cubes bg-color-purple"> <span class="iconbox"> <i class="fa fa-map-marker fa-4x"></i> <span>Maps</span> </span> </a>
+        </li>
+        <li>
+            <a href="invoice.html" class="jarvismetro-tile big-cubes bg-color-blueDark"> <span class="iconbox"> <i class="fa fa-book fa-4x"></i> <span>Invoice <span class="label pull-right bg-color-darken">99</span></span> </span> </a>
+        </li>
+        <li>
+            <a href="gallery.html" class="jarvismetro-tile big-cubes bg-color-greenLight"> <span class="iconbox"> <i class="fa fa-picture-o fa-4x"></i> <span>Gallery </span> </span> </a>
+        </li>
+        <li>
+            <a href="profile.html" class="jarvismetro-tile big-cubes selected bg-color-pinkDark"> <span class="iconbox"> <i class="fa fa-user fa-4x"></i> <span>My Profile </span> </span> </a>
+        </li>
+    </ul>
+</div>
+<script type="text/javascript">
+
+    var preCalendarIds = {{ calendarIds|tojson }}
+    var preCalendarTitles = {{ calendarTitles|tojson }}
+    var preCalendarStartTimes = {{ calendarStartTimes|tojson }}
+    var preCalendarDescriptions = {{ calendarDescriptions|tojson }}
+    var preCalendarIcons = {{ calendarIcons|tojson }}
+    var preCalendarColors = {{ calendarColors|tojson }}
+
+    var calendarIds = JSON.parse(preCalendarIds);
+    var calendarTitles = JSON.parse(preCalendarTitles);
+    var calendarStartTimes = JSON.parse(preCalendarStartTimes);
+    var calendarDescriptions = JSON.parse(preCalendarDescriptions);
+    var calendarIcons = JSON.parse(preCalendarIcons);
+    var calendarColors = JSON.parse(preCalendarColors);
+
+    var date = new Date();
+    var d = date.getDate();
+    var m = date.getMonth();
+    var y = date.getFullYear();
+    var lastView;
+
+    var calendarEvents = new Array();
+
+    for (i = 0; i < calendarIds.length; i++) {
+        var calendarItem = new Object();
+        calendarItem.id = calendarIds[i];
+        calendarItem.title = calendarTitles[i];
+        calendarItem.start = calendarStartTimes[i];
+        calendarItem.icon = calendarIcons[i];
+        calendarItem.description = calendarDescriptions[i];
+        calendarItem.className = ["event", calendarColors[i]];
+        calendarEvents[i] = calendarItem;
+    }
+
+    $('#timepicker').timepicker({
+        donetext: 'Done',
+        minDate: 0,
+        minTime: 0
+    });
+
+    $('#selectedRetirementDate').datepicker({
+        minDate: 0,
+        navigationAsDateFormat: true,
+        nextText: '>',
+        prevText: '<',
+        donetext: 'Done'
+    });
+
+    $('#datepicker').datepicker({
+        minDate: 0,
+        navigationAsDateFormat: true,
+        nextText: '>',
+        prevText: '<',
+        donetext: 'Done'
+
+    });
+
+    $('body').addClass('smart-style-5')
+
+    $(document).ready(function () {
+
+        pageSetUp();
+
+        "use strict";
+
+        var hdr = {
+            left: 'title',
+            center: 'month,agendaWeek,agendaDay',
+            right: 'prev,today,next'
+        };
+
+        var initDrag = function (e) {
+            var eventObject = {
+                title: $.trim(e.children().text()), // use the element's text as the event title
+                time: $.trim(e.children('span').attr('data-time')),
+                description: $.trim(e.children('span').attr('data-description')),
+                icon: $.trim(e.children('span').attr('data-icon')),
+                className: $.trim(e.children('span').attr('class')) // use the element's children as the event class
+            };
+            // store the Event Object in the DOM element so we can get to it later
+            e.data('eventObject', eventObject);
+
+            // make the event draggable using jQuery UI
+            e.draggable({
+                zIndex: 999,
+                revert: true, // will cause the event to go back to its
+                revertDuration: 0 //  original position after the drag
+            });
+        };
+
+        var addEvent = function (title, time, priority, description, icon) {
+
+            title = title.length === 0 ? "Untitled Event" : title;
+            description = description.length === 0 ? "No Description" : description;
+            icon = icon.length === 0 ? " " : icon;
+            priority = priority.length === 0 ? "label label-default" : priority;
+
+            var html = $('<li><span class="' + priority + '" data-description="' + description + '" data-time="' + time + '" data-icon="' +
+                icon + '">' + title + '</span></li>').prependTo('ul#external-events').hide().fadeIn();
+
+            $("#event-container").effect("highlight", 800);
+
+            initDrag(html);
+        };
+
+        /* initialize the external events
+         -----------------------------------------------------------------*/
+
+        $('#external-events > li').each(function () {
+            initDrag($(this));
+        });
+
+        $('#add-event').click(function () {
+            var title = $('#title').val(),
+                priority = $('input:radio[name=priority]:checked').val(),
+                time = $('#timepicker').val(),
+                date = $('#datepicker').val(),
+                description = $('#description').val(),
+                icon = $('input:radio[name=iconselect]:checked').val();
+            
+            var calendarItem = new Object();
+            calendarItem.id = "-1Nullx0";
+            calendarItem.title = title;
+            calendarItem.start = date + " " +  time;
+            calendarItem.icon = icon;
+            calendarItem.description = description;
+            calendarItem.color = priority;
+            
+            runCalendarInsertPython(calendarItem.id, calendarItem.title, calendarItem.start, calendarItem.description, calendarItem.icon, calendarItem.color)
+            location.reload();
+        });
+
+        /* initialize the calendar
+         -----------------------------------------------------------------*/
+
+        $('#calendar').fullCalendar({
+
+            header: hdr,
+            editable: true,
+            droppable: true, 
+
+            select: function (start, end, allDay) {
+                var title = prompt('Event Title:');
+                if (title) {
+                    calendar.fullCalendar('renderEvent', {
+                        title: title,
+                        start: start,
+                        end: end,
+                        allDay: allDay
+                    }, true // make the event "stick"
+                    );
+                }
+                calendar.fullCalendar('unselect');
+            },
+
+
+            viewDisplay: function (view) {
+                if (lastView == 'undefined') {
+                    lastView = 'firstRun';
+                }
+                if (view.name !== lastView) {
+                    if (view.name == 'month') {
+                        $('#calendar').fullCalendar('addEventSource', month);
+                        $('#calendar').fullCalendar('removeEventSource', day);
+                        $('#calendar').fullCalendar('removeEventSource', day);
+                        $('#calendar').fullCalendar('renderEvents');
+                    }
+                    lastView = view.name;
+                }
+            },
+
+            eventDragStart: function (event, jsEvent){
+
+            },
+
+            listenStop: function(event, jsEvent) {
+
+            },
+
+            eventDragStop: function (event, jsEvent) {
+
+                var trashEl = jQuery('#calendarTrash');
+                var ofs = trashEl.offset();
+
+                var x1 = ofs.left;
+                var x2 = ofs.left + trashEl.outerWidth(true);
+                var y1 = ofs.top;
+                var y2 = ofs.top + trashEl.outerHeight(true);
+
+                if (jsEvent.pageX >= x1 && jsEvent.pageX <= x2 && jsEvent.pageY >= y1 && jsEvent.pageY <= y2) {
+                    runCalendarDeletePython(event._id, event.title, event.start.toString(), event.description, event.icon, event.className[1]);
+
+                    $('#calendar').fullCalendar('removeEvents', event._id);
+                }
+            },
+
+            eventRender: function (event, element, icon) {
+                var myId;
+                if (event._id != "_fc1")
+                    myId = event._id;
+                else
+                    myId = "1Nullx0";
+
+                runUpdateDatabasePython(event._id, event.title, event.start.toString(), event.description, event.icon, event.className[1]);
+                if (!event.description == "") {
+                    element.find('.fc-title').append("<br/><span class='ultra-light'>" + event.description +
+                        "</span>");
+                }
+                if (!event.icon == "") {
+                    element.find('.fc-title').append("<i class='air air-top-right fa " + event.icon +
+                        " '></i>");
+                }
+            },
+
+            windowResize: function (event, ui) {
+                $('#calendar').fullCalendar('render');
+            }
+        });
+        $('#calendar').fullCalendar('addEventSource', calendarEvents);
+        $('#calendar').fullCalendar('rerenderEvents');
+
+        $('.fc-right, .fc-center').hide();
+
+
+        $('#calendar-buttons #btn-prev').click(function () {
+            $('.fc-prev-button').click();
+            return false;
+        });
+
+        $('#calendar-buttons #btn-next').click(function () {
+            $('.fc-next-button').click();
+            return false;
+        });
+
+        $('#calendar-buttons #btn-today').click(function () {
+            $('.fc-today-button').click();
+            return false;
+        });
+
+        $('#mt').click(function () {
+            $('#calendar').fullCalendar('changeView', 'month');
+        });
+
+        $('#ag').click(function () {
+            $('#calendar').fullCalendar('changeView', 'agendaWeek');
+        });
+
+        $('#td').click(function () {
+            $('#calendar').fullCalendar('changeView', 'agendaDay');
+        });
+
+    })
+
+    function runUpdateDatabasePython(aId, aTitle, aStartTime, aDescription, aIcon, aColor) {
+
+        aDescription = (typeof aDescription === 'undefined') ? "-1Nullx0" : aDescription;
+
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "/calendarUpdate",
+            data: { id: aId, title: aTitle, startTime: aStartTime, description: aDescription, icon: aIcon, color: aColor }
+        });
+
+        return jqXHR.responseText;
+    }
+
+    function runCalendarDeletePython(aId, aTitle, aStartTime, aDescription, aIcon, aColor) {
+
+        aDescription = (typeof aDescription === 'undefined') ? "-1Nullx0" : aDescription;
+
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "/calendarDelete",
+            data: { id: aId, title: aTitle, startTime: aStartTime, description: aDescription, icon: aIcon, color: aColor }
+        });
+
+        return jqXHR.responseText;
+    }
+
+    function runCalendarInsertPython(aId, aTitle, aStartTime, aDescription, aIcon, aColor) {
+
+        aDescription = (typeof aDescription === 'undefined') ? "-1Nullx0" : aDescription;
+
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "/calendarInsert",
+            async: false,
+            data: { id: aId, title: aTitle, startTime: aStartTime, description: aDescription, icon: aIcon, color: aColor }
+        });
+
+        return jqXHR.responseText;
+    }
+
+</script>
+    {% endblock %}

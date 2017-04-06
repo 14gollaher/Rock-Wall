@@ -1,0 +1,114 @@
+﻿{% extends "layout.html" %}
+{% block body %}
+
+<aside id="left-panel" style="height:280px; min-height:0px;">
+    <nav>
+        <ul>
+            <li>
+                <a href="employeeMenu"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Dashboard</span></a>
+            </li>
+            <li>
+                <a href="patronViewEmployee"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
+            </li>
+            <li>
+                <a href="inventory"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Inventory</span></a>
+            </li>
+            <li>
+                <a href="reporting"><i class="fa fa-lg fa-fw fa-exclamation"></i> <span class="menu-item-parent">Reporting</span></a>
+            </li>
+            <li>
+                <a href="calendar"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Calendar</span></a>
+            </li>
+            <li class="active">
+                <a href="message"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Messages</span></a>
+            </li>
+            <li>
+                <a href="logout"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Logout</span></a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<div id="main" role="main">
+    <div id="content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                <h1 class="page-title txt-color-blueDark">
+                    <i class="fa-fw fa fa-inbox"></i>
+                    Messages
+                </h1>
+            </div>
+        </div>
+        <section id="widget-grid" class="">
+            <div class="row">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-envelope"></i> </span>
+                            <h2 style="line-height:15px"><strong>Message Center</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body">
+                                <div id="chat-body" class="chat-body custom-scroll" style="height: 500px;">
+                                    <ul>
+                                        {% for row in messageTable %}
+                                        <li class="message">
+                                            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+                                            <br/>
+                                            <div class="message-text">
+                                                <time style="color:yellow; font-size: 13px; font-weight:bolder">
+                                                    {{ row['time'] }}
+                                                </time> <a href="javascript:void(0);" style="color:yellow; font-size: 15px; font-weight:bolder" class="username">{{ row['author'] }}</a> <br/>{{ row['content'] }}
+                                            </div>
+                                            <hr>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                <div class="chat-footer">
+                                    <div class="textarea-div">
+                                        <div class="typearea">
+                                            <textarea class="form-control" placeholder="Write a message..." rows="3" maxlength="2500" id="content" name="content"></textarea>
+                                        </div>
+                                    </div>
+                                    <span class="textarea-controls">
+                                        <button class="btn btn-sm btn-primary pull-right" id="addMessage">
+                                            Send
+                                        </button> <span class="pull-right smart-form" style="margin-top: 3px; margin-right: 10px;"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $('body').addClass('smart-style-5')
+
+    $(document).ready(function () {
+        pageSetUp();
+    });
+
+    $('#addMessage').click(function () {
+        let content = document.getElementsByName("content")[0].value;
+        runAddMessagePython(content);
+        location.reload();
+    });
+
+    function runAddMessagePython(aContent) {
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "/addMessage",
+            data: { content: aContent },
+            async: false
+        });
+        return jqXHR.responseText;
+    }
+
+</script>
+            {% endblock %}

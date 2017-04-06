@@ -1,0 +1,207 @@
+{% extends "layout.html" %}
+{%block body %}
+
+<!-- MAIN CONTENT -->
+<div id="content" class="container" style="padding-top: 100px; margin-left: 30%;">
+    <div class="col-md-8">
+        <div class="well no-padding">
+            <form action="patronSignUpRoute" method="post" id="form-createAccount" class="smart-form client-form">
+                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+                    Patron Sign Up
+                </header>
+                <fieldset>
+                    <section>
+                        {% if messageCreateAccount %}
+                        <div class="pageError" style="color: white">
+                            {{ messageCreateAccount }}
+                        </div>
+                        {% endif %}
+                        <label class="input">
+                            <i class="icon-append fa fa-info"></i>
+                            <input type="number" name="id" id="id" placeholder="ID number">
+                            <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-user"></i>
+                            <input type="text" name="firstName" id="firstName" placeholder="First Name">
+                            <b class="tooltip tooltip-bottom-right">Your first name is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-user"></i>
+                            <input type="text" name="lastName" id="lastName" placeholder="Last Name">
+                            <b class="tooltip tooltip-bottom-right">Your last name is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-envelope"></i>
+                            <input type="email" name="email" id="email" placeholder="Email address">
+                            <b class="tooltip tooltip-bottom-right">Email is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-phone"></i>
+                            <input type='number' name="phoneNumber" id="phoneNumber" placeholder="Phone Number"> 
+                            <b class="tooltip tooltip-bottom-right">Phone number is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-building"></i>
+                            <input type="text" name="address" id="address" placeholder="Address">
+                            <b class="tooltip tooltip-bottom-right">Address is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-map"></i>
+                            <input type="text" name="state" id="state" placeholder="State">
+                            <b class="tooltip tooltip-bottom-right">State is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-map"></i>
+                            <input type="text" name="city" id="city" placeholder="City">
+                            <b class="tooltip tooltip-bottom-right">City is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <label class="input">
+                            <i class="icon-append fa fa-map"></i>
+                            <input type="text" name="zipCode" id="zipCode" placeholder="Zip Code">
+                            <b class="tooltip tooltip-bottom-right">Zip code is required</b>
+                        </label>
+                    </section>
+                    <section>
+                        <select class="form-control" name="gender" id="gender">
+                            <option value="">Choose your gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="noAnswer">Prefer not to answer</option>
+                        </select>
+                    </section>
+                </fieldset>
+                <footer>
+                    <button type="submit" class="btn btn-primary patronButton" style="float: left">
+                        Proceed to Waiver
+                    </button>
+                    <a href="patronCheckIn">
+                        <input type="button" class="btn btn-primary patronButton" value="Back to Check In" style="float: right" />
+                    </a>
+                </footer>
+
+                <div class="message">
+                    <i class="fa fa-check"></i>
+                    <p>
+                        Thank you for your registration!
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $(document).keypress(function () {
+        $(".pageError").remove();
+    });
+
+    runAllForms();
+
+    // Validation
+    $(function () {
+        // Validation
+        $("#form-createAccount").validate({
+
+            // Rules for form validation
+            rules: {
+                id: {
+                    required: true,
+                    minlength: 1,
+                    maxlength: 20
+                },
+                firstName: {
+                    required: true,
+                },
+                lastName: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                phoneNumber: {
+                    required: true,
+                    tel: true
+                },
+                address: {
+                    required: true
+                },
+                state: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+                zip: {
+                    required: true
+                },
+                gender: {
+                    required: true
+                },
+            },
+
+            // Messages for form validation
+            messages: {
+                id: {
+                    required: 'Please enter a new ID number',
+                    minlength: 'ID may not be less than 1 digits',
+                    maxlength: 'ID may not be longer than 20 digits'
+                },
+                firstName: {
+                    required: 'Please enter your first name',
+                },
+                lastName: {
+                    required: 'Please enter your last name',
+                },
+                email: {
+                    required: 'Please enter your email address',
+                    email: 'Please enter a VALID email address'
+                },
+                phoneNumber: {
+                    required: 'Please enter your phone number',
+                    tel: 'Please enter a valid phone number'
+                },
+                address: {
+                    required: 'Please enter your address'
+                },
+                state: {
+                    required: 'Please enter the state that you live in'
+                },
+                city: {
+                    required: 'Please enter the city that you live in'
+                },
+                zip: {
+                    required: 'Please enter your zip code'
+                },
+                gender: {
+                    required: 'Please enter your gender'
+                }
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+</script>
+
+{% endblock %}

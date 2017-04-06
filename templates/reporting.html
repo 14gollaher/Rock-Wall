@@ -1,0 +1,162 @@
+﻿{% extends "layout.html" %}
+{% block body %}
+
+<aside id="left-panel" style="height:280px; min-height:0px;">
+    <nav>
+        <ul>
+            <li>
+                <a href="employeeMenu"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Dashboard</span></a>
+            </li>
+            <li>
+                <a href="patronViewEmployee"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
+            </li>
+            <li>
+                <a href="inventory"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Inventory</span></a>
+            </li>
+            <li class="active">
+                <a href="reporting"><i class="fa fa-lg fa-fw fa-exclamation"></i> <span class="menu-item-parent">Reporting</span></a>
+            </li>
+            <li>
+                <a href="calendar"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Calendar</span></a>
+            </li>
+            <li>
+                <a href="message"><i class="fa fa-lg fa-fw fa-inbox"></i> <span class="menu-item-parent">Messages</span> <span class="badge pull-right inbox-badge margin-right-13">14</span></a>
+            </li>
+            <li>
+                <a href="logout"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Logout</span></a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+<div id="main" role="main">
+    <div id="content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                <h1 class="page-title txt-color-blueDark">
+                    <i class="fa-fw fa fa-list"></i>
+                    Inventory
+                </h1>
+            </div>
+        </div>
+        <section id="widget-grid" class="">
+            <div class="row">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                            <h2 style="line-height:15px"><strong>Inventory</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body">
+                                <form id="reportForm" method="post" action="addIncidentRoute">
+                                    <fieldset>
+                                        <legend>
+                                            Report an Incident
+                                        </legend>
+                                        <div class="form-group">
+                                            <div>
+                                                <label class="control-label">Time of Incident</label>
+                                                <input type="text" name="incidentTime" id="incidentTime" placeholder="Time" class="form-control timepicker" data-dateformat="mm/dd/yy" required />
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div>
+                                                <label class="control-label">Date of Incident</label>
+                                                <input type="text" name="incidentDate" id="incidentDate" placeholder="Date" class="form-control datepicker" data-dateformat="mm/dd/yy" required />
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <label class="control-label">Description of Incident </label>
+                                            <textarea class="form-control" name="incidentDescription" rows="8" placeholder="Description the Incident" required></textarea>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <button class="btn btn-default" type="submit">
+                                                    <i class="fa fa-check"></i>
+                                                    Submit Incident Report
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</div>
+
+<div id="bigBox" class="bigBox animated fadeIn fast" style="background-color: rgb(50, 118, 177);">
+    <div id="bigBoxColor2">
+        <i class="botClose fa fa-times"></i><span>
+            Report was sucessfully submitted! <br />
+        </span>
+        <div class="bigboxicon">
+            <i class="fa fa-check animated"></i>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    let today = new Date();
+    let dd = today.getDate();
+    let mm = today.getMonth() + 1;
+    let yyyy = today.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = mm + '/' + dd + '/' + yyyy;
+
+    $('body').addClass('smart-style-5')
+
+    $('#incidentDate').datepicker({
+        maxDate: 0,
+        navigationAsDateFormat: true,
+        nextText: '>',
+        prevText: '<',
+        donetext: 'Done'
+    });
+
+
+    $('#incidentTime').timepicker({
+        maxDate: 0,
+        maxTime: 0
+    });
+
+    $(document).ready(function () {
+        debugger;
+        pageSetUp();
+        let previousUrl = document.referrer;
+        if (previousUrl == "http://localhost:4000/reporting") {
+            $('.bigBox').show();
+            setTimeout(function () {
+                $('.bigBox').hide();
+            }, 3000);
+        }
+        else {
+            $(".bigBox").remove();
+        }
+    });
+
+    $(".bigBox").click(function () {
+        $(".bigBox").remove();
+    });
+
+</script>
+    {% endblock %}

@@ -1,0 +1,221 @@
+{% extends "layout.html" %}
+{%block body %}
+
+<!-- MAIN CONTENT -->
+<div id="content" class="container" style="padding-top: 100px; margin-left: 30%;">
+    <div class="col-md-8">
+        <div class="well no-padding">
+            <form action="patronCheckInRoute" method="post" id="form-createAccount" class="smart-form client-form">
+                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+                    Check In
+                </header>
+                <fieldset>
+                    <section>
+                        {% if messageCreateAccount %}
+                        <div class="pageError" style="color: white">
+                            {{ messageCreateAccount }}
+                        </div>
+                        {% endif %}
+                        <label class="input">
+                            <i class="icon-append fa fa-info"></i>
+                            <input type="number" name="patronId" id="patronId" placeholder="Student ID">
+                            <b class="tooltip tooltip-bottom-right">Needed to verify your account</b> <!--may edit-->
+                        </label>
+                    </section>
+                </fieldset>
+                <footer>
+                    <button class="btn btn-primary" type="submit" style="float: left" data-toggle="modal" data-target="#editModal">
+                        Check In
+                    </button>
+                    <button class="btn btn-primary" id ="hiddenButton" type="button" style="visibility:hidden; height:0px; width:0px; padding:0px;" data-toggle="modal" data-target="#editModal">
+                        Check In
+                    </button>
+                    <a href="patronSignUp">
+                        <input type="button" class="btn btn-primary" value="Create Account" style="float: right" />
+                    </a>
+                </footer>
+                <div class="message">
+                    <i class="fa fa-check"></i>
+                    <p>
+                        Thank you for your registration!
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<form action="patronCheckInRoute2" method="post" id="form-createAccount">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Update Current Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" placeholder="Select a item to edit..." class="form-control" id="selectedId" name="patronId2" value={{id}} readonly="readonly" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" placeholder="First Name" required class="form-control" id="selectedFirstName" name="firstName" value="{{firstName}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" id="selectedLastName" required class="form-control" placeholder="Last Name" name="lastName" value="{{lastName}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" id="selectedEmail" required class="form-control" placeholder="Email" name="email" value="{{email}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" id="selectedPhoneNumber" required class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" id="selectedAddress" required class="form-control" placeholder="Address" name="address" value="{{address}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" id="selectedState" required class="form-control" placeholder="State" name="state" value="{{state}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" id="selectedCity" required class="form-control" placeholder="City" name="city" value="{{city}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="text" id="selectedZipCode" required class="form-control" placeholder="Zip Code" name="zipCode" value="{{zipCode}}" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <section>
+                                <select class="form-control" name="gender" id="gender">
+                                    {% if gender == 'male' %}
+                                    <option value="">Choose your gender</option>
+                                    <option selected value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="noAnswer">Prefer not to answer</option>
+                                    {% endif %}
+                                    {% if gender == 'female' %}
+                                    <option value="">Choose your gender</option>
+                                    <option value="male">Male</option>
+                                    <option selected value="female">Female</option>
+                                    <option value="noAnswer">Prefer not to answer</option>
+                                    {% endif %}
+                                    {% if gender == 'noAnswer' %}
+                                    <option value="">Choose your gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option selected value="noAnswer">Prefer not to answer</option>
+                                    {% endif %}
+                                </select>
+                            </section>
+                        </div>
+
+
+                        <div class="modal-footer">
+                            <div style="padding-top: 15px;">
+                                <button type="submit" class="btn btn-primary" style="margin-top: 20px; margin-right:125px; width:300px">
+                                    Continue to Check In
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="bigBox" class="bigBox animated fadeIn fast" style="background-color: rgb(50, 118, 177);">
+    <div id="bigBoxColor2">
+        <i class="botClose fa fa-times"></i><span>
+            Welcome! <br />
+        </span><p>#BlueTeam</p>
+        <div class="bigboxicon">
+            <i class="fa fa-check animated"></i>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+        pageSetUp();
+        let previousUrl = document.referrer;
+        if (previousUrl == "http://localhost:4000/patronCheckIn") {
+            $('.bigBox').show();
+            setTimeout(function () {
+                $('.bigBox').hide();
+            }, 7000);
+        }
+        else {
+            $(".bigBox").remove();
+        }
+        
+    });
+    window.onload = function(){
+        var prePass2 = {{pass2|tojson}}
+        var pass2 = JSON.parse(prePass2);
+        debugger;
+        if (pass2[0] == 'T')
+        {
+            document.getElementById("hiddenButton").click();
+        }
+
+    }
+
+    $(".bigBox").click(function () {
+        $(".bigBox").remove();
+    });
+
+
+    $(document).keypress(function () {
+        $(".pageError").remove();
+    });
+
+    runAllForms();
+
+    // Validation
+    $(function () {
+        // Validation
+        $("#form-createAccount").validate({
+
+            // Rules for form validation
+            rules: {
+                patronID: {
+                    required: true,
+                },
+            },
+
+            // Messages for form validation
+            messages: {
+                patronID: {
+                    required: 'Please enter your Rock Wall ID',
+                    patronID: 'Please enter a VALID ID'
+                },
+            },
+
+            // Do not change code below
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
+</script>
+    {% endblock %}
