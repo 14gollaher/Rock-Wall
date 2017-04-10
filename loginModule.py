@@ -13,6 +13,7 @@ import databaseFunctions
 import itertools
 from itertools import *
 import re
+import pytz
 
 class UserAccount:
 
@@ -32,7 +33,7 @@ class Message:
         self.content = content
 
 def login():
-
+  
     if session.get('isLoggedIn'):
         return redirect('/')
     else:
@@ -73,7 +74,10 @@ def populateTodaysVisitsTable ():
 
     for i in range(0, len(allPatronVisitsDates)):
         dateTimeStart = allPatronVisitsDates[i]
-        today = date.today()
+
+        currentTime = datetime.now(pytz.timezone('US/Central'))
+        today = date(currentTime.year, currentTime.month,currentTime.day) 
+
         thisVisit = datetime.strptime(dateTimeStart, "%m/%d/%Y")
         
         if thisVisit.day == today.day and thisVisit.month == today.month and thisVisit.year == today.year:
@@ -85,14 +89,17 @@ def populateTodaysVisitsTable ():
     for visit in todaysTimes:
         
         currentLowerBoundHourCheck = 0
-        currentUpperBoundHourCheck = 0
+        currentUpperBoundHourCheck = 2
         currentRangeIndex = 0
 
         for i in range (0, 12):
 
+            if (currentUpperBoundHourCheck > 23):
+                currentUpperBoundHourCheck = 23
+        
             start = time(currentLowerBoundHourCheck, 0)
-            end = time(currentUpperBoundHourCheck + 2, 0)
-
+            end = time(currentUpperBoundHourCheck, 0)
+            
             thisVisit = datetime.strptime(visit, "%H:%M")
             checkTime = time(thisVisit.hour, thisVisit.minute)
 
@@ -123,7 +130,9 @@ def populateWeeksVisitTable():
 
             thisVisit = datetime.strptime(dateTimeStart, "%m/%d/%Y")
         
-            today = date.today()
+            currentTime = datetime.now(pytz.timezone('US/Central'))
+            today = date(currentTime.year, currentTime.month,currentTime.day) 
+
             margin = timedelta(days = i)
             evaluateVisit = date(thisVisit.year, thisVisit.month, thisVisit.day)
         
@@ -151,8 +160,13 @@ def populateMonthVisitTable():
             dateTimeStart = visit
 
             thisVisit = datetime.strptime(dateTimeStart, "%m/%d/%Y")
+            
+            currentTime = datetime.now(pytz.timezone('US/Central'))
+            today = date(currentTime.year, currentTime.month,currentTime.day) 
 
-            today = date.today() + relativedelta(months = -i)
+            today = today + relativedelta(months = -i)
+
+
             start = date(today.year, today.month, 1)
             end = date.today()
 

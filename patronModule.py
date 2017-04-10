@@ -9,6 +9,7 @@ import sys
 import databaseFunctions
 import simplejson as json
 import time
+import pytz
 
 class Patron:
 
@@ -85,9 +86,12 @@ def patronCheckInRoute():
 
 
 def patronCheckInRoute2():
+
     patronAccount = Patron(str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), str(request.form['email']), str(request.form['phoneNumber']), str(request.form['gender']), str(request.form['address']),  str(request.form['city']), str(request.form['zipCode']), '', str(request.form['state']), False, False, False, "", "")
     databaseFunctions.editPatronAccount(patronAccount)
-    newVisitLogItem = VisitHistoryLogItem("null", str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), time.strftime("%m/%d/%Y"), time.strftime("%H:%M"))
+
+    my_date = datetime.datetime.now(pytz.timezone('US/Central'))
+    newVisitLogItem = VisitHistoryLogItem("null", str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), my_date.strftime("%m/%d/%Y"), my_date.strftime("%H:%M"))
     databaseFunctions.insertNewVisitHistoryItem(newVisitLogItem)
     return redirect('patronCheckIn')
 
