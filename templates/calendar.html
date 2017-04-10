@@ -1,31 +1,6 @@
 ﻿{% extends "layout.html" %}
 {% block body %}
 
-<aside id="left-panel" style="height:280px; min-height:0px;">
-    <nav>
-        <ul>
-            <li>
-                <a href="employeeMenu"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Dashboard</span></a>
-            </li>
-            <li>
-                <a href="patronViewEmployee"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
-            </li>
-            <li>
-                <a href="inventory"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Inventory</span></a>
-            </li>
-            <li>
-                <a href="reportingEmployee"><i class="fa fa-lg fa-fw fa-exclamation"></i> <span class="menu-item-parent">Reporting</span></a>
-            </li>
-            <li class="active">
-                <a href="calendar"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Calendar</span></a>
-            </li>
-            <li>
-                <a href="logout"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Logout</span></a>
-            </li>
-        </ul>
-    </nav>
-</aside>
-<!-- MAIN PANEL -->
 <div id="main" role="main">
     <!-- MAIN CONTENT -->
     <div id="content">
@@ -229,6 +204,8 @@ you can add as many as you like
 </div>
 <script type="text/javascript">
 
+    $($("#navbarList > li")[3]).addClass('active')
+
     var preCalendarIds = {{ calendarIds|tojson }}
     var preCalendarTitles = {{ calendarTitles|tojson }}
     var preCalendarStartTimes = {{ calendarStartTimes|tojson }}
@@ -285,11 +262,9 @@ you can add as many as you like
 
     });
 
-    $('body').addClass('smart-style-5')
+
 
     $(document).ready(function () {
-
-        pageSetUp();
 
         "use strict";
 
@@ -347,7 +322,7 @@ you can add as many as you like
                 date = $('#datepicker').val(),
                 description = $('#description').val(),
                 icon = $('input:radio[name=iconselect]:checked').val();
-            
+
             var calendarItem = new Object();
             calendarItem.id = "-1Nullx0";
             calendarItem.title = title;
@@ -355,7 +330,7 @@ you can add as many as you like
             calendarItem.icon = icon;
             calendarItem.description = description;
             calendarItem.color = priority;
-            
+
             runCalendarInsertPython(calendarItem.id, calendarItem.title, calendarItem.start, calendarItem.description, calendarItem.icon, calendarItem.color)
             location.reload();
         });
@@ -367,7 +342,7 @@ you can add as many as you like
 
             header: hdr,
             editable: true,
-            droppable: true, 
+            droppable: true,
 
             select: function (start, end, allDay) {
                 var title = prompt('Event Title:');

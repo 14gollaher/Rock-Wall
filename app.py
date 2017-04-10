@@ -1,7 +1,8 @@
 import os
+from os import environ
 from flask import Flask, flash, redirect, render_template, request, session, abort, url_for, make_response
 from sqlalchemy.orm import sessionmaker, scoped_session
-import datetime
+from datetime import datetime
 from sqlalchemy import text, create_engine
 import sqlalchemy 
 import sys
@@ -9,10 +10,10 @@ import databaseFunctions
 import loginModule
 import inventoryModule
 import calendarModule
-import messageModule
 import patronModule
 import reportingModule
 import patronViewModule
+import userViewModule
 
 
 app = Flask(__name__)
@@ -25,6 +26,10 @@ app.secret_key = os.urandom(12)
 ######################################################################### 
 
 @app.route('/')
+@app.route('/index')
+@app.route('/menu')
+@app.route('/home')
+
 def index():
     return loginModule.index()
 
@@ -32,9 +37,9 @@ def index():
 def employeeMenu():
     return loginModule.employeeMenu()
 
-@app.route('/employeeAddMessage', methods=['GET', 'POST'])
+@app.route('/userAddMessage', methods=['GET', 'POST'])
 def addMessage():
-    return messageModule.addMessage()
+    return loginModule.addMessage()
 
 @app.route('/administratorMenu')
 def administratorMenu():
@@ -78,7 +83,7 @@ def changePasswordRoute():
 
 @app.route('/authenticateChangePassword', methods=['POST'])
 def authenticateChangePassword():
-    return loginModule.authenticateChangePassword
+    return loginModule.authenticateChangePassword()
 
 #########################################################################
 ###                                                                   ###
@@ -132,19 +137,6 @@ def calendarDelete():
 def calendarInsert():
     return calendarModule.calendarInsert()
 
-#########################################################################
-###                                                                   ###
-###                           Message                                 ###
-###                                                                   ###
-######################################################################### 
-
-#@app.route('/message')
-#def message():
-#    return messageModule.message()
-
-#@app.route('/addMessage', methods=['GET', 'POST'])
-#def addMessage():
-#    return messageModule.addMessage()
 
 #########################################################################
 ###                                                                   ###
@@ -198,23 +190,83 @@ def storeImage():
 ###                          Reporting                                ###
 ###                                                                   ###
 ######################################################################### 
+
 @app.route('/reporting')
 def reporting():
     return reportingModule.reporting()
 
+@app.route('/reportingEmployee')
+def reportingEmployee():
+    return reportingModule.reportingEmployee()
+
+@app.route('/reportingAdmin')
+def reportingAdmin():
+    return reportingModule.reportingAdmin()
+
+@app.route('/reportingMaster')
+def reportingMaster():
+    return reportingModule.reportingMaster()
+
 @app.route('/addIncidentRoute', methods=['POST'])
 def addIncidentRoute():
     return reportingModule.addIncidentRoute()
+
+@app.route('/toggleReportReviewStatus', methods=['GET', 'POST'])
+def toggleReportReviewStatus():
+    return reportingModule.toggleReportReviewStatus()
 
 #########################################################################
 ###                                                                   ###
 ###                        Patron View                                ###
 ###                                                                   ###
 ######################################################################### 
+
+@app.route('/patrons')
+def patron():
+    return patronViewModule.patrons()
+
 @app.route('/patronViewEmployee')
 def patronViewEmployee():
     return patronViewModule.patronViewEmployee()
 
+@app.route('/patronViewAdmin')
+def patronViewAdmin():
+    return patronViewModule.patronViewAdmin()
+
+@app.route('/patronViewMaster')
+def patronViewMaster():
+    return patronViewModule.patronViewMaster()
+
+@app.route('/editPatronRoute', methods=['POST'])
+def editPatronRoute():
+    return patronViewModule.editPatronRoute()
+
+@app.route('/patronDelete', methods=['GET', 'POST'])
+def patronDelete():
+    return patronViewModule.patronDelete()
+
+
+#########################################################################
+###                                                                   ###
+###                          User View                                ###
+###                                                                   ###
+######################################################################### 
+
+@app.route('/users')
+def users():
+    return userViewModule.users()
+
+@app.route('/userViewAdmin')
+def userViewAdmin():
+    return userViewModule.userViewAdmin()
+
+#if __name__ == '__main__':
+#     HOST = environ.get('SERVER_HOST', 'localhost')
+#     try:
+#         PORT = int(environ.get('SERVER_PORT', '5555'))
+#     except ValueError:
+#         PORT = 5555
+#     app.run(HOST, PORT,debug=True)
+
 if __name__ == "__main__":
-    app.secret_key = os.urandom(12)
     app.run(debug=False,host='0.0.0.0', port=4000)

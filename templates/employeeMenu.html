@@ -1,51 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
-<aside id="left-panel" style="height:280px; min-height:0px;">
-    <nav>
-        <ul>
-            <li class="top-menu-invisible active">
-                <a href="employeeMenu"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Dashboard</span></a>
-            </li>
-            <li class="patronEmployeeAccess">
-                <a href="patronViewEmployee"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
-            </li>
-            <li>
-                <a href="inventory"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Inventory</span></a>
-            </li>
-            <li>
-                <a href="reporting"><i class="fa fa-lg fa-fw fa-exclamation"></i> <span class="menu-item-parent">Reporting</span></a>
-            </li>
-            <li>
-                <a href="calendar"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Calendar</span></a>
-            </li>
-            <li>
-                <a href="logout"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Logout</span></a>
-            </li>
-        </ul>
-    </nav>
-</aside>
-<!-- MAIN PANEL -->
+
 <div id="main" role="main">
-
-    <!-- MAIN CONTENT -->
     <div id="content">
-
-        <!-- row -->
         <div class="row">
-
-            <!-- col -->
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
                 <h1 class="page-title txt-color-blueDark">
-                    <!-- PAGE HEADER -->
                     <i class="fa-fw fa fa-cube"></i>
                     Dashboard
                 </h1>
             </div>
-            <!-- end col -->
-            <!-- right side of the page with the sparkline graphs -->
-            <!-- col -->
             <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
-                <!-- sparks -->
                 <ul id="sparks">
                     <li class="sparks-info">
                         <h5> Today's Visits <span class="txt-color-blue">69</span></h5>
@@ -68,16 +33,9 @@
                         </div>
                     </li>
                 </ul>
-                <!-- end sparks -->
             </div>
-            <!-- end col -->
         </div>
-        <!-- end row -->
-        <!--
-            The ID "widget-grid" will start to initialize all widgets below
-            You do not need to use widgets if you dont want to. Simply remove
-            the <section></section> and you can use wells or panels instead
-            -->
+
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -123,9 +81,7 @@
             </div>
         </section>
     </div>
-    <!-- END MAIN CONTENT -->
 </div>
-<!-- END MAIN PANEL -->
 
 <div id="bigBox" class="bigBox animated fadeIn fast" style="background-color: rgb(50, 118, 177);">
     <div id="bigBoxColor2">
@@ -141,7 +97,6 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        pageSetUp();
         let previousUrl = document.referrer;
         if (previousUrl == "http://localhost:4000/login" || previousUrl == "http://www.matthewgollaher/login") {
             $('.bigBox').show();
@@ -171,7 +126,7 @@
     function runAddMessagePython(aContent) {
         var jqXHR = $.ajax({
             type: "POST",
-            url: "/employeeAddMessage",
+            url: "/userAddMessage",
             data: { content: aContent },
             async: false
         });

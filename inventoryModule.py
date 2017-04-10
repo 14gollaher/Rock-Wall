@@ -20,6 +20,7 @@ class InventoryItem:
         self.checkOutStatus = checkOutStatus
 
 def inventory():
+
     if not session.get('isLoggedIn'):
         return redirect('login');
 
@@ -34,6 +35,10 @@ def inventory():
     return render_template('inventory.html', inventoryTable = inventoryTable)
 
 def addInventoryRoute():
+
+    if not session.get('isLoggedIn'):
+        return redirect('login')
+
     newInventoryItem = InventoryItem(str(request.form['newId']), str(request.form['newName']), str(request.form['newDescription']), str(request.form['newRetirementDate']), False)
     if not databaseFunctions.getInventoryItemId(newInventoryItem):
         databaseFunctions.insertNewInventoryItem(newInventoryItem)
@@ -43,29 +48,39 @@ def addInventoryRoute():
     return redirect('inventory')
 
 def editInventoryRoute():
-    if request.method == 'POST':
-        print (str(request.form['updatedId']))
-        print (str(request.form['updatedName']))
-        print (str(request.form['updatedDescription']))
-        print (str(request.form['updatedRetirementDate']))
+
+    if not session.get('isLoggedIn'):
+        return redirect('login')
+
+    if str(request.form['updatedCheckOutStatus']) == 'Yes':
+        newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedRetirementDate']), True)
+    else:
         newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedRetirementDate']), False)
-        databaseFunctions.editInventoryItem(newInventoryItem)
+
+    databaseFunctions.editInventoryItem(newInventoryItem)
     return redirect('inventory')
 
 def inventoryToggleCheckStatus():
-    if request.method == 'POST':
-        if str(request.form['isCheckOut']) == 'Yes':
-            newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", False)
-        else:
-            newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", True)
 
-        databaseFunctions.setInventoryCheckStatus(newInventoryItem)
+    if not session.get('isLoggedIn'):
+        return redirect('login')
+
+    if str(request.form['isCheckOut']) == 'Yes':
+        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", False)
+    else:
+        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", True)
+
+    databaseFunctions.setInventoryCheckStatus(newInventoryItem)
     return redirect('inventory')
 
 def inventoryDelete():
-    if request.method == 'POST':
-        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", False)
-        newInventoryItem.id = newInventoryItem.id.strip('"')
-        databaseFunctions.deleteInventoryItem(newInventoryItem)
+
+    if not session.get('isLoggedIn'):
+        return redirect('login')
+
+    newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", False)
+    newInventoryItem.id = newInventoryItem.id.strip('"')
+    databaseFunctions.deleteInventoryItem(newInventoryItem)
+
     return redirect('inventory')
 

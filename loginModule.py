@@ -1,13 +1,21 @@
 import os
 from flask import Flask, flash, redirect, render_template, request, session, abort
 from sqlalchemy.orm import sessionmaker, scoped_session
-import datetime
+from datetime import date
+from datetime import time
+from datetime import datetime
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 from sqlalchemy import text, create_engine
 import sqlalchemy 
 import sys
 import databaseFunctions
+import itertools
+from itertools import *
+import re
 
 class UserAccount:
+
     def __init__(self, email, password, accountType, firstName, lastName):
         self.email = email
         self.password = password
@@ -15,89 +23,173 @@ class UserAccount:
         self.firstName = firstName
         self.lastName = lastName
 
+class Message:
+
+    def __init__(self, id, author, time, content):
+        self.id = id
+        self.author = author
+        self.time = time
+        self.content = content
+
 def login():
+
     if session.get('isLoggedIn'):
         return redirect('/')
     else:
         return render_template('login/login.html', messageLogin = session.get('messageLogin'))
 
 def index():
-    logMessage('Begin Menu')
-    if session.get('isLoggedIn'):
-        if session.get('sessionType') == 'employee':
-            return redirect('employeeMenu')
-        elif session.get('sessionType') == 'administrator':
-            return redirect('administratorMenu')
-        elif session.get('sessionType') == 'master':
-            return redirect('masterMenu')
-        else: 
-            logMessage('Unhandled Expection @ index()')
-            return redirect('login')
-    else:
+    
+    if not session.get('isLoggedIn'):
         return redirect('login')
 
-def employeeMenu():
+    mT = populateMessagesTable()
+    tVT = populateTodaysVisitsTable()
+    tTV = sum(tVT)
+    wVT = populateWeeksVisitTable()
+    tWV = sum(wVT)
+    mVT = populateMonthVisitTable()
+    tMV = sum(mVT)
+
+    return render_template('menu.html', currentUserFirstName = session.get('currentUserFirstName'), messageTable = mT, todaysVisitsTable = tVT, totalTodaysVisits = tTV, weeksVisitTable = wVT, totalWeekVisists = tWV, monthVisitTable = mVT, totalMonthVisits = tMV)
+
+def populateMessagesTable ():
+    
     messageTable = {}
     messageTable['author'] = databaseFunctions.getTop100MessageAuthors()
     messageTable['time'] = databaseFunctions.getTop100MessageTimes()
     messageTable['content'] = databaseFunctions.getTop100MessageContents()
+    
     messageTable = [dict(author=a, time=t, content=c) for a, t, c in zip(messageTable['author'], messageTable['time'], messageTable['content'])]
 
-    if session.get('isLoggedIn'):
-        if session.get('sessionType') == 'employee':
-            return render_template('employeeMenu.html', currentUserFirstName = session.get('currentUserFirstName'), messageTable = messageTable)
-        elif session.get('sessionType') == 'administrator':
-            return redirect('administratorMenu')
-        elif session.get('sessionType') == 'master':
-            return redirect('masterMenu')
-        else: 
-            logMessage('Unhandled Expection @ employeeMenu()')
-            return redirect('login')
-    else:
-        return redirect('login')
+    return messageTable
 
-def administratorMenu():
-    if session.get('isLoggedIn'):
-        if session.get('sessionType') == 'employee':
-            return redirect('employeeMenu')
-        elif session.get('sessionType') == 'administrator':
-            return render_template('adminMenu.html')
-        #"Hello Administrator!  <a href='/logout'>Logout</a>"
-        elif session.get('sessionType') == 'master':
-            return redirect('masterMenu')
-        else: 
-            logMessage('Unhandled Expection @ administratorMenu()')
-            return redirect('login')
-    else:
-        return redirect('login')
+def populateTodaysVisitsTable ():
 
-def masterMenu():
-    if session.get('isLoggedIn'):
-        if session.get('sessionType') == 'employee':
-            return redirect('employeeMenu')
-        elif session.get('sessionType') == 'administrator':
-            return redirect('administratorMenu')
-        elif session.get('sessionType') == 'master':
-            return "Hello Master!  <a href='/logout'>Logout</a>"
-        else: 
-            logMessage('Unhandled Expection @ masterMenu()')
-            return redirect('login')
+    allPatronVisitsDates = databaseFunctions.getAllVisitPatronVisitDates()
+    allPatronsVisitsTimes = databaseFunctions.getAllVisitPatronVisitTimes()
+
+    todaysTimes = []
+
+    for i in range(0, len(allPatronVisitsDates)):
+        dateTimeStart = allPatronVisitsDates[i]
+        today = date.today()
+        thisVisit = datetime.strptime(dateTimeStart, "%m/%d/%Y")
+        
+        if thisVisit.day == today.day and thisVisit.month == today.month and thisVisit.year == today.year:
+            todaysTimes.append(allPatronsVisitsTimes[i])
+   
+    todaysVisitsTable = [0] * 12
+
+
+    for visit in todaysTimes:
+        
+        currentLowerBoundHourCheck = 0
+        currentUpperBoundHourCheck = 0
+        currentRangeIndex = 0
+
+        for i in range (0, 12):
+
+            start = time(currentLowerBoundHourCheck, 0)
+            end = time(currentUpperBoundHourCheck + 2, 0)
+
+            thisVisit = datetime.strptime(visit, "%H:%M")
+            checkTime = time(thisVisit.hour, thisVisit.minute)
+
+            if timeInRange(start, end, checkTime):
+                todaysVisitsTable[currentRangeIndex] += 1 
+                break;
+
+            currentLowerBoundHourCheck += 2
+            currentUpperBoundHourCheck += 2
+            currentRangeIndex += 1
+        
+    return todaysVisitsTable
+
+def populateWeeksVisitTable():
+
+    allPatronVisitsDates = databaseFunctions.getAllVisitPatronVisitDates()
+    allPatronsVisitsTimes = databaseFunctions.getAllVisitPatronVisitTimes()
+
+    weekVisitsTable = [0] * 7
+    
+    for visit in allPatronVisitsDates:
+    
+        currentIndex = 0
+
+        for i in range(0, 7):
+
+            dateTimeStart = visit
+
+            thisVisit = datetime.strptime(dateTimeStart, "%m/%d/%Y")
+        
+            today = date.today()
+            margin = timedelta(days = i)
+            evaluateVisit = date(thisVisit.year, thisVisit.month, thisVisit.day)
+        
+            if today - margin <= evaluateVisit:
+                weekVisitsTable[len(weekVisitsTable) - 1 - currentIndex] += 1
+                break;
+            else:
+                currentIndex += 1
+    
+    return weekVisitsTable
+
+def populateMonthVisitTable():
+
+    allPatronVisitsDates = databaseFunctions.getAllVisitPatronVisitDates()
+    allPatronsVisitsTimes = databaseFunctions.getAllVisitPatronVisitTimes()
+
+    monthVisitsTable = [0] * 12
+
+    for visit in allPatronVisitsDates:
+    
+        currentIndex = 0
+
+        for i in range(0, 12):
+
+            dateTimeStart = visit
+
+            thisVisit = datetime.strptime(dateTimeStart, "%m/%d/%Y")
+
+            today = date.today() + relativedelta(months = -i)
+            start = date(today.year, today.month, 1)
+            end = date.today()
+
+            evaluateVisit = date(thisVisit.year, thisVisit.month, thisVisit.day)
+        
+            if timeInRange (start, end, evaluateVisit):
+                monthVisitsTable[len(monthVisitsTable) - 1 - currentIndex] += 1
+                break;
+            else:
+                currentIndex += 1
+    
+    return monthVisitsTable
+
+
+
+def timeInRange(start, end, x):
+
+    if start <= end:
+        return start <= x <= end
     else:
-        return redirect('login')
+        return start <= x or x <= end
 
 def logout():
-    logMessage('Begin logout')
+
     session['isLoggedIn'] = False
-    session['sessionType'] = ""
+    # session.clear() # Can't use this as it'd clear the patrons sessions as well. 
+                      # Need to write an individual "clear desktop site" sessions function
     return redirect('login')
 
 def loginRoute():
-    logMessage('Begin login')
+
     session['messageLogin'] = ""
 
     userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "", "", "")
     
     if validateCredentials(userAccount): 
+
         session['isLoggedIn'] = True
         
         if databaseFunctions.getAccountType(userAccount) == 'employee':
@@ -112,16 +204,15 @@ def loginRoute():
     
     session['currentUserFirstName'] = databaseFunctions.getAccountFirstName(userAccount)
     session['currentUserLastName'] = databaseFunctions.getAccountLastName(userAccount)
+    session['currentUserAccountType'] = databaseFunctions.getAccountType(userAccount)
     return redirect('/')
 
 def createAccount():
-    logMessage('Begin createAccount')
     if session.get('isLoggedIn'):
         return redirect('/')
     return render_template('login/createAccount.html', messageCreateAccount = session.get('messageCreateAccount'))
 
 def createAccountRoute(): 
-    logMessage('Begin createAccountRoute')
     session['messageCreateAccount'] = ""
 
     userAccount = UserAccount(str(request.form['email']), str(request.form['password']), str(request.form['accountType']), str(request.form['firstName']), str(request.form['lastName']))
@@ -149,10 +240,9 @@ def createAccountRoute():
     return render_template('login/authenticateCreateAccount.html', accountType = session.get('newAccountType'))
 
 def authenticateCreateAccount():
-    logMessage("Begin authenticateCreateAccount")
     session['messageCreateAccount'] = ""
 
-    userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "")
+    userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "", "", "")
     userAccount.accountType = databaseFunctions.getAccountType(userAccount)
     newUser = UserAccount(session.get('newAccountEmail'), session.get('newAccountPassword'), session.get('newAccountType'), session.get('newFirstName'), session.get('newLastName'))
     
@@ -170,16 +260,14 @@ def authenticateCreateAccount():
     return redirect('login')
 
 def changePassword():
-    logMessage('Begin changePassword')
     if session.get('isLoggedIn'):
         return redirect('/')
     return render_template('login/changePassword.html', messageChangePassword = session.get('messageChangePassword')) 
 
 def changePasswordRoute():
-    logMessage('Begin changePasswordRoute')
     session['messageChangePassword'] = ""
 
-    userAccount = UserAccount(str(request.form['email']), str(request.form['newPassword']), "")
+    userAccount = UserAccount(str(request.form['email']), str(request.form['newPassword']), "", "", "")
     userAccount.accountType = databaseFunctions.getAccountType(userAccount)
     postConfirmNewPassword = str(request.form['newConfirmPassword'])
 
@@ -203,12 +291,11 @@ def changePasswordRoute():
 
 
 def authenticateChangePassword():
-    logMessage("Begin authenticateChangePassword")
     session['messageChangePassword'] = ""
 
-    userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "")
+    userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "", "", "")
     userAccount.accountType = databaseFunctions.getAccountType(userAccount)
-    passwordChangeAccount = UserAccount(session['changePasswordEmail'], session['changePasswordNewPassword'], session['changePasswordAccountType'])
+    passwordChangeAccount = UserAccount(session['changePasswordEmail'], session['changePasswordNewPassword'], session['changePasswordAccountType'], "", "")
 
     if validateCredentials(userAccount):
         if checkPermissionsPasswordChange(userAccount, passwordChangeAccount):
@@ -239,7 +326,9 @@ def checkPermissionsPasswordChange(userAccount, userChangeAccount):
     else:
         return False
 
-def logMessage(log):
-    with open("debugLog.txt", "a") as logFile:
-        print('{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now()) + ': ' + str(log) + '\n')
-        logFile.write('{:%Y-%m-%d %H:%M:%S}'.format(datetime.datetime.now()) + ': ' + str(log) + '\n')
+def addMessage():
+    currentUserFullName = session.get('currentUserFirstName') + ' ' + session.get('currentUserLastName')
+    newMessage = Message('-1Nullx0', str(currentUserFullName), str(datetime.now().strftime('%b-%d %I:%M %p')), str(request.form['content']))
+    newMessage.content = '\n' + newMessage.content
+    databaseFunctions.insertNewMessage(newMessage)
+    return redirect('message')

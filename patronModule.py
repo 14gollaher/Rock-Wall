@@ -8,9 +8,11 @@ import sqlalchemy
 import sys
 import databaseFunctions
 import simplejson as json
+import time
 
 class Patron:
-    def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, isSoloClimbCertified):
+
+    def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, isSoloClimbCertified, isSuspended, suspendedStartDate, suspendedEndDate):
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -24,22 +26,41 @@ class Patron:
         self.state = state
         self.isBelayCertified = isBelayCertified
         self.isSoloClimbCertified = isSoloClimbCertified
+        self.isSuspended = isSuspended
+        self.suspendedStartDate = suspendedStartDate
+        self.suspendedEndDate = suspendedEndDate
+
+class VisitHistoryLogItem:
+
+    def __init__(self, id, patronId, patronFirstName, patronLastName, patronVisitDate, patronVisitTime):
+
+        self.id = id    
+        self.patronId = patronId
+        self.patronFirstName = patronFirstName
+        self.patronLastName = patronLastName
+        self.patronVisitDate = patronVisitDate
+        self.patronVisitTime = patronVisitTime
 
 def patronSignUp():
+
     return render_template('patron/patronSignUp.html')
 
 def patronCheckIn():
+    
     pass2 = []
     pass2.append('F')
     pass2 = json.dumps(pass2)
+
     return render_template('patron/patronCheckIn.html', pass2 = pass2)
 
 def patronCheckInRoute():
+    
     pass2 = []
     pass2.append('F')
     pass2 = json.dumps(pass2)
-    patronAccount = Patron(str(request.form['patronId']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"", False, False)
+    patronAccount = Patron(str(request.form['patronId']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"", False, False, False, "", "")
     session['currentPatronId'] = patronAccount.id
+
     if validateCredentials(patronAccount): 
         session['isCheckedIn'] = True
         currentPatronId = session.get('currentPatronId')
@@ -55,27 +76,33 @@ def patronCheckInRoute():
         pass2 = []
         pass2.append('T')
         pass2 = json.dumps(pass2)
+
     else:
         session['messageCheckIn'] = 'Account does not exist!'
         return redirect('patronCheckIn')
+
     return render_template('patron/patronCheckIn.html', id = currentPatronId, firstName = currentPatronFirstName, lastName = currentPatronLastName, email = currentPatronEmail, phoneNumber = currentPatronPhoneNumber, address = currentPatronAddress, state = currentPatronState, city = currentPatronCity, zipCode = currentPatronZipCode, gender = currentPatronGender, pass2 = pass2)
 
 
 def patronCheckInRoute2():
-    patronAccount = Patron(str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), str(request.form['email']), str(request.form['phoneNumber']), str(request.form['gender']), str(request.form['address']),  str(request.form['city']), str(request.form['zipCode']), '', str(request.form['state']), False, False)
+    patronAccount = Patron(str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), str(request.form['email']), str(request.form['phoneNumber']), str(request.form['gender']), str(request.form['address']),  str(request.form['city']), str(request.form['zipCode']), '', str(request.form['state']), False, False, False, "", "")
     databaseFunctions.editPatronAccount(patronAccount)
+    newVisitLogItem = VisitHistoryLogItem("null", str(request.form['patronId2']), str(request.form['firstName']), str(request.form['lastName']), time.strftime("%m/%d/%Y"), time.strftime("%H:%M"))
+    databaseFunctions.insertNewVisitHistoryItem(newVisitLogItem)
     return redirect('patronCheckIn')
 
 def validateCredentials(patronAccount):
+
     if databaseFunctions.getPatronId(patronAccount):
         return True
     else:
         return False
 
 def patronSignUpRoute(): 
+
     session['messagePatronSignUp'] = ""
 
-    patronAccount = Patron(str(request.form['id']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"", False, False)
+    patronAccount = Patron(str(request.form['id']), "", "", "", "" ,"" ,"" ,"" ,"" ,"" ,"", False, False, False, "", "")
 
     if databaseFunctions.getPatronId(patronAccount):
         session['messagePatronSignUp'] = 'Id already exists!'
@@ -101,19 +128,18 @@ def createPatronAccountRoute():
     
     file = open("sysSig.bteam", "r")
     waiverUrl = file.read()
-    newPatron = Patron(session.get('newPatronId'), session.get('newPatronFirstName'), session.get('newPatronLastName'), session.get('newPatronEmail'), session.get('newPatronPhoneNumber'), session.get('newPatronGender'), session.get('newPatronAddress'), session.get('newPatronCity'), session.get('newPatronZipCode'), waiverUrl, session.get('newPatronState'), False, False)
+    newPatron = Patron(session.get('newPatronId'), session.get('newPatronFirstName'), session.get('newPatronLastName'), session.get('newPatronEmail'), session.get('newPatronPhoneNumber'), session.get('newPatronGender'), session.get('newPatronAddress'), session.get('newPatronCity'), session.get('newPatronZipCode'), waiverUrl, session.get('newPatronState'), False, False, False, "", "")
     databaseFunctions.insertNewPatron(newPatron)
     file.close()
 
     return redirect('patronCheckIn')
 
 def storeImage():
-    if request.method == 'POST':
-        data = request.form['data']
+
+    data = request.form['data']
     
     file = open("sysSig.bteam", "w")
     file.write(data)
     file.close() 
 
     return redirect('signWaiver')
-

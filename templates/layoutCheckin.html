@@ -77,56 +77,14 @@
 
 <body class="smart-style-5">
 
-    {% if session['isLoggedIn'] %}
-    <div class="login-info" style="font-size:25px">
-        <span>
-            <span>
-                {{ session['currentUserFirstName'] }} <br />
-            </span>
-        </span>
-    </div>
-    {% if session['currentUserAccountType'] != 'employee' %}
-        <aside id="left-panel" style="height:317px; min-height:0px;">
-    {% endif %}
-    {% if session['currentUserAccountType'] == 'employee' %}
-        <aside id="left-panel" style="height:280px; min-height:0px;">
-    {% endif %}
-            <nav>
-                <ul id="navbarList">
-                    <li>
-                        <a href="index"><i class="fa fa-lg fa-fw fa-cube txt-color-blue"></i> <span class="menu-item-parent">Dashboard</span></a>
-                    </li>
-                    <li>
-                        <a href="inventory"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Inventory</span></a>
-                    </li>
-                    <li>
-                        <a href="reporting"><i class="fa fa-lg fa-fw fa-exclamation"></i> <span class="menu-item-parent">Reporting</span></a>
-                    </li>
-                    <li>
-                        <a href="calendar"><i class="fa fa-lg fa-fw fa-table"></i> <span class="menu-item-parent">Calendar</span></a>
-                    </li>
-                    <li>
-                        <a href="patrons"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
-                    </li>
-                    {% if session['currentUserAccountType'] != 'employee' %}
-                    <li>
-                        <a href="users"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Users</span></a>
-                    </li>
-                    {% endif %}
-                    <li>
-                        <a href="logout"><i class="fa fa-lg fa-fw fa-desktop"></i> <span class="menu-item-parent">Logout</span></a>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-        {% endif %}
-        {% block body %}{% endblock %}
+    {% block body %}{% endblock %}
 
-        <script type="text/javascript">
-            runAllForms();
-            pageSetUp();
-            $('body').addClass('smart-style-5')
-        </script>
+    <script type="text/javascript">
+        runAllForms();
+        pageSetUp();
+        $('body').addClass('smart-style-5')
+
+    </script>
 
 </body>
 
