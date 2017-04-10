@@ -1,6 +1,5 @@
 from sqlalchemy import text, create_engine, MetaData
-#engine = create_engine('sqlite:///SDSU-Rock-Wall/RockWall.db',
-#convert_unicode=True)
+#engine = create_engine('sqlite:///SDSU-Rock-Wall/RockWall.db', convert_unicode=True)
 engine = create_engine('sqlite:///RockWall.db', convert_unicode=True)
 metadata = MetaData(bind=engine)
 

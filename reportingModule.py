@@ -43,7 +43,16 @@ def reportingAdmin():
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    return render_template('reportingManager.html')
+    reportTable = {}
+    reportTable['id'] = databaseFunctions.getAllIncidentReportIds()
+    reportTable['time'] = databaseFunctions.getAllIncidentReportTimes()
+    reportTable['date'] = databaseFunctions.getAllIncidentReportDates()
+    reportTable['description'] = databaseFunctions.getAllIncidentReportDescriptions()
+    reportTable['author'] = databaseFunctions.getAllIncidentReportAuthors()
+    reportTable['isReviewed'] = databaseFunctions.getAllIncidentReportIsRevieweds()
+    reportTable = [dict(id=i, time=t, date=d, description=de, author=a, isReviewed=ir) for i, t, d, de, a, ir in zip(reportTable['id'], reportTable['time'], reportTable['date'], reportTable['description'], reportTable['author'], reportTable['isReviewed'])]
+    
+    return render_template('reportingManager.html', reportTable = reportTable)
 
 def reportingMaster():
 

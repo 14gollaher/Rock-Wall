@@ -342,7 +342,10 @@ def checkPermissionsPasswordChange(userAccount, userChangeAccount):
 
 def addMessage():
     currentUserFullName = session.get('currentUserFirstName') + ' ' + session.get('currentUserLastName')
-    newMessage = Message('-1Nullx0', str(currentUserFullName), str(datetime.now().strftime('%b-%d %I:%M %p')), str(request.form['content']))
+
+    currentTime = datetime.now(pytz.timezone('US/Central'))
+
+    newMessage = Message('-1Nullx0', str(currentUserFullName), str(currentTime.strftime('%b-%d %I:%M %p')), str(request.form['content']))
     newMessage.content = '\n' + newMessage.content
     databaseFunctions.insertNewMessage(newMessage)
     return redirect('message')
