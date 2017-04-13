@@ -1,7 +1,0 @@
-set_config
-CheckerTestCase
-Message
-ImportsCheckerTC
-imports
-test_utils
-unittest

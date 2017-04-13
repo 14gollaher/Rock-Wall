@@ -1,5 +1,0 @@
-_show_fixture_action
-pytest_fixture_post_finalizer
-pytest_addoption
-pytest
-sys

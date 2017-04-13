@@ -1,8 +1,0 @@
-osp
-register
-PyLinter
-checkers
-TestMcCabeMethodChecker
-TestReporter
-BaseReporter
-unittest

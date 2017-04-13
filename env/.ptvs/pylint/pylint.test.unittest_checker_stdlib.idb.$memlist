@@ -1,8 +1,0 @@
-StdlibCheckerTest
-CheckerTestCase
-test_utils
-astroid
-stdlib
-_add_transform
-contextlib
-unittest

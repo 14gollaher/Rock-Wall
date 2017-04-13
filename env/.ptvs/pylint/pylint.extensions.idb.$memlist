@@ -1,7 +1,0 @@
-check_docs
-_check_docs_utils
-mccabe
-bad_builtin
-check_elif
-docstyle
-docparams

@@ -1,7 +1,0 @@
-create_new_paste
-sys
-pytest_addoption
-pytest_terminal_summary
-pytest
-tempfile
-pytest_unconfigure
