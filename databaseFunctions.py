@@ -616,13 +616,39 @@ def getCurrentPatronGender(id):
 		row = result
 		return row['Gender']
 
+def getCurrentPatronSuspension(id):
+	sqlText = text("SELECT IsSuspended FROM Patron WHERE Id = :id")
+	result = engine.execute(sqlText, {"id": id}).fetchone()
+	if not result:
+		return result
+	else:	
+		row = result
+		return row['IsSuspended']
+
 def deletePatronItem(PatronItem):
 	sqlText = text("DELETE FROM Patron WHERE Id = :id")
 	engine.execute(sqlText, {"id": PatronItem.id})
 
 def editPatron(PatronItem):
-    sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber, Gender = :gender, Address = :address, City = :city, Zip = :zipCode, State = :state, IsBelayCertified = :isBelayCertified, IsSoloClimbCertified = :isSoloClimbCertified, IsSuspended = isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
-    engine.execute(sqlText, {"id": PatronItem.id, "firstName": PatronItem.firstName, "lastName": PatronItem.lastName, "email": PatronItem.email, "phoneNumber": PatronItem.phoneNumber, "gender": PatronItem.gender, "address": PatronItem.address, "city": PatronItem.city, "zipCode": PatronItem.zipCode, "state": PatronItem.state, "isBelayCertified": PatronItem.isBelayCertified, "isSoloClimbCertified": PatronItem.isSoloClimbCertified, "isSuspended": PatronItem.isSuspended,  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
+    if PatronItem.isBelayCertified == 'Yes':
+        belayBooleanStatus = True
+    else:
+        belayBooleanStatus = False
+
+    if PatronItem.isSoloClimbCertified == 'Yes':
+        soloClimbBooleanStatus = True
+    else:
+        soloClimbBooleanStatus = False
+    
+    if PatronItem.isSuspended == 'Yes':
+        suspendedBooleanStatus = True
+    else:
+        PatronItem.suspendedStartDate = ''
+        PatronItem.suspendedEndDate = ''
+        suspendedBooleanStatus = False
+
+    sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber, Gender = :gender, Address = :address, City = :city, Zip = :zipCode, State = :state, IsBelayCertified = :isBelayCertified, IsSoloClimbCertified = :isSoloClimbCertified, IsSuspended = :isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
+    engine.execute(sqlText, {"id": PatronItem.id, "firstName": PatronItem.firstName, "lastName": PatronItem.lastName, "email": PatronItem.email, "phoneNumber": PatronItem.phoneNumber, "gender": PatronItem.gender, "address": PatronItem.address, "city": PatronItem.city, "zipCode": PatronItem.zipCode, "state": PatronItem.state, "isBelayCertified": str(belayBooleanStatus), "isSoloClimbCertified": str(soloClimbBooleanStatus), "isSuspended": str(suspendedBooleanStatus),  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
 
 #########################################################################
 ###                                                                   ###
@@ -746,7 +772,7 @@ def getAllCalendarColors():
 
 #########################################################################
 ###                                                                   ###
-###                         Inventory Table ###
+###                         Inventory Table                           ###
 ###                                                                   ###
 #########################################################################
 

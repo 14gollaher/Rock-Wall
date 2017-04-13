@@ -14,7 +14,7 @@
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
                             <span class="widget-icon"> <i class="fa fa-users"></i> </span>
                             <h2 style="line-height:15px"><strong>User List</strong></h2>
@@ -87,93 +87,10 @@
             phone: 480
         };
 
-        $('#dt_basic').dataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-                "t" +
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "autoWidth": true,
-            "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-            },
-            "preDrawCallback": function () {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_dt_basic) {
-                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_dt_basic.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_dt_basic.respond();
-            }
-        });
-
-        /* END BASIC */
-
-        /* COLUMN FILTER  */
-        var otable = $('#datatable_fixed_column').DataTable({
-            //"bFilter": false,
-            //"bInfo": false,
-            //"bLengthChange": false
-            //"bAutoWidth": false,
-            //"bPaginate": false,
-            "bStateSave": true,
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6 hidden-xs'f><'col-sm-6 col-xs-12 hidden-xs'<'toolbar'>>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "autoWidth": true,
-            "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-            },
-            "preDrawCallback": function () {
-                if (!responsiveHelper_datatable_fixed_column) {
-                    responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#datatable_fixed_column'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable_fixed_column.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable_fixed_column.respond();
-            }
-
-        });
-
-        $("div.toolbar").html('<div class="text-right"><img src="img/logo.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
-
-        $("#datatable_fixed_column thead th input[type=text]").on('keyup change', function () {
-
-            otable
-                .column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
-
-        });
-
-        $('#datatable_col_reorder').dataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-            "autoWidth": true,
-            "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-            },
-            "preDrawCallback": function () {
-                // Initialize the responsive datatables helper once.
-                if (!responsiveHelper_datatable_col_reorder) {
-                    responsiveHelper_datatable_col_reorder = new ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable_col_reorder.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable_col_reorder.respond();
-            }
-        });
 
         $('#datatable').dataTable({
+            stateSave: true,
+
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
                     "t" +
                     "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
@@ -195,18 +112,7 @@
                 ],
                 "sSwfPath": "static/js/plugin/datatables/swf/copy_csv_xls_pdf.swf"
             },
-            "autoWidth": true,
-            "preDrawCallback": function () {
-                if (!responsiveHelper_datatable) {
-                    responsiveHelper_datatable = new ResponsiveDatatablesHelper($('#datatable'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable.respond();
-            },
+            "autoWidth": false
         });
 
         var table = $('#datatable').DataTable();
@@ -245,7 +151,6 @@
             }
         });
         $('#datatable tbody').on('dblclick', 'tr', function () {
-            "";
             document.getElementById('inventoryEditButton').click(); return false;
         });
 

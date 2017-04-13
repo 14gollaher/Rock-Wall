@@ -10,6 +10,7 @@ import databaseFunctions
 import simplejson as json
 import time
 import pytz
+import ctypes
 
 class Patron:
 
@@ -74,6 +75,7 @@ def patronCheckInRoute():
         currentPatronCity = databaseFunctions.getCurrentPatronCity(currentPatronId)
         currentPatronZipCode = databaseFunctions.getCurrentPatronZipCode(currentPatronId)
         currentPatronGender = databaseFunctions.getCurrentPatronGender(currentPatronId)
+        currentPatronSuspension = databaseFunctions.getCurrentPatronSuspension(currentPatronId)
         pass2 = []
         pass2.append('T')
         pass2 = json.dumps(pass2)
@@ -81,8 +83,12 @@ def patronCheckInRoute():
     else:
         session['messageCheckIn'] = 'Account does not exist!'
         return redirect('patronCheckIn')
+    if currentPatronSuspension == 'True':
+        return redirect('patronSuspension')
+    
 
-    return render_template('patron/patronCheckIn.html', id = currentPatronId, firstName = currentPatronFirstName, lastName = currentPatronLastName, email = currentPatronEmail, phoneNumber = currentPatronPhoneNumber, address = currentPatronAddress, state = currentPatronState, city = currentPatronCity, zipCode = currentPatronZipCode, gender = currentPatronGender, pass2 = pass2)
+
+    return render_template('patron/patronCheckIn.html', id = currentPatronId, firstName = currentPatronFirstName, lastName = currentPatronLastName, email = currentPatronEmail, phoneNumber = currentPatronPhoneNumber, address = currentPatronAddress, state = currentPatronState, city = currentPatronCity, zipCode = currentPatronZipCode, gender = currentPatronGender, isSuspended = currentPatronSuspension, pass2 = pass2)
 
 
 def patronCheckInRoute2():
@@ -128,6 +134,9 @@ def patronSignUpRoute():
 def signWaiver():
     return render_template('patron/signWaiver.html')
     
+def patronSuspension():
+    return render_template('patron/patronSuspension.html')
+
 def createPatronAccountRoute():
     
     file = open("sysSig.bteam", "r")

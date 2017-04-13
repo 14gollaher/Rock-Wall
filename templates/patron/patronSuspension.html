@@ -1,0 +1,36 @@
+﻿{% extends "layoutCheckin.html" %}
+{%block body %}
+
+<!-- MAIN CONTENT -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<div id="content" class="container" style="padding-top: 100px;">
+    <div class="col-md-8">
+        <div class="well no-padding">
+            <form action="patronCheckInRoute" method="post" id="form-createAccount" class="smart-form client-form">
+                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+                    Check In
+                </header>
+                <fieldset>
+                    <section>
+                        {% if messageCreateAccount %}
+                        <div class="pageError" style="color: white">
+                            {{ messageCreateAccount }}
+                        </div>
+                        {% endif %}
+                        <p style="font-size: 25px; text-align:center;"> Account is suspended! Please see a rock wall employee. </p>
+                    </section>
+                </fieldset>
+                <footer>
+                    <button class="btn btn-primary" onclick="location.href='/patronCheckIn'" type="button" style="margin-right: 100px; width: 500px; height: 50px;">
+                        Back to check in
+                    </button>
+                </footer>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+</script>
+    {% endblock %}

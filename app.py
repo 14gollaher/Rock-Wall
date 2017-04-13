@@ -15,7 +15,6 @@ import reportingModule
 import patronViewModule
 import userViewModule
 
-
 app = Flask(__name__)
 app.secret_key = os.urandom(12)
 
@@ -37,7 +36,7 @@ def index():
 def employeeMenu():
     return loginModule.employeeMenu()
 
-@app.route('/userAddMessage', methods=['GET', 'POST'])
+@app.route('/userAddMessage', methods=['POST'])
 def addMessage():
     return loginModule.addMessage()
 
@@ -103,15 +102,15 @@ def addInventoryRoute():
 def editInventoryRoute():
     return inventoryModule.editInventoryRoute()
 
-@app.route('/inventoryDelete', methods=['GET', 'POST'])
+@app.route('/inventoryDelete', methods=['POST'])
 def inventoryDelete():
     return inventoryModule.inventoryDelete()
 
-@app.route('/inventoryUpdate', methods=['GET', 'POST'])
+@app.route('/inventoryUpdate', methods=['POST'])
 def inventoryUpdate():
     return inventoryModule.inventoryToggleCheckStatus()
 
-@app.route('/inventoryEdit', methods=['GET', 'POST'])
+@app.route('/inventoryEdit', methods=['POST'])
 def inventoryEdit():
     return inventoryModule.inventoryEdit()
 
@@ -125,15 +124,15 @@ def inventoryEdit():
 def calendar():
     return calendarModule.calendar() 
 
-@app.route('/calendarUpdate', methods=['GET', 'POST'])
+@app.route('/calendarUpdate', methods=['POST'])
 def calendarUpdate():
     return calendarModule.calendarUpdate()
 
-@app.route('/calendarDelete', methods=['GET', 'POST'])
+@app.route('/calendarDelete', methods=['POST'])
 def calendarDelete():
     return calendarModule.calendarDelete()
 
-@app.route('/calendarInsert', methods=['GET', 'POST'])
+@app.route('/calendarInsert', methods=['POST'])
 def calendarInsert():
     return calendarModule.calendarInsert()
 
@@ -160,7 +159,6 @@ def patronCheckIn():
 def patronCheckInRoute():
     return patronModule.patronCheckInRoute()
 
-
 @app.route('/patronCheckInRoute2', methods=['POST'])
 def patronCheckInRoute2():
     return patronModule.patronCheckInRoute2()
@@ -173,15 +171,19 @@ def patronConfirmation():
 def signWaiver():
     return patronModule.signWaiver()
 
+@app.route('/patronSuspension')
+def patronSuspension():
+    return patronModule.patronSuspension()
+
 @app.route('/signWaiverRoute', methods=['POST'])
 def signWaiverRoute():
     return patronModule.signWaiverRoute()
 
-@app.route('/createPatronAccountRoute', methods=['GET', 'POST'])
+@app.route('/createPatronAccountRoute', methods=['POST'])
 def createPatronAccountRoute():
     return patronModule.createPatronAccountRoute()
 
-@app.route('/storeImage', methods=['GET', 'POST'])
+@app.route('/storeImage', methods=['POST'])
 def storeImage():
     return patronModule.storeImage()
 
@@ -211,9 +213,14 @@ def reportingMaster():
 def addIncidentRoute():
     return reportingModule.addIncidentRoute()
 
-@app.route('/toggleReportReviewStatus', methods=['GET', 'POST'])
+@app.route('/toggleReportReviewStatus', methods=['POST'])
 def toggleReportReviewStatus():
     return reportingModule.toggleReportReviewStatus()
+
+@app.route('/editPatronSuspensionRoute', methods=['POST'])
+def editPatronSuspensionRoute():
+    return reportingModule.editPatronSuspensionRoute()
+
 
 #########################################################################
 ###                                                                   ###
@@ -241,10 +248,10 @@ def patronViewMaster():
 def editPatronRoute():
     return patronViewModule.editPatronRoute()
 
-@app.route('/patronDelete', methods=['GET', 'POST'])
+
+@app.route('/patronDelete', methods=['POST'])
 def patronDelete():
     return patronViewModule.patronDelete()
-
 
 #########################################################################
 ###                                                                   ###
@@ -260,14 +267,17 @@ def users():
 def userViewAdmin():
     return userViewModule.userViewAdmin()
 
+@app.route('/userViewMaster')
+def userViewMaster():
+    return userViewModule.userViewMaster()
 
-#if __name__ == '__main__':
-#     HOST = environ.get('SERVER_HOST', 'localhost')
-#     try:
-#         PORT = int(environ.get('SERVER_PORT', '5555'))
-#     except ValueError:
-#         PORT = 5555
-#     app.run(HOST, PORT,debug=True)
+if __name__ == '__main__':
+     HOST = environ.get('SERVER_HOST', 'localhost')
+     try:
+         PORT = int(environ.get('SERVER_PORT', '5555'))
+     except ValueError:
+         PORT = 5555
+     app.run(HOST, PORT,debug=True)
 
-if __name__ == "__main__":
-    app.run(debug=False,host='0.0.0.0', port=4000)
+#if __name__ == "__main__":
+#    app.run(debug=False,host='0.0.0.0', port=4000)

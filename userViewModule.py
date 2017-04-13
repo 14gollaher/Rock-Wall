@@ -35,4 +35,18 @@ def userViewAdmin():
     userTable['accountType'] = databaseFunctions.getAllUserAccountTypes()
     userTable = [dict(email=e, firstName=f, lastName=l, accountType = a) for e, f, l, a in zip(userTable['email'], userTable['firstName'], userTable['lastName'], userTable['accountType'])]
     
-    return render_template('userViewAdmin.html', userTable = userTable)
+    return render_template('userViewManager.html', userTable = userTable)
+
+def userViewMaster():
+
+    if not session.get('isLoggedIn'):
+        return redirect('login')
+
+    userTable = {}
+    userTable['email'] = databaseFunctions.getAllUserEmails()
+    userTable['firstName'] = databaseFunctions.getAllUserFirstNames()
+    userTable['lastName'] = databaseFunctions.getAllUserLastNames()
+    userTable['accountType'] = databaseFunctions.getAllUserAccountTypes()
+    userTable = [dict(email=e, firstName=f, lastName=l, accountType = a) for e, f, l, a in zip(userTable['email'], userTable['firstName'], userTable['lastName'], userTable['accountType'])]
+    
+    return render_template('userViewManager.html', userTable = userTable)

@@ -14,7 +14,7 @@
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
                             <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                             <h2 style="line-height:15px"><strong>Reporting</strong></h2>
@@ -61,7 +61,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
                             <span class="widget-icon"> <i class="fa fa-table"></i> </span>
                             <h2 style="line-height:15px"><strong>Reports</strong></h2>
@@ -77,7 +77,7 @@
                                     </button>
                                 </div>
 
-                                <table id="datatable" class="table table-striped table-bordered table-hover">
+                                <table id="datatable" class="display table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th style="display:none"></th>
@@ -104,6 +104,51 @@
                             </div>
                         </div>
                     </div>
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-users"></i> </span>
+                            <h2 style="line-height:15px"><strong>Patron List</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div style="padding-bottom:10px; padding-right: 5px; padding-top: 7px;">
+                                    <button class="btn btn-primary" id="editSuspension" style="margin-left:6px;" data-toggle="modal" data-target="#suspensionModal">
+                                        <i class="fa fa-plus"></i> <span class="hidden-mobile">Edit Suspension Details</span>
+                                    </button>
+
+                                </div>
+                                <table id="patronDatatable" class="display table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Suspension Status</th>
+                                            <th>Suspension Start Date</th>
+                                            <th>Suspension End Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in patronTable %}
+                                        <tr id="tr">
+                                            <td>{{ row['id']|tojson|safe }}</td>
+                                            <td>{{ row['firstName'] }}</td>
+                                            <td>{{ row['lastName'] }}</td>
+                                            {% if row['isSuspended'] == 'False' %}
+                                            <td>No</td>
+                                            {% else %}
+                                            <td>Yes</td>
+                                            {% endif %}
+                                            <td>{{ row['suspendedStartDate'] }}</td>
+                                            <td>{{ row['suspendedEndDate'] }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                 </article>
             </div>
         </section>
@@ -128,7 +173,7 @@
                 <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Edit Inventory Item</h4>
+                <h4 class="modal-title" id="myModalLabel">Edit Suspension Details</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -172,219 +217,296 @@
         </div>
     </div>
 </div>
+<form action="editPatronSuspensionRoute" method="post">
+    <div class="modal fade" id="suspensionModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Inventory Item</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group" style="display:none;">
+                                <label class="control-label">Patron ID</label>
+                                <input type="text" class="form-control" id="selectedPatronId" readonly="readonly" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">First Name</label>
+                                <input type="text" class="form-control" id="selectedPatronFirstName" readonly="readonly" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Last Name</label>
+                                <input type="text" class="form-control" id="selectedPatronLastName" readonly="readonly" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Suspended</label>
+                                <select class="form-control" name="updatedPatronSuspensionStatus" id="selectedPatronSuspensionStatus" style="margin-bottom:15px">
+                                    <option value="">Suspension Status</option>
+                                    <option value="Yes">Yes</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Suspension Start Date</label>
+                                <input type="text" class="form-control datepicker" data-dateformat="mm/dd/yy" name="updatedPatronSuspensionStartDate" id="selectedPatronSuspensionStartDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Suspension End Date</label>
+                                <input type="text" class="form-control datepicker" data-dateformat="mm/dd/yy" name="updatedPatronSuspensionEndDate" id="selectedPatronSuspensionEndDate" readonly/>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary" data-dismiss="modal">
+                                Submit Changes
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    <script type="text/javascript">
 
 
+        $($("#navbarList > li")[2]).addClass('active')
 
-<script type="text/javascript">
+        var selectedId = "";
+        var selectedTime = "";
+        var selectedDate = "";
+        var selectedDescription = "";
+        var selectedAuthor = "";
+        var selectedIsReviewed = "";
 
-    $($("#navbarList > li")[2]).addClass('active')
+        var selectedPatronId = "";
+        var selectedPatronFirstName = "";
+        var selectedPatronLastName = "";
+        var selectedPatronSuspensionStatus = "";
+        var selectedPatronSuspensionStartDate = "";
+        var selectedPatronSuspensionEndDate = "";
 
-    var selectedId = "";
-    var selectedTime = "";
-    var selectedDate = "";
-    var selectedDescription = "";
-    var selectedAuthor = "";
-    var selectedIsReviewed = "";
+        var allDescriptions = [];
+        var allDesciptionIds = [];
 
-    var allDescriptions = [];
-    var allDesciptionIds = [];
-
-    $(".bigBox").click(function () {
-        $(".bigBox").remove();
-    });
-
-    $('#incidentDate').datepicker({
-        maxDate: 0,
-        nextText: '>',
-        prevText: '<',
-        donetext: 'Done',
-        navigationAsDateFormat: true
-    });
-
-
-    $('#incidentTime').timepicker({
-        maxDate: 0,
-        maxTime: 0
-    });
-
-    $(document).ready(function () {
-
-        let previousUrl = document.referrer;
-        if (previousUrl == "http://localhost:4000/reporting" || previousUrl == "http://www.matthew.gollaher/reporting") {
-            $('.bigBox').show();
-            setTimeout(function () {
-                $('.bigBox').hide();
-            }, 3000);
-        }
-        else {
+        $(".bigBox").click(function () {
             $(".bigBox").remove();
-        }
+        });
 
-        var responsiveHelper_dt_basic = undefined;
-        var responsiveHelper_datatable_fixed_column = undefined;
-        var responsiveHelper_datatable_col_reorder = undefined;
-        var responsiveHelper_datatable = undefined;
+        $('#incidentDate').datepicker({
+            maxDate: 0,
+            nextText: '>',
+            prevText: '<',
+            donetext: 'Done',
+            navigationAsDateFormat: true
+        });
 
-        var breakpointDefinition = {
-            tablet: 1024,
-            phone: 480
-        };
 
-        $('#dt_basic').dataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
-                "t" +
-                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "autoWidth": true,
-            "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-            },
-            "preDrawCallback": function () {
-                if (!responsiveHelper_dt_basic) {
-                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_dt_basic.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_dt_basic.respond();
+        $('#incidentTime').timepicker({
+            maxDate: 0,
+            maxTime: 0
+        });
+
+        $("#selectedSuspendedStartDate").datepicker({
+            minDate: 0,
+            onSelect: function (selected) {
+                $("#selectedSuspendedEndDate").datepicker("option", "minDate", selected)
+            }
+        });
+        $("#selectedSuspendedEndDate").datepicker({
+            minDate: 0,
+            onSelect: function (selected) {
+                $("#selectedSuspendedStartDate").datepicker("option", "maxDate", selected)
             }
         });
 
-        var otable = $('#datatable_fixed_column').DataTable({
+        $(document).ready(function () {
 
-            "bStateSave": true,
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6 hidden-xs'f><'col-sm-6 col-xs-12 hidden-xs'<'toolbar'>>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
-            "autoWidth": true,
-            "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-            },
-            "preDrawCallback": function () {
-                if (!responsiveHelper_datatable_fixed_column) {
-                    responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#datatable_fixed_column'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable_fixed_column.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable_fixed_column.respond();
-            }
-        });
-
-        $("div.toolbar").html('<div class="text-right"><img src="img/logo.png" alt="SmartAdmin" style="width: 111px; margin-top: 3px; margin-right: 10px;"></div>');
-
-        $("#datatable_fixed_column thead th input[type=text]").on('keyup change', function () {
-
-            otable
-                .column($(this).parent().index() + ':visible')
-                .search(this.value)
-                .draw();
-
-        });
-
-        $('#datatable_col_reorder').dataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'C>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-            "autoWidth": true,
-            "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-            },
-            "preDrawCallback": function () {
-                if (!responsiveHelper_datatable_col_reorder) {
-                    responsiveHelper_datatable_col_reorder = new ResponsiveDatatablesHelper($('#datatable_col_reorder'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable_col_reorder.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable_col_reorder.respond();
-            }
-        });
-
-        $('#datatable').dataTable({
-            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
-                    "t" +
-                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
-            "oLanguage": {
-                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
-            },
-            "oTableTools": {
-                "aButtons": [
-                "copy",
-                "xls",
-                   {
-                       "sExtends": "pdf",
-                       "sPdfSize": "letter"
-                   },
-                   {
-                       "sExtends": "print",
-                       "sMessage": "<i>(press Esc to close)</i>"
-                   }
-                ],
-                "sSwfPath": "static/js/plugin/datatables/swf/copy_csv_xls_pdf.swf"
-            },
-            order: [['2', 'desc']],
-            "autoWidth": true,
-            "preDrawCallback": function () {
-                if (!responsiveHelper_datatable) {
-                    responsiveHelper_datatable = new ResponsiveDatatablesHelper($('#datatable'), breakpointDefinition);
-                }
-            },
-            "rowCallback": function (nRow) {
-                responsiveHelper_datatable.createExpandIcon(nRow);
-            },
-            "drawCallback": function (oSettings) {
-                responsiveHelper_datatable.respond();
-            },
-            "columnDefs": [
-            {
-                targets: 3,
-                render: $.fn.dataTable.render.ellipsis()
-            }]
-        });
-
-
-        var table = $('#datatable').DataTable();
-        $('#datatable tbody').on('click', 'tr', function () {
-
-            if ($(this).hasClass('selected')) {
-                $(this).removeClass('selected');
-                $(this).removeClass('rowSelect');
-
+            
+            let previousUrl = document.referrer;
+            if (previousUrl == "http://localhost:4000/reporting" || previousUrl == "http://www.matthew.gollaher/reporting") {
+                $('.bigBox').show();
+                setTimeout(function () {
+                    $('.bigBox').hide();
+                }, 3000);
             }
             else {
-                table.$('tr.selected').removeClass('rowSelect');
-                table.$('tr.selected').removeClass('selected');
-                $(this).addClass('selected');
-                $(this).addClass('rowSelect');
+                $(".bigBox").remove();
             }
+
+            $('table.display').DataTable({
+                stateSave: true,
+                "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
+                        "t" +
+                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+                "oLanguage": {
+                    "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+                },
+                "oTableTools": {
+                    "aButtons": [
+                    "copy",
+                    "xls",
+                       {
+                           "sExtends": "pdf",
+                           "sPdfSize": "letter"
+                       },
+                       {
+                           "sExtends": "print",
+                           "sMessage": "<i>(press Esc to close)</i>"
+                       }
+                    ],
+                    "sSwfPath": "static/js/plugin/datatables/swf/copy_csv_xls_pdf.swf"
+                },
+                order: ['2'],
+                "autoWidth": true,
+                "columnDefs": [
+                {
+                    targets: 3,
+                    render: $.fn.dataTable.render.ellipsis()
+                }]
+            });
+
+            var table = $('#datatable').DataTable();
+            var table2 = $('#patronDatatable').DataTable();
+            $('table.display').on('click', 'tr', function () {
+
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                    $(this).removeClass('rowSelect');
+
+                }
+                else {
+                    table.$('tr.selected').removeClass('rowSelect');
+                    table.$('tr.selected').removeClass('selected');
+                    table2.$('tr.selected').removeClass('rowSelect');
+                    table2.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                    $(this).addClass('rowSelect');
+                }
+            });
+
+
+            $('#toggleReviewReport').click(function () {
+
+                let selectedRow = document.querySelectorAll(".selected");
+                selectedRow = selectedRow[0].textContent.split("\n");
+
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
+                selectedIsReviewed = selectedRow[6].trim(" ");
+
+                if (selectedId != "") {
+                    runToggleReviewPython(selectedId, selectedIsReviewed);
+                    location.reload();
+                }
+            });
         });
+
 
         $('#viewReport').click(function () {
 
             let selectedRow = document.querySelectorAll(".selected");
-            selectedRow = selectedRow[0].textContent.split("\n");
+            if (!selectedRow[0]) {
+                alert('Please select a report to view more details.');
+            }
+            else {
+                $("#viewReportModal").modal()
+                selectedRow = selectedRow[0].textContent.split("\n");
 
-            selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
-            selectedTime = selectedRow[2].trim(" ");
-            selectedDate = selectedRow[3].trim(" ");
-            selectedAuthor = selectedRow[5].trim(" ");
-            selectedIsReviewed = selectedRow[6].trim(" ");
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
+                selectedTime = selectedRow[2].trim(" ");
+                selectedDate = selectedRow[3].trim(" ");
+                selectedAuthor = selectedRow[5].trim(" ");
+                selectedIsReviewed = selectedRow[6].trim(" ");
 
-            document.getElementById("selectedId").value = selectedId;
-            document.getElementById("selectedTime").value = selectedTime;
-            document.getElementById("selectedDate").value = selectedDate;
-            document.getElementById("selectedDescription").value = findSelectedDescription();
-            document.getElementById("selectedAuthor").value = selectedAuthor;
-            document.getElementById("selectedIsReviewed").value = selectedIsReviewed;
+                document.getElementById("selectedId").value = selectedId;
+                document.getElementById("selectedTime").value = selectedTime;
+                document.getElementById("selectedDate").value = selectedDate;
+                document.getElementById("selectedDescription").value = findSelectedDescription();
+                document.getElementById("selectedAuthor").value = selectedAuthor;
+                document.getElementById("selectedIsReviewed").value = selectedIsReviewed;
+            }
 
         });
 
+        $('#editSuspension').click(function () {
+           
+            let selectedRow = document.querySelectorAll(".selected");
+            if (!selectedRow[0]) {
+                alert('Please select a patron to edit suspension privileges.');
+            }
+            else {
+                $("#editSuspensionModal").modal()
+                selectedRow = selectedRow[0].textContent.split("\n");
+
+                selectedPatronId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
+                selectedPatronFirstName = selectedRow[2].trim(" ");
+                selectedPatronLastName = selectedRow[3].trim(" ");
+                selectedPatronSuspensionStatus = selectedRow[5].trim(" ");
+                selectedPatronSuspensionStartDate = selectedRow[7].trim(" ");
+                selectedPatronSuspensionEndDate = selectedRow[8].trim(" ");
+
+                document.getElementById("selectedPatronId").value = selectedPatronId;
+                document.getElementById("selectedPatronFirstName").value = selectedPatronFirstName;
+                document.getElementById("selectedPatronLastName").value = selectedPatronLastName;
+                document.getElementById("selectedPatronSuspensionStatus").value = selectedPatronSuspensionStatus;
+                document.getElementById("selectedPatronSuspensionStartDate").value = selectedPatronSuspensionStartDate;
+                document.getElementById("selectedPatronSuspensionEndDate").value = selectedPatronSuspensionEndDate;
+            
+
+                if ($('#selectedPatronSuspensionStatus')[0].value == 'Yes') {
+
+                    $('#selectedPatronSuspensionStartDate').addClass('disabled', false);
+                    $('#selectedPatronSuspensionStartDate').datepicker('enable');
+
+                    $('#selectedPatronSuspensionEndDate').addClass('disabled', false);
+                    $('#selectedPatronSuspensionEndDate').datepicker('enable');
+
+                } else {
+
+                    $('#selectedPatronSuspensionStartDate').addClass('disabled', true);
+                    $('#selectedPatronSuspensionStartDate').datepicker('disable');
+
+                    $('#selectedPatronSuspensionEndDate').addClass('disabled', true);
+                    $('#selectedPatronSuspensionEndDate').datepicker('disable');
+                }
+            }
+        });
+
+        $('#selectedPatronSuspensionStatus').change(function () {
+            if ($('#selectedPatronSuspensionStatus')[0].value == 'Yes') {
+
+                $('#selectedPatronSuspensionStartDate').addClass('disabled', false);
+                $('#selectedPatronSuspensionStartDate').datepicker('enable');
+                $('#selectedPatronSuspensionStartDate')[0].value = '';
+
+                $('#selectedPatronSuspensionEndDate').addClass('disabled', false);
+                $('#selectedPatronSuspensionEndDate').datepicker('enable');
+                $('#selectedPatronSuspensionEndDate')[0].value = '';
+
+            } else {
+
+                $('#selectedPatronSuspensionStartDate').addClass('disabled', true);
+                $('#selectedPatronSuspensionStartDate').datepicker('disable');
+                $('#selectedPatronSuspensionStartDate')[0].value = '';
+
+                $('#selectedPatronSuspensionEndDate').addClass('disabled', true);
+                $('#selectedPatronSuspensionEndDate').datepicker('disable');
+                $('#selectedPatronSuspensionEndDate')[0].value = '';
+            }
+        });
 
         $('#toggleReviewReport').click(function () {
 
@@ -398,38 +520,35 @@
                 runToggleReviewPython(selectedId, selectedIsReviewed);
                 location.reload();
             }
-        })
-    });
+        });
 
-    $.fn.dataTable.render.ellipsis = function () {
-        return function (data, type, row) {
-            allDescriptions.push(row[3])
-            allDesciptionIds.push(row[0])
-            return type === 'display' && data.length > 165 ?
-                data.substr(0, 165) + '…' :
-                data;
-        }
-    };
+        $.fn.dataTable.render.ellipsis = function () {
+            return function (data, type, row) {
+                allDescriptions.push(row[3])
+                allDesciptionIds.push(row[0])
+                return type === 'display' && data.length > 165 ?
+                    data.substr(0, 165) + '…' :
+                    data;
+            }
+        };
 
-    function findSelectedDescription() {
-        for (i = 0; i < allDesciptionIds.length; i++)
-        {
-            if (selectedId == allDesciptionIds[i])
-            {
-                return allDescriptions[i];
+        function findSelectedDescription() {
+            for (i = 0; i < allDesciptionIds.length; i++) {
+                if (selectedId == allDesciptionIds[i]) {
+                    return allDescriptions[i];
+                }
             }
         }
-    }
 
-    function runToggleReviewPython(aId, aIsReviewed) {
-        var jqXHR = $.ajax({
-            type: "POST",
-            url: "/toggleReportReviewStatus",
-            data: { id: aId, isReviewed: aIsReviewed },
-            async: false
-        });
-        return jqXHR.responseText;
-    }
+        function runToggleReviewPython(aId, aIsReviewed) {
+            var jqXHR = $.ajax({
+                type: "POST",
+                url: "/toggleReportReviewStatus",
+                data: { id: aId, isReviewed: aIsReviewed },
+                async: false
+            });
+            return jqXHR.responseText;
+        }
 
-</script>
+    </script>
     {% endblock %}

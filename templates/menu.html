@@ -11,7 +11,7 @@
                 </h1>
             </div>
             <div class="col-xs-12 col-sm-5 col-md-5 col-lg-8">
-                <ul id="sparks">
+                <ul id="sparks" style="padding-right: 30px;">
                     <li class="sparks-info">
                         <h5> Today's Visits <span class="txt-color-blue">{{ totalTodaysVisits }}</span></h5>
                         <div class="sparkline txt-color-blue hidden-mobile hidden-md hidden-sm">
@@ -39,9 +39,9 @@
         <section id="widget-grid" class="">
             <div class="row">
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
-                            <span class="widget-icon"> <i class="fa fa-envelope"></i> </span>
+                            <span class="widget-icon"> <i class="fa fa-comment icon fa-lg"></i> </span>
                             <h2 style="line-height:15px"><strong>Message Center</strong></h2>
                         </header>
                         <div>
@@ -50,12 +50,12 @@
                                     <ul>
                                         {% for row in messageTable %}
                                         <li class="message">
-                                            <i class="fa fa-envelope fa-lg" aria-hidden="true"></i>
+                                            <i class="fa fa-comment icon fa-lg" aria-hidden="true"></i>
                                             <br />
                                             <div class="message-text">
                                                 <time style="color:yellow; font-size: 13px; font-weight:bolder">
                                                     {{ row['time'] }}
-                                                </time> <a href="javascript:void(0);" style="color:yellow; font-size: 15px; font-weight:bolder" class="username">{{ row['author'] }}</a> <br />{{ row['content'] }}
+                                                </time> <a style="color:yellow; font-size: 15px; font-weight:bolder" class="username">{{ row['author'] }}</a> <br />{{ row['content'] }}
                                             </div>
                                             <hr>
                                         </li>
@@ -96,6 +96,8 @@
 
 <script type="text/javascript">
 
+    var clickedSendOnce = false;
+
     $($("#navbarList > li")[0]).addClass('active')
 
     $(document).ready(function () {
@@ -120,9 +122,19 @@
     });
 
     $('#addMessage').click(function () {
-        let content = document.getElementsByName("content")[0].value;
-        runAddMessagePython(content);
-        location.reload();
+
+        if (clickedSendOnce == false) {
+
+            let content = document.getElementsByName("content")[0].value;
+            if (content.length == 0) {
+                alert("Please enter a chat message.");
+            }
+            else {
+                clickedSendOnce = true;
+                runAddMessagePython(content);
+                location.reload();
+            }
+        }
     });
 
     function runAddMessagePython(aContent) {

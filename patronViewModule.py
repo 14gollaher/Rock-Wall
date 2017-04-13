@@ -111,7 +111,6 @@ def patronViewMaster():
     return render_template('patronViewManager.html', patronTable = patronTable)
 
 def patronDelete():
-
     if not session.get('isLoggedIn'):
         return redirect('login')
 
@@ -122,13 +121,22 @@ def patronDelete():
     return redirect('patronViewManager')
 
 def editPatronRoute():
-
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    newPatronItem = Patron(str(request.form['updatedId']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']), str(request.form['updatedEmail']), str(request.form['updatedPhoneNumber']), str(request.form['updatedGender']), str(request.form['updatedAddress']), str(request.form['updatedCity']), str(request.form['updatedZipCode']), "", str(request.form['updatedState']), str(request.form['updatedBelayStatus']), str(request.form['updatedSoloClimbStatus']), str(request.form['updatedIsSuspended']), str(request.form['updatedSuspendedStartDate']), str(request.form['updatedSuspendedEndDate']))
-    databaseFunctions.editPatron(newPatronItem)
+    patronUpdatedStartDate = ""
+    patronUpdatedEndDate = ""
+    try:
+        patronUpdatedStartDate = str(request.form['updatedSuspendedStartDate'])
+        patronUpdatedEndDate = str(request.form['updatedSuspendedEndDate'])
+    except:
+        patronUpdatedStartDate = ""
+        patronUpdatedEndDate = ""
+    newPatronItem = Patron(str(request.form['updatedId']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']), str(request.form['updatedEmail']), str(request.form['updatedPhoneNumber']), str(request.form['updatedGender']), str(request.form['updatedAddress']), str(request.form['updatedCity']), str(request.form['updatedZipCode']), "", str(request.form['updatedState']), str(request.form['updatedBelayStatus']), str(request.form['updatedSoloClimbStatus']), str(request.form['updatedIsSuspended']), patronUpdatedStartDate, patronUpdatedEndDate)
+    databaseFunctions.editPatron(newPatronItem) 
     if session.get('currentUserAccountType') == 'administrator':
         return redirect('patronViewAdmin')
     else:
         return redirect('patronViewMaster')
+
+

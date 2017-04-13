@@ -130,7 +130,7 @@
 
                         <div class="modal-footer">
                             <div style="padding-top: 15px;">
-                                <button type="submit" class="btn btn-primary" style="margin-top: 20px; margin-right:125px; width:300px">
+                                <button type="submit" class="btn btn-primary" id="finalCheckIn" style="margin-top: 20px; margin-right:125px; width:300px">
                                     Continue to Check In
                                 </button>
                             </div>
@@ -157,7 +157,7 @@
 
 
     $(document).ready(function () {
-        pageSetUp();
+
         let previousUrl = document.referrer;
         if (previousUrl == "http://localhost:4000/patronCheckIn" || previousUrl == "http://www.matthewgollaher.com/patronCheckIn") {
             $('.bigBox').show();
@@ -189,6 +189,7 @@
         $(".pageError").remove();
     });
 
+    
     runAllForms();
 
     // Validation

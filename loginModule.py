@@ -14,6 +14,7 @@ import itertools
 from itertools import *
 import re
 import pytz
+from passlib.hash import pbkdf2_sha256
 
 class UserAccount:
 
@@ -222,11 +223,13 @@ def loginRoute():
     return redirect('/')
 
 def createAccount():
+
     if session.get('isLoggedIn'):
         return redirect('/')
     return render_template('login/createAccount.html', messageCreateAccount = session.get('messageCreateAccount'))
 
 def createAccountRoute(): 
+
     session['messageCreateAccount'] = ""
 
     userAccount = UserAccount(str(request.form['email']), str(request.form['password']), str(request.form['accountType']), str(request.form['firstName']), str(request.form['lastName']))
@@ -254,11 +257,15 @@ def createAccountRoute():
     return render_template('login/authenticateCreateAccount.html', accountType = session.get('newAccountType'))
 
 def authenticateCreateAccount():
+
     session['messageCreateAccount'] = ""
 
     userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "", "", "")
     userAccount.accountType = databaseFunctions.getAccountType(userAccount)
-    newUser = UserAccount(session.get('newAccountEmail'), session.get('newAccountPassword'), session.get('newAccountType'), session.get('newFirstName'), session.get('newLastName'))
+
+    hashedPassword = pbkdf2_sha256.hash(session.get('newAccountPassword'))
+
+    newUser = UserAccount(session.get('newAccountEmail'), hashedPassword, session.get('newAccountType'), session.get('newFirstName'), session.get('newLastName'))
     
     if validateCredentials(userAccount):
         if checkPermissionsPasswordChange(userAccount, newUser):
@@ -274,11 +281,13 @@ def authenticateCreateAccount():
     return redirect('login')
 
 def changePassword():
+
     if session.get('isLoggedIn'):
         return redirect('/')
     return render_template('login/changePassword.html', messageChangePassword = session.get('messageChangePassword')) 
 
 def changePasswordRoute():
+
     session['messageChangePassword'] = ""
 
     userAccount = UserAccount(str(request.form['email']), str(request.form['newPassword']), "", "", "")
@@ -325,7 +334,13 @@ def authenticateChangePassword():
     return redirect('login')
 
 def validateCredentials(userAccount):
-    if databaseFunctions.getAccountEmail(userAccount) and (databaseFunctions.getAccountPassword(userAccount) == userAccount.password):
+
+    # Code Snippet to add the Master Account
+    #hashedPassword = hashedPassword = pbkdf2_sha256.hash('abc123')
+    #newUser = UserAccount('master@gmail.com', hashedPassword, 'master', 'Justin', 'Parks')
+    #databaseFunctions.insertNewUser(newUser)    
+
+    if pbkdf2_sha256.verify(userAccount.password, databaseFunctions.getAccountPassword(userAccount)):
         return True
     else:
         return False
@@ -342,10 +357,8 @@ def checkPermissionsPasswordChange(userAccount, userChangeAccount):
 
 def addMessage():
     currentUserFullName = session.get('currentUserFirstName') + ' ' + session.get('currentUserLastName')
-
     currentTime = datetime.now(pytz.timezone('US/Central'))
-
     newMessage = Message('-1Nullx0', str(currentUserFullName), str(currentTime.strftime('%b-%d %I:%M %p')), str(request.form['content']))
-    newMessage.content = '\n' + newMessage.content
+    newMessage.content = newMessage.content
     databaseFunctions.insertNewMessage(newMessage)
-    return redirect('message')
+    return redirect('/')
