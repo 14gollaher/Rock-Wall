@@ -1,0 +1,12 @@
+ImportError
+PluginManager
+inspect
+HookspecMarker
+PluginValidationError
+HookimplMarker
+HookCallError
+varnames
+normalize_hookimpl_opts
+HookImpl
+sys
+__version__
