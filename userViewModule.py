@@ -10,6 +10,14 @@ import itertools
 from itertools import *
 import re
 
+class UserAccount:
+
+    def __init__(self, email, password, accountType, firstName, lastName):
+        self.email = email
+        self.password = password
+        self.accountType = accountType
+        self.firstName = firstName
+        self.lastName = lastName
 
 def users():
 
@@ -35,7 +43,7 @@ def userViewAdmin():
     userTable['accountType'] = databaseFunctions.getAllUserAccountTypes()
     userTable = [dict(email=e, firstName=f, lastName=l, accountType = a) for e, f, l, a in zip(userTable['email'], userTable['firstName'], userTable['lastName'], userTable['accountType'])]
     
-    return render_template('userViewManager.html', userTable = userTable)
+    return render_template('userViewAdmin.html', userTable = userTable)
 
 def userViewMaster():
 
@@ -49,4 +57,27 @@ def userViewMaster():
     userTable['accountType'] = databaseFunctions.getAllUserAccountTypes()
     userTable = [dict(email=e, firstName=f, lastName=l, accountType = a) for e, f, l, a in zip(userTable['email'], userTable['firstName'], userTable['lastName'], userTable['accountType'])]
     
-    return render_template('userViewManager.html', userTable = userTable)
+    return render_template('userViewMaster.html', userTable = userTable)
+
+def editUserRoute():
+    if not session.get('isLoggedIn'):
+        return redirect('login')
+    newUserItem = UserAccount(str(request.form['updatedEmail']), "", str(request.form['updatedAccountType']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']))
+    databaseFunctions.editUser(newUserItem) 
+    if session.get('currentUserAccountType') == 'administrator':
+        return redirect('userViewAdmin')
+    else:
+        return redirect('userViewMaster')
+
+def userDelete():
+    if not session.get('isLoggedIn'):
+        return redirect('login')
+
+    newUserItem = UserAccount(str(request.form['email']), "", "", "", "")
+    newUserItem.email = newUserItem.email.strip('"')
+    databaseFunctions.deleteUser(newUserItem)
+
+    if session.get('currentUserAccountType') == 'administrator':
+        return redirect('userViewAdmin')
+    else:
+        return redirect('userViewMaster')

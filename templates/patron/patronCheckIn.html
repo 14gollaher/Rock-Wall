@@ -6,45 +6,34 @@
 <div id="content" class="container" style="padding-top: 100px;">
     <div class="col-md-8">
         <div class="well no-padding">
-            <form action="patronCheckInRoute" method="post" id="form-createAccount" class="smart-form client-form">
-                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+            <form action="patronCheckInRoute" method="post" id="form-checkIn" class="smart-form client-form">
+                <header class="bannerYellowGradient" align="center">
                     Check In
                 </header>
                 <fieldset>
-                    <section>
-                        {% if messageCreateAccount %}
-                        <div class="pageError" style="color: white">
-                            {{ messageCreateAccount }}
-                        </div>
-                        {% endif %}
+                    <ction>
                         <label class="input">
                             <i class="icon-append fa fa-info"></i>
-                            <input type="number" name="patronId" id="patronId" placeholder="Student ID">
-                            <b class="tooltip tooltip-bottom-right">Needed to verify your account</b> <!--may edit-->
+                            <input type="number" name="patronId" id="patronId" placeholder="Student or Wellness Center ID">
+                            <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                         </label>
-                    </section>
+                        <p id="messageBag" style="color: #ffd100; ; padding-top: 5px;">
+                        </p>
+                    </ction>
                 </fieldset>
                 <footer>
-                    <button class="btn btn-primary" type="submit" style="float: left" data-toggle="modal" data-target="#editModal">
-                        Check In
-                    </button>
-                    <button class="btn btn-primary" id ="hiddenButton" type="button" style="visibility:hidden; height:0px; width:0px; padding:0px;" data-toggle="modal" data-target="#editModal">
+                    <button class="btn btn-primary" type="submit" style="float: left" data-target="#checkInModal">
                         Check In
                     </button>
                     <a href="patronSignUp">
                         <input type="button" class="btn btn-primary" value="Create Account" style="float: right" />
                     </a>
                 </footer>
-                <div class="message">
-                    <i class="fa fa-check"></i>
-                    <p>
-                        Thank you for your registration!
-                    </p>
-                </div>
             </form>
         </div>
     </div>
 </div>
+
 <form action="patronCheckInRoute2" method="post" id="form-createAccount">
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -59,74 +48,149 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="control-label">ID</label>
                                 <input type="text" placeholder="Select a item to edit..." class="form-control" id="selectedId" name="patronId2" value={{id}} readonly="readonly" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="control-label">First Name</label>
                                 <input type="text" placeholder="First Name" required class="form-control" id="selectedFirstName" name="firstName" value="{{firstName}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="control-label">Last First</label>
                                 <input type="text" id="selectedLastName" required class="form-control" placeholder="Last Name" name="lastName" value="{{lastName}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="control-label">E-mail</label>
                                 <input type="text" id="selectedEmail" required class="form-control" placeholder="Email" name="email" value="{{email}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="text" id="selectedPhoneNumber" required class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
+                                <label class="control-label">Telephone Number</label>
+                                <input type='tel' data-mask="(999) 999-9999" id="selectedPhoneNumber" required class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="control-label">Address</label>
                                 <input type="text" id="selectedAddress" required class="form-control" placeholder="Address" name="address" value="{{address}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <input type="text" id="selectedState" required class="form-control" placeholder="State" name="state" value="{{state}}" />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
+                                <label class="control-label">City</label>
                                 <input type="text" id="selectedCity" required class="form-control" placeholder="City" name="city" value="{{city}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
+                                <label class="control-label">State</label>
+                                <label class="select" style="display:block">
+                                    <select class="form-control" name="state" id="state">
+                                        <option value="{{state}}" selected="">{{state}}</option>
+                                        <option value="Alabama">Alabama</option>
+                                        <option value="Alaska">Alaska</option>
+                                        <option value="Arizona">Arizona</option>
+                                        <option value="Arkansas">Arkansas</option>
+                                        <option value="California">California</option>
+                                        <option value="Colorado">Colorado</option>
+                                        <option value="Connecticut">Connecticut</option>
+                                        <option value="Delaware">Delaware</option>
+                                        <option value="District Of Columbia">District Of Columbia</option>
+                                        <option value="Florida">Florida</option>
+                                        <option value="Georgia">Georgia</option>
+                                        <option value="Hawaii">Hawaii</option>
+                                        <option value="Idaho">Idaho</option>
+                                        <option value="Illinois">Illinois</option>
+                                        <option value="Indiana">Indiana</option>
+                                        <option value="Iowa">Iowa</option>
+                                        <option value="Kansas">Kansas</option>
+                                        <option value="Kentucky">Kentucky</option>
+                                        <option value="Louisiana">Louisiana</option>
+                                        <option value="Maine">Maine</option>
+                                        <option value="Maryland">Maryland</option>
+                                        <option value="Massachusetts">Massachusetts</option>
+                                        <option value="Michigan">Michigan</option>
+                                        <option value="Minnesota">Minnesota</option>
+                                        <option value="Mississippi">Mississippi</option>
+                                        <option value="Missouri">Missouri</option>
+                                        <option value="Montana">Montana</option>
+                                        <option value="Nebraska">Nebraska</option>
+                                        <option value="Nevada">Nevada</option>
+                                        <option value="New Hampshire">New Hampshire</option>
+                                        <option value="New Jersey">New Jersey</option>
+                                        <option value="New Mexico">New Mexico</option>
+                                        <option value="New York">New York</option>
+                                        <option value="North Carolina">North Carolina</option>
+                                        <option value="North Dakota">North Dakota</option>
+                                        <option value="Ohio">Ohio</option>
+                                        <option value="Oklahoma">Oklahoma</option>
+                                        <option value="Oregon">Oregon</option>
+                                        <option value="Pennsylvania">Pennsylvania</option>
+                                        <option value="Rhode Island">Rhode Island</option>
+                                        <option value="South Carolina">South Carolina</option>
+                                        <option value="South Dakota">South Dakota</option>
+                                        <option value="Tennessee">Tennessee</option>
+                                        <option value="Texas">Texas</option>
+                                        <option value="Utah">Utah</option>
+                                        <option value="Vermont">Vermont</option>
+                                        <option value="Virginia">Virginia</option>
+                                        <option value="Washington">Washington</option>
+                                        <option value="West Virginia">West Virginia</option>
+                                        <option value="Wisconsin">Wisconsin</option>
+                                        <option value="Wyoming">Wyoming</option>
+                                        <option value="American Samoa">American Samoa</option>
+                                        <option value="Guam">Guam</option>
+                                        <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                                        <option value="Puerto Rico">Puerto Rico</option>
+                                        <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
+                                        <option value="Virgin Islands">Virgin Islands</option>
+                                        <option value="Armed Forces Americas">Armed Forces Americas</option>
+                                        <option value="Armed Forces Pacific">Armed Forces Pacific</option>
+                                        <option value="Armed Forces Others">Armed Forces Others</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                    <b class="tooltip tooltip-bottom-right">State is required</b>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Zip Code</label>
                                 <input type="text" id="selectedZipCode" required class="form-control" placeholder="Zip Code" name="zipCode" value="{{zipCode}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <section>
+                                <label class="control-label">Gender</label>
                                 <select class="form-control" name="gender" id="gender">
                                     {% if gender == 'male' %}
                                     <option value="">Choose your gender</option>
                                     <option selected value="male">Male</option>
                                     <option value="female">Female</option>
-                                    <option value="noAnswer">Prefer not to answer</option>
+                                    <option value="noAnswer">Prefer Not to Answer</option>
                                     {% endif %}
                                     {% if gender == 'female' %}
                                     <option value="">Choose your gender</option>
                                     <option value="male">Male</option>
                                     <option selected value="female">Female</option>
-                                    <option value="noAnswer">Prefer not to answer</option>
+                                    <option value="noAnswer">Prefer Not to Answer</option>
                                     {% endif %}
                                     {% if gender == 'noAnswer' %}
                                     <option value="">Choose your gender</option>
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
-                                    <option selected value="noAnswer">Prefer not to answer</option>
+                                    <option selected value="noAnswer">Prefer Not to Answer</option>
                                     {% endif %}
                                 </select>
                             </section>
                         </div>
-
 
                         <div class="modal-footer">
                             <div style="padding-top: 15px;">
@@ -155,7 +219,6 @@
 
 <script type="text/javascript">
 
-
     $(document).ready(function () {
 
         let previousUrl = document.referrer;
@@ -168,16 +231,31 @@
         else {
             $(".bigBox").remove();
         }
-        
+
     });
+
+    var messageBagContent = '{{ session['messageCheckIn'] }}';
+    var messageBag = $("#messageBag");
+
+    if (messageBagContent.length > 0)
+    {
+        messageBagContent = "&nbsp;" + messageBagContent;
+        messageBag.css("display","block")
+        messageBag[0].innerHTML = messageBagContent;
+    }
+
+    $(document).keypress(function () {
+        messageBag.css("display","none")
+    });
+
     window.onload = function(){
+
         var prePass2 = {{pass2|tojson}}
         var pass2 = JSON.parse(prePass2);
         if (pass2[0] == 'T')
         {
-            document.getElementById("hiddenButton").click();
+            $("#editModal").modal()
         }
-
     }
 
     $(".bigBox").click(function () {
@@ -185,38 +263,8 @@
     });
 
 
-    $(document).keypress(function () {
-        $(".pageError").remove();
-    });
 
-    
-    runAllForms();
 
-    // Validation
-    $(function () {
-        // Validation
-        $("#form-createAccount").validate({
 
-            // Rules for form validation
-            rules: {
-                patronID: {
-                    required: true,
-                },
-            },
-
-            // Messages for form validation
-            messages: {
-                patronID: {
-                    required: 'Please enter your Rock Wall ID',
-                    patronID: 'Please enter a VALID ID'
-                },
-            },
-
-            // Do not change code below
-            errorPlacement: function (error, element) {
-                error.insertAfter(element.parent());
-            }
-        });
-    });
 </script>
     {% endblock %}

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layoutCheckin.html" %}
 {%block body %}
 
 <!-- MAIN CONTENT -->
@@ -12,80 +12,152 @@
                 </header>
                 <fieldset>
                     <section>
-                        {% if messageCreateAccount %}
-                        <div class="pageError" style="color: white">
-                            {{ messageCreateAccount }}
-                        </div>
-                        {% endif %}
-                        <label class="input">
+                        ID Number
+                        <label class="input control-label">
                             <i class="icon-append fa fa-info"></i>
-                            <input type="number" name="id" id="id" placeholder="ID number">
+
+                            <input type="number" name="id" id="id" placeholder="Student or Wellness Center ID">
                             <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                         </label>
                     </section>
                     <section>
-                        <label class="input">
+                        First Name
+                        <label class="input control-label">
                             <i class="icon-append fa fa-user"></i>
                             <input type="text" name="firstName" id="firstName" placeholder="First Name">
                             <b class="tooltip tooltip-bottom-right">Your first name is required</b>
                         </label>
                     </section>
                     <section>
-                        <label class="input">
+                        Last Name
+                        <label class="input control-label">
                             <i class="icon-append fa fa-user"></i>
                             <input type="text" name="lastName" id="lastName" placeholder="Last Name">
                             <b class="tooltip tooltip-bottom-right">Your last name is required</b>
                         </label>
                     </section>
                     <section>
-                        <label class="input">
+                        E-Mail
+                        <label class="input control-label">
                             <i class="icon-append fa fa-envelope"></i>
                             <input type="email" name="email" id="email" placeholder="Email address">
                             <b class="tooltip tooltip-bottom-right">Email is required</b>
                         </label>
                     </section>
                     <section>
-                        <label class="input">
+                        Telephone Number
+                        <label class="input control-label">
                             <i class="icon-append fa fa-phone"></i>
-                            <input type='number' name="phoneNumber" id="phoneNumber" placeholder="Phone Number"> 
+                            <input type='tel' data-mask="(999) 999-9999" name="phoneNumber" id="phoneNumber" placeholder="Phone Number">
                             <b class="tooltip tooltip-bottom-right">Phone number is required</b>
                         </label>
                     </section>
                     <section>
-                        <label class="input">
+                        Address
+                        <label class="input control-label">
                             <i class="icon-append fa fa-building"></i>
                             <input type="text" name="address" id="address" placeholder="Address">
                             <b class="tooltip tooltip-bottom-right">Address is required</b>
                         </label>
                     </section>
                     <section>
-                        <label class="input">
+                        City
+                        <label class="input control-label">
                             <i class="icon-append fa fa-map"></i>
                             <input type="text" name="city" id="city" placeholder="City">
                             <b class="tooltip tooltip-bottom-right">City is required</b>
                         </label>
                     </section>
+                        State
                     <section>
-                        <label class="input">
                             <i class="icon-append fa fa-map"></i>
-                            <input type="text" name="state" id="state" placeholder="State">
+                        <label class="select">
+                            <select class="form-control" name="state" id="state">
+                                <option value="" selected="" disabled="">&nbsp;State</option>
+                                <option value="Alabama">Alabama</option>
+                                <option value="Alaska">Alaska</option>
+                                <option value="Arizona">Arizona</option>
+                                <option value="Arkansas">Arkansas</option>
+                                <option value="California">California</option>
+                                <option value="Colorado">Colorado</option>
+                                <option value="Connecticut">Connecticut</option>
+                                <option value="Delaware">Delaware</option>
+                                <option value="District Of Columbia">District Of Columbia</option>
+                                <option value="Florida">Florida</option>
+                                <option value="Georgia">Georgia</option>
+                                <option value="Hawaii">Hawaii</option>
+                                <option value="Idaho">Idaho</option>
+                                <option value="Illinois">Illinois</option>
+                                <option value="Indiana">Indiana</option>
+                                <option value="Iowa">Iowa</option>
+                                <option value="Kansas">Kansas</option>
+                                <option value="Kentucky">Kentucky</option>
+                                <option value="Louisiana">Louisiana</option>
+                                <option value="Maine">Maine</option>
+                                <option value="Maryland">Maryland</option>
+                                <option value="Massachusetts">Massachusetts</option>
+                                <option value="Michigan">Michigan</option>
+                                <option value="Minnesota">Minnesota</option>
+                                <option value="Mississippi">Mississippi</option>
+                                <option value="Missouri">Missouri</option>
+                                <option value="Montana">Montana</option>
+                                <option value="Nebraska">Nebraska</option>
+                                <option value="Nevada">Nevada</option>
+                                <option value="New Hampshire">New Hampshire</option>
+                                <option value="New Jersey">New Jersey</option>
+                                <option value="New Mexico">New Mexico</option>
+                                <option value="New York">New York</option>
+                                <option value="North Carolina">North Carolina</option>
+                                <option value="North Dakota">North Dakota</option>
+                                <option value="Ohio">Ohio</option>
+                                <option value="Oklahoma">Oklahoma</option>
+                                <option value="Oregon">Oregon</option>
+                                <option value="Pennsylvania">Pennsylvania</option>
+                                <option value="Rhode Island">Rhode Island</option>
+                                <option value="South Carolina">South Carolina</option>
+                                <option value="South Dakota">South Dakota</option>
+                                <option value="Tennessee">Tennessee</option>
+                                <option value="Texas">Texas</option>
+                                <option value="Utah">Utah</option>
+                                <option value="Vermont">Vermont</option>
+                                <option value="Virginia">Virginia</option>
+                                <option value="Washington">Washington</option>
+                                <option value="West Virginia">West Virginia</option>
+                                <option value="Wisconsin">Wisconsin</option>
+                                <option value="Wyoming">Wyoming</option>
+                                <option value="American Samoa">American Samoa</option>
+                                <option value="Guam">Guam</option>
+                                <option value="Northern Mariana Islands">Northern Mariana Islands</option>
+                                <option value="Puerto Rico">Puerto Rico</option>
+                                <option value="United States Minor Outlying Islands">United States Minor Outlying Islands</option>
+                                <option value="Virgin Islands">Virgin Islands</option>
+                                <option value="Armed Forces Americas">Armed Forces Americas</option>
+                                <option value="Armed Forces Pacific">Armed Forces Pacific</option>
+                                <option value="Armed Forces Others">Armed Forces Others</option>
+                                <option value="Other">Other</option>
+                            </select>
                             <b class="tooltip tooltip-bottom-right">State is required</b>
                         </label>
                     </section>
                     <section>
-                        <label class="input">
+                        Zip Code
+                        <label class="input control-label">
                             <i class="icon-append fa fa-map"></i>
                             <input type="text" name="zipCode" id="zipCode" placeholder="Zip Code">
                             <b class="tooltip tooltip-bottom-right">Zip code is required</b>
                         </label>
                     </section>
+                        Gender
                     <section>
-                        <select class="form-control" name="gender" id="gender">
-                            <option value="">Choose your gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="noAnswer">Prefer not to answer</option>
-                        </select>
+                        <i class="icon-append fa fa-male"></i>
+                        <label class="select">
+                            <select class="form-control" name="gender" id="gender">
+                                <option selected="" disabled="" value="">&nbsp;Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="noAnswer">Prefer not to answer</option>
+                            </select>
+                        </label>
                     </section>
                 </fieldset>
                 <footer>
@@ -96,13 +168,6 @@
                         <input type="button" class="btn btn-primary patronButton" value="Back to Check In" style="float: right" />
                     </a>
                 </footer>
-
-                <div class="message">
-                    <i class="fa fa-check"></i>
-                    <p>
-                        Thank you for your registration!
-                    </p>
-                </div>
             </form>
         </div>
     </div>
@@ -113,8 +178,6 @@
     $(document).keypress(function () {
         $(".pageError").remove();
     });
-
-    runAllForms();
 
     // Validation
     $(function () {
@@ -159,7 +222,6 @@
                 },
             },
 
-            // Messages for form validation
             messages: {
                 id: {
                     required: 'Please enter a new ID number',
@@ -197,7 +259,6 @@
                 }
             },
 
-            // Do not change code below
             errorPlacement: function (error, element) {
                 error.insertAfter(element.parent());
             }

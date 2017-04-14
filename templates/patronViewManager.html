@@ -23,10 +23,10 @@
                             <div class="widget-body no-padding">
                                 <div style="padding-bottom:10px; padding-right: 5px; padding-top: 7px;">
                                     <button class="btn btn-primary" id="editPatron" style="margin-left:6px;" data-target="#editModal">
-                                        <i class="fa fa-plus"></i> <span class="hidden-mobile">Edit Selected Item</span>
+                                        <i class="fa fa-plus"></i> <span class="hidden-mobile">Edit Selected Patron</span>
                                     </button>
                                     <button class="btn btn-primary" style="margin-left:6px;" id="deleteButton">
-                                        <i class="fa fa-times"></i> <span class="hidden-mobile">Delete Selected Item</span>
+                                        <i class="fa fa-times"></i> <span class="hidden-mobile">Delete Selected Patron</span>
                                     </button>
                                 </div>
                                 <table id="datatable" class="table table-striped table-bordered table-hover">
@@ -379,8 +379,13 @@
                 debugger;
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
-                table.row('.selected').remove().draw(false);
-                runPatronDeletePython(selectedId)
+                var buttonPress = confirm("Are you sure you want to delete this patron?");
+                if (buttonPress == true) {
+                    table.row('.selected').remove().draw(false);
+                    runPatronDeletePython(selectedEmail)
+                } else {
+                    confirmation = false;
+                }
             }
         });
 

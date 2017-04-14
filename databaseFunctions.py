@@ -650,6 +650,19 @@ def editPatron(PatronItem):
     sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber, Gender = :gender, Address = :address, City = :city, Zip = :zipCode, State = :state, IsBelayCertified = :isBelayCertified, IsSoloClimbCertified = :isSoloClimbCertified, IsSuspended = :isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
     engine.execute(sqlText, {"id": PatronItem.id, "firstName": PatronItem.firstName, "lastName": PatronItem.lastName, "email": PatronItem.email, "phoneNumber": PatronItem.phoneNumber, "gender": PatronItem.gender, "address": PatronItem.address, "city": PatronItem.city, "zipCode": PatronItem.zipCode, "state": PatronItem.state, "isBelayCertified": str(belayBooleanStatus), "isSoloClimbCertified": str(soloClimbBooleanStatus), "isSuspended": str(suspendedBooleanStatus),  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
 
+
+def editPatronSuspensions(PatronItem):
+    
+    if PatronItem.isSuspended == 'Yes':
+        suspendedBooleanStatus = True
+    else:
+        PatronItem.suspendedStartDate = ""
+        PatronItem.suspendedEndDate = ""
+        suspendedBooleanStatus = False
+
+    sqlText = text("UPDATE Patron SET IsSuspended = :isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
+    engine.execute(sqlText, {"id": PatronItem.id, "isSuspended": str(suspendedBooleanStatus),  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
+
 #########################################################################
 ###                                                                   ###
 ###                          Calendar Table                           ###
@@ -818,6 +831,20 @@ def getAllInventoryDescriptions():
         else:	
             return descriptions
 
+def getAllInventoryPurchaseDates():
+    with engine.connect() as connection:
+        sqlText = text("SELECT PurchaseDate FROM Inventory ORDER by Name, Id")
+        result = engine.execute(sqlText)
+        purchaseDates = []
+    
+        for row in result:
+            purchaseDates.append(row[0])    
+
+        if not purchaseDates:
+            return None
+        else:	
+            return purchaseDates
+
 def getAllInventoryRetirementDates():
     with engine.connect() as connection:
         sqlText = text("SELECT RetirementDate FROM Inventory ORDER by Name, Id")
@@ -847,16 +874,16 @@ def getAllInventoryCheckOutStatuses():
             return checkOutStatuses
 
 def insertNewInventoryItem(InventoryItem):
-	sqlText = text("INSERT INTO Inventory VALUES (:id, :name, :description, :retirementDate, :isCheckOut)")
-	engine.execute(sqlText, {"id": InventoryItem.id, "name": InventoryItem.name, "description": InventoryItem.description, "retirementDate": InventoryItem.retirementDate, "isCheckOut": "False"})
+	sqlText = text("INSERT INTO Inventory VALUES (:id, :name, :description, :purchaseDate, :retirementDate, :isCheckOut)")
+	engine.execute(sqlText, {"id": InventoryItem.id, "name": InventoryItem.name, "description": InventoryItem.description, "purchaseDate": InventoryItem.purchaseDate, "retirementDate": InventoryItem.retirementDate, "isCheckOut": "False"})
 
 def deleteInventoryItem(InventoryItem):
 	sqlText = text("DELETE FROM Inventory WHERE Id = :id")
 	engine.execute(sqlText, {"id": InventoryItem.id})
 
 def editInventoryItem(InventoryItem):
-    sqlText = text("UPDATE Inventory SET Name = :name, Description = :description, RetirementDate = :retirementDate WHERE Id = :id")
-    engine.execute(sqlText, {"id": InventoryItem.id, "name": InventoryItem.name, "description": InventoryItem.description, "retirementDate": InventoryItem.retirementDate})
+    sqlText = text("UPDATE Inventory SET Name = :name, Description = :description, PurchaseDate = :purchaseDate, RetirementDate = :retirementDate WHERE Id = :id")
+    engine.execute(sqlText, {"id": InventoryItem.id, "name": InventoryItem.name, "description": InventoryItem.description, "purchaseDate": InventoryItem.purchaseDate, "retirementDate": InventoryItem.retirementDate})
 
 def setInventoryCheckStatus(InventoryItem):
     sqlText = text("UPDATE Inventory SET IsCheckOut = :isCheckOut WHERE Id = :id")
@@ -1008,4 +1035,13 @@ def changePassword(User, newPassword):
 def changeAccountType(User, newAccountType):
 	sqlText = text("UPDATE User SET AccountType = :newAccountType WHERE Email = :email")
 	engine.execute(sqlText, {"email": User.email, "newAccountType": newAccountType})
+
+def editUser(UserItem):
+
+    sqlText = text("UPDATE User SET Email = :email, FirstName = :firstName, LastName = :lastName, AccountType = :accountType WHERE Email = :email")
+    engine.execute(sqlText, {"email": UserItem.email, "firstName": UserItem.firstName, "lastName": UserItem.lastName,"accountType": UserItem.accountType})
+
+def userDelete(UserItem):
+	sqlText = text("DELETE FROM User WHERE Email = :email")
+	engine.execute(sqlText, {"email": UserItem.email})
 

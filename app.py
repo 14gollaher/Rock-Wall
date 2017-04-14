@@ -271,6 +271,14 @@ def userViewAdmin():
 def userViewMaster():
     return userViewModule.userViewMaster()
 
+@app.route('/editUserRoute', methods=['POST'])
+def editUserRoute():
+    return userViewModule.editUserRoute()
+
+@app.route('/userDelete', methods=['POST'])
+def userDelete():
+    return userViewModule.userDelete()
+
 if __name__ == '__main__':
      HOST = environ.get('SERVER_HOST', 'localhost')
      try:

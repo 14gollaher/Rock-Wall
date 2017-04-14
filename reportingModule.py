@@ -142,11 +142,21 @@ def toggleReportReviewStatus():
 
 def editPatronSuspensionRoute():
     if not session.get('isLoggedIn'):
-        return redirect('login')
+       return redirect('login')
 
-    newPatronItem = Patron("", "", "", "", "", "", "", "", "", "", "", "", "", str(request.form['updatedPatronSuspensionStatus']), str(request.form['updatedPatronSuspensionStartDate']), str(request.form['updatedPatronSuspensionEndDate']))
-    databaseFunctions.editPatron(newPatronItem)
+    patronUpdatedStartDate = ""
+    patronUpdatedEndDate = ""
+    try:
+        patronUpdatedStartDate = str(request.form['updatedPatronSuspensionStartDate'])
+        patronUpdatedEndDate = str(request.form['updatedPatronSuspensionEndDate'])
+    except:
+        patronUpdatedStartDate = ""
+        patronUpdatedEndDate = ""
+    newPatronItem = Patron(str(request.form['updatedPatronId']), "", "", "", "", "", "", "", "", "", "", "", "", str(request.form['updatedPatronSuspensionStatus']),  patronUpdatedStartDate, patronUpdatedEndDate)
+    databaseFunctions.editPatronSuspensions(newPatronItem)
     if session.get('currentUserAccountType') == 'administrator':
         return redirect('reportingAdmin')
     else:
         return redirect('reportingMaster')
+
+

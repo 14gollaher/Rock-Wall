@@ -12,10 +12,11 @@ import re
 
 class InventoryItem:
 
-    def __init__(self, id, name, description, retirementDate, checkOutStatus):
+    def __init__(self, id, name, description, purchaseDate, retirementDate, checkOutStatus):
         self.id = id
         self.name = name
         self.description = description
+        self.purchaseDate = purchaseDate
         self.retirementDate = retirementDate
         self.checkOutStatus = checkOutStatus
 
@@ -28,9 +29,10 @@ def inventory():
     inventoryTable['id'] = databaseFunctions.getAllInventoryIds()
     inventoryTable['name'] = databaseFunctions.getAllInventoryNames()
     inventoryTable['description'] = databaseFunctions.getAllInventoryDescriptions()
+    inventoryTable['purchaseDate'] = databaseFunctions.getAllInventoryPurchaseDates()
     inventoryTable['retirementDate'] = databaseFunctions.getAllInventoryRetirementDates()
     inventoryTable['checkOutStatus'] = databaseFunctions.getAllInventoryCheckOutStatuses()
-    inventoryTable = [dict(id=i, name=n, description=d, retirementDate=r, checkOutStatus=s) for i, n, d, r, s in zip(inventoryTable['id'], inventoryTable['name'], inventoryTable['description'], inventoryTable['retirementDate'], inventoryTable['checkOutStatus'])]
+    inventoryTable = [dict(id=i, name=n, description=d, purchaseDate=p, retirementDate=r, checkOutStatus=s) for i, n, d, p, r, s in zip(inventoryTable['id'], inventoryTable['name'], inventoryTable['description'], inventoryTable['purchaseDate'], inventoryTable['retirementDate'], inventoryTable['checkOutStatus'])]
     
     return render_template('inventory.html', inventoryTable = inventoryTable)
 
@@ -39,7 +41,7 @@ def addInventoryRoute():
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    newInventoryItem = InventoryItem(str(request.form['newId']), str(request.form['newName']), str(request.form['newDescription']), str(request.form['newRetirementDate']), False)
+    newInventoryItem = InventoryItem(str(request.form['newId']), str(request.form['newName']), str(request.form['newDescription']), str(request.form['newPurchaseDate']), str(request.form['newRetirementDate']), False)
     if not databaseFunctions.getInventoryItemId(newInventoryItem):
         databaseFunctions.insertNewInventoryItem(newInventoryItem)
     else: 
@@ -53,9 +55,9 @@ def editInventoryRoute():
         return redirect('login')
 
     if str(request.form['updatedCheckOutStatus']) == 'Yes':
-        newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedRetirementDate']), True)
+        newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedPurchaseDate']), str(request.form['updatedRetirementDate']), True)
     else:
-        newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedRetirementDate']), False)
+        newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedPurchaseDate']), str(request.form['updatedRetirementDate']), False)
 
     databaseFunctions.editInventoryItem(newInventoryItem)
     return redirect('inventory')
@@ -66,9 +68,9 @@ def inventoryToggleCheckStatus():
         return redirect('login')
 
     if str(request.form['isCheckOut']) == 'Yes':
-        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", False)
+        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", False)
     else:
-        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", True)
+        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", True)
 
     databaseFunctions.setInventoryCheckStatus(newInventoryItem)
     return redirect('inventory')
@@ -78,7 +80,7 @@ def inventoryDelete():
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", False)
+    newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", False)
     newInventoryItem.id = newInventoryItem.id.strip('"')
     databaseFunctions.deleteInventoryItem(newInventoryItem)
 

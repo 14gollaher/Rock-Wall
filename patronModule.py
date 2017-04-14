@@ -48,7 +48,7 @@ def patronSignUp():
     return render_template('patron/patronSignUp.html')
 
 def patronCheckIn():
-    
+
     pass2 = []
     pass2.append('F')
     pass2 = json.dumps(pass2)
@@ -56,7 +56,8 @@ def patronCheckIn():
     return render_template('patron/patronCheckIn.html', pass2 = pass2)
 
 def patronCheckInRoute():
-    
+
+    session['messageCheckIn'] = ""    
     pass2 = []
     pass2.append('F')
     pass2 = json.dumps(pass2)
@@ -64,7 +65,6 @@ def patronCheckInRoute():
     session['currentPatronId'] = patronAccount.id
 
     if validateCredentials(patronAccount): 
-        session['isCheckedIn'] = True
         currentPatronId = session.get('currentPatronId')
         currentPatronFirstName = databaseFunctions.getCurrentPatronFirstName(currentPatronId)
         currentPatronLastName = databaseFunctions.getCurrentPatronLastName(currentPatronId)
@@ -81,13 +81,11 @@ def patronCheckInRoute():
         pass2 = json.dumps(pass2)
 
     else:
-        session['messageCheckIn'] = 'Account does not exist!'
+        session['messageCheckIn'] = 'ID does not exist!'
         return redirect('patronCheckIn')
     if currentPatronSuspension == 'True':
         return redirect('patronSuspension')
-    
-
-
+   
     return render_template('patron/patronCheckIn.html', id = currentPatronId, firstName = currentPatronFirstName, lastName = currentPatronLastName, email = currentPatronEmail, phoneNumber = currentPatronPhoneNumber, address = currentPatronAddress, state = currentPatronState, city = currentPatronCity, zipCode = currentPatronZipCode, gender = currentPatronGender, isSuspended = currentPatronSuspension, pass2 = pass2)
 
 
