@@ -44,7 +44,7 @@
                                     <fieldset>
                                         <div class="form-group">
                                             <label class="control-label">Description of Incident </label>
-                                            <textarea class="form-control" name="incidentDescription" rows="10" placeholder="Description the Incident" required></textarea>
+                                            <textarea class="form-control" name="incidentDescription" rows="10" placeholder="Description the Incident" maxlength="1000" required></textarea>
                                         </div>
                                     </fieldset>
                                     <div class="form-actions">
@@ -72,7 +72,7 @@
                                     <button class="btn btn-primary" id="toggleReviewReport" style="margin-left:6px;">
                                         <i class="fa fa-plus"></i> <span class="hidden-mobile">Toggle Report Status</span>
                                     </button>
-                                    <button class="btn btn-primary" id="viewReport" style="margin-left:6px;" data-toggle="modal" data-target="#viewReportModal">
+                                    <button class="btn btn-primary" id="viewReport" style="margin-left:6px;" data-target="#viewReportModal">
                                         <i class="fa fa-plus"></i> <span class="hidden-mobile">Expand Selected Report</span>
                                     </button>
                                 </div>
@@ -112,7 +112,7 @@
                         <div>
                             <div class="widget-body no-padding">
                                 <div style="padding-bottom:10px; padding-right: 5px; padding-top: 7px;">
-                                    <button class="btn btn-primary" id="editSuspension" style="margin-left:6px;" data-toggle="modal" data-target="#suspensionModal">
+                                    <button class="btn btn-primary" id="editSuspension" style="margin-left:6px;" data-target="#suspensionModal">
                                         <i class="fa fa-plus"></i> <span class="hidden-mobile">Edit Suspension Details</span>
                                     </button>
 
@@ -194,7 +194,7 @@
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <textarea rows="10" class="form-control" id="selectedDescription" readonly="readonly"></textarea>
+                            <textarea rows="10" class="form-control" id="selectedDescription" maxlength="500" readonly="readonly"></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -405,14 +405,20 @@
         $('#toggleReviewReport').click(function () {
 
             let selectedRow = document.querySelectorAll(".selected");
-            selectedRow = selectedRow[0].textContent.split("\n");
+            if (!selectedRow[0]) {
+                alert('Please select a report to toggle review status.');
+            }
+            else {
+                let selectedRow = document.querySelectorAll(".selected");
+                selectedRow = selectedRow[0].textContent.split("\n");
 
-            selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
-            selectedIsReviewed = selectedRow[6].trim(" ");
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
+                selectedIsReviewed = selectedRow[6].trim(" ");
 
-            if (selectedId != "") {
-                runToggleReviewPython(selectedId, selectedIsReviewed);
-                location.reload();
+                if (selectedId != "") {
+                    runToggleReviewPython(selectedId, selectedIsReviewed);
+                    location.reload();
+                }
             }
         });
     });
@@ -450,9 +456,8 @@
             alert('Please select a patron to edit suspension privileges.');
         }
         else {
-            $("#editSuspensionModal").modal()
+            $("#suspensionModal").modal()
             selectedRow = selectedRow[0].textContent.split("\n");
-            debugger;
             selectedPatronId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
             selectedPatronFirstName = selectedRow[2].trim(" ");
             selectedPatronLastName = selectedRow[3].trim(" ");

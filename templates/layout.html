@@ -85,10 +85,10 @@
             </span>
         </span>
     </div>
-    {% if session['currentUserAccountType'] != 'employee' %}
+    {% if session['currentUserAccountType'] != 'Employee' %}
         <aside id="left-panel" style="height:317px; min-height:0px;">
     {% endif %}
-    {% if session['currentUserAccountType'] == 'employee' %}
+    {% if session['currentUserAccountType'] == 'Employee' %}
         <aside id="left-panel" style="height:280px; min-height:0px;">
     {% endif %}
             <nav>
@@ -108,7 +108,7 @@
                     <li>
                         <a href="patrons"><i class="fa fa-lg fa-fw fa-users txt-color-blue"></i> <span class="menu-item-parent">Patrons</span></a>
                     </li>
-                    {% if session['currentUserAccountType'] != 'employee' %}
+                    {% if session['currentUserAccountType'] != 'Employee' %}
                     <li>
                         <a href="users"><i class="fa fa-lg fa-fw fa-list"></i> <span class="menu-item-parent">Users</span></a>
                     </li>

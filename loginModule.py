@@ -207,12 +207,12 @@ def loginRoute():
 
         session['isLoggedIn'] = True
         
-        if databaseFunctions.getAccountType(userAccount) == 'employee':
-            session['sessionType'] = 'employee'
-        if databaseFunctions.getAccountType(userAccount) == 'administrator':
-            session['sessionType'] = 'administrator'
-        if databaseFunctions.getAccountType(userAccount) == 'master':
-            session['sessionType'] = 'master'
+        if databaseFunctions.getAccountType(userAccount) == 'Employee':
+            session['sessionType'] = 'Employee'
+        if databaseFunctions.getAccountType(userAccount) == 'Administrator':
+            session['sessionType'] = 'Administrator'
+        if databaseFunctions.getAccountType(userAccount) == 'Master':
+            session['sessionType'] = 'Master'
     else:
         session['messageLogin'] = 'Invalid Credentials!'
         return redirect('login')
@@ -337,7 +337,7 @@ def validateCredentials(userAccount):
 
     # Code Snippet to add the Master Account
     #hashedPassword = hashedPassword = pbkdf2_sha256.hash('abc123')
-    #newUser = UserAccount('master@gmail.com', hashedPassword, 'master', 'Justin', 'Parks')
+    #newUser = UserAccount('master@gmail.com', hashedPassword, 'Master', 'Justin', 'Parks')
     #databaseFunctions.insertNewUser(newUser)    
 
     if pbkdf2_sha256.verify(userAccount.password, databaseFunctions.getAccountPassword(userAccount)):
@@ -346,11 +346,11 @@ def validateCredentials(userAccount):
         return False
 
 def checkPermissionsPasswordChange(userAccount, userChangeAccount):
-    if userChangeAccount.accountType == 'employee' and databaseFunctions.getAccountType(userAccount) == 'administrator':
+    if userChangeAccount.accountType == 'Employee' and databaseFunctions.getAccountType(userAccount) == 'Administrator':
        return True
-    elif userChangeAccount.accountType == 'employee' and databaseFunctions.getAccountType(userAccount) == 'master':
+    elif userChangeAccount.accountType == 'Employee' and databaseFunctions.getAccountType(userAccount) == 'Master':
        return True
-    elif userChangeAccount.accountType == 'administrator' and databaseFunctions.getAccountType(userAccount) == 'master':
+    elif userChangeAccount.accountType == 'Administrator' and databaseFunctions.getAccountType(userAccount) == 'Master':
         return True
     else:
         return False

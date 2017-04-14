@@ -44,11 +44,11 @@ def reporting():
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    if session.get('currentUserAccountType') == 'employee':
+    if session.get('currentUserAccountType') == 'Employee':
         return redirect('reportingEmployee')
-    elif session.get('currentUserAccountType') == 'administrator':
+    elif session.get('currentUserAccountType') == 'Administrator':
         return redirect('reportingAdmin')
-    elif session.get('currentUserAccountType') == 'master':
+    elif session.get('currentUserAccountType') == 'Master':
         return redirect('reportingMaster')
     
 def reportingEmployee():

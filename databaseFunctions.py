@@ -1019,6 +1019,145 @@ def getAllUserAccountTypes():
         else:	
             return accountTypes
 
+def getAllEmployeeUserEmails():
+    with engine.connect() as connection:
+        sqlText = text("SELECT Email FROM User WHERE AccountType = 'Employee' ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        emails = []
+    
+        for row in result:
+            emails.append(row[0])    
+
+        if not emails:
+            return None
+        else:	
+            return emails
+
+def getAllEmployeeUserFirstNames():
+    with engine.connect() as connection:
+        sqlText = text("SELECT FirstName FROM User WHERE AccountType = 'Employee' ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        firstNames = []
+    
+        for row in result:
+            firstNames.append(row[0])    
+
+        if not firstNames:
+            return None
+        else:	
+            return firstNames
+
+def getAllEmployeeUserLastNames():
+    with engine.connect() as connection:
+        sqlText = text("SELECT LastName FROM User WHERE AccountType = 'Employee' ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        lastNames = []
+    
+        for row in result:
+            lastNames.append(row[0])    
+
+        if not lastNames:
+            return None
+        else:	
+            return lastNames
+
+def getAllEmployeeUserPasswords():
+    with engine.connect() as connection:
+        sqlText = text("SELECT Password FROM User WHERE AccountType = 'Employee' ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        passwords = []
+    
+        for row in result:
+            passwords.append(row[0])    
+
+        if not passwords:
+            return None
+        else:	
+            return passwords
+
+def getAllEmployeeUserAccountTypes():
+    with engine.connect() as connection:
+        sqlText = text("SELECT AccountType FROM User WHERE AccountType = 'Employee' ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        accountTypes = []
+    
+        for row in result:
+            accountTypes.append(row[0])    
+
+        if not accountTypes:
+            return None
+        else:	
+            return accountTypes
+
+def getAllEmployeeAdminUserEmails():
+    with engine.connect() as connection:
+        sqlText = text("SELECT Email FROM User WHERE(AccountType = 'Employee' OR AccountType = 'Administrator') ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        emails = []
+    
+        for row in result:
+            emails.append(row[0])    
+
+        if not emails:
+            return None
+        else:	
+            return emails
+
+def getAllEmployeeAdminUserFirstNames():
+    with engine.connect() as connection:
+        sqlText = text("SELECT FirstName FROM User WHERE(AccountType = 'Employee' OR AccountType = 'Administrator') ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        firstNames = []
+    
+        for row in result:
+            firstNames.append(row[0])    
+
+        if not firstNames:
+            return None
+        else:	
+            return firstNames
+
+def getAllEmployeeAdminUserLastNames():
+    with engine.connect() as connection:
+        sqlText = text("SELECT LastName FROM User WHERE(AccountType = 'Employee' OR AccountType = 'Administrator') ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        lastNames = []
+    
+        for row in result:
+            lastNames.append(row[0])    
+
+        if not lastNames:
+            return None
+        else:	
+            return lastNames
+
+def getAllEmployeeAdminUserPasswords():
+    with engine.connect() as connection:
+        sqlText = text("SELECT Password FROM User WHERE(AccountType = 'Employee' OR AccountType = 'Administrator') ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        passwords = []
+    
+        for row in result:
+            passwords.append(row[0])    
+
+        if not passwords:
+            return None
+        else:	
+            return passwords
+
+def getAllEmployeeAdminUserAccountTypes():
+    with engine.connect() as connection:
+        sqlText = text("SELECT AccountType FROM User WHERE (AccountType = 'Employee' OR AccountType = 'Administrator') ORDER by LastName, FirstName, Email")
+        result = engine.execute(sqlText)
+        accountTypes = []
+    
+        for row in result:
+            accountTypes.append(row[0])    
+
+        if not accountTypes:
+            return None
+        else:	
+            return accountTypes
 
 def insertNewUser(User):
 	sqlText = text("INSERT INTO User VALUES (:email, :password, :accountType, :firstName, :lastName)")

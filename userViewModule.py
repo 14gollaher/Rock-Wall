@@ -24,11 +24,11 @@ def users():
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    if session.get('currentUserAccountType') == 'employee':
+    if session.get('currentUserAccountType') == 'Employee':
         return redirect('login')
-    elif session.get('currentUserAccountType') == 'administrator':
+    elif session.get('currentUserAccountType') == 'Administrator':
         return redirect('userViewAdmin')
-    elif session.get('currentUserAccountType') == 'master':
+    elif session.get('currentUserAccountType') == 'Master':
         return redirect('userViewMaster')
 
 def userViewAdmin():
@@ -37,13 +37,14 @@ def userViewAdmin():
         return redirect('login')
 
     userTable = {}
-    userTable['email'] = databaseFunctions.getAllUserEmails()
-    userTable['firstName'] = databaseFunctions.getAllUserFirstNames()
-    userTable['lastName'] = databaseFunctions.getAllUserLastNames()
-    userTable['accountType'] = databaseFunctions.getAllUserAccountTypes()
+    userTable['email'] = databaseFunctions.getAllEmployeeUserEmails()
+    userTable['firstName'] = databaseFunctions.getAllEmployeeUserFirstNames()
+    userTable['lastName'] = databaseFunctions.getAllEmployeeUserLastNames()
+    userTable['accountType'] = databaseFunctions.getAllEmployeeUserAccountTypes()
+
     userTable = [dict(email=e, firstName=f, lastName=l, accountType = a) for e, f, l, a in zip(userTable['email'], userTable['firstName'], userTable['lastName'], userTable['accountType'])]
     
-    return render_template('userViewAdmin.html', userTable = userTable)
+    return render_template('userViewManager.html', userTable = userTable)
 
 def userViewMaster():
 
@@ -51,17 +52,19 @@ def userViewMaster():
         return redirect('login')
 
     userTable = {}
-    userTable['email'] = databaseFunctions.getAllUserEmails()
-    userTable['firstName'] = databaseFunctions.getAllUserFirstNames()
-    userTable['lastName'] = databaseFunctions.getAllUserLastNames()
-    userTable['accountType'] = databaseFunctions.getAllUserAccountTypes()
+    userTable['email'] = databaseFunctions.getAllEmployeeAdminUserEmails()
+    userTable['firstName'] = databaseFunctions.getAllEmployeeAdminUserFirstNames()
+    userTable['lastName'] = databaseFunctions.getAllEmployeeAdminUserLastNames()
+    userTable['accountType'] = databaseFunctions.getAllEmployeeAdminUserAccountTypes()
     userTable = [dict(email=e, firstName=f, lastName=l, accountType = a) for e, f, l, a in zip(userTable['email'], userTable['firstName'], userTable['lastName'], userTable['accountType'])]
     
-    return render_template('userViewMaster.html', userTable = userTable)
+    return render_template('userViewManager.html', userTable = userTable)
 
 def editUserRoute():
+
     if not session.get('isLoggedIn'):
         return redirect('login')
+
     newUserItem = UserAccount(str(request.form['updatedEmail']), "", str(request.form['updatedAccountType']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']))
     databaseFunctions.editUser(newUserItem) 
     if session.get('currentUserAccountType') == 'administrator':

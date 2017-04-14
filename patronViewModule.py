@@ -35,11 +35,11 @@ def patrons():
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    if session.get('currentUserAccountType') == 'employee':
+    if session.get('currentUserAccountType') == 'Employee':
         return redirect('patronViewEmployee')
-    elif session.get('currentUserAccountType') == 'administrator':
+    elif session.get('currentUserAccountType') == 'Administrator':
         return redirect('patronViewAdmin')
-    elif session.get('currentUserAccountType') == 'master':
+    elif session.get('currentUserAccountType') == 'Master':
         return redirect('patronViewMaster')
     
 def patronViewEmployee():
