@@ -157,7 +157,7 @@ def editPatronSuspensionRoute():
     except:
         patronUpdatedStartDate = ""
         patronUpdatedEndDate = ""
-    newPatronItem = Patron(str(request.form['updatedPatronId']), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", str(request.form['updatedPatronSuspensionStatus']),  patronUpdatedStartDate, patronUpdatedEndDate)
+    newPatronItem = Patron(str(request.form['updatedPatronId']), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", str(request.form['updatedPatronSuspensionStatus']),  patronUpdatedStartDate, patronUpdatedEndDate, "")
     databaseFunctions.editPatronSuspensions(newPatronItem)
     if session.get('currentUserAccountType') == 'administrator':
         return redirect('reportingAdmin')
