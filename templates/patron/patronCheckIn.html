@@ -1,28 +1,27 @@
 {% extends "layoutCheckin.html" %}
 {%block body %}
-
+<title>Patron Check In</title>
 <!-- MAIN CONTENT -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div id="content" class="container" style="padding-top: 100px;">
     <div class="col-md-8">
         <div class="well no-padding">
             <form action="patronCheckInRoute" method="post" id="form-checkIn" class="smart-form client-form">
-                <header class="bannerYellowGradient" align="center">
+                <header class="bannerYellow" align="center">
                     Check In
                 </header>
                 <fieldset>
                     <ction>
                         <label class="input">
                             <i class="icon-append fa fa-info"></i>
-                            <input type="number" name="patronId" id="patronId" placeholder="Student or Wellness Center ID">
+                            <input type="number" name="patronId" id="patronId" min="0" placeholder="Student or Wellness Center ID">
                             <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                         </label>
-                        <p id="messageBag" style="color: #ffd100; ; padding-top: 5px;">
-                        </p>
+                        <p id="messageBag" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
                     </ction>
                 </fieldset>
                 <footer>
-                    <button class="btn btn-primary" type="submit" style="float: left" data-target="#checkInModal">
+                    <button class="btn btn-primary" type="submit" style="float: left" data-backdrop="static" data-keyboard="false" data-target="#checkInModal">
                         Check In
                     </button>
                     <a href="patronSignUp">
@@ -34,7 +33,7 @@
     </div>
 </div>
 
-<form action="patronCheckInRoute2" method="post" id="form-createAccount">
+<form action="patronCheckInRoute2" method="post" id="form-checkInUpdate">
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -49,43 +48,43 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">ID</label>
-                                <input type="text" placeholder="Select a item to edit..." class="form-control" id="selectedId" name="patronId2" value={{id}} readonly="readonly" />
+                                <input type="number" placeholder="Select a item to edit..." class="form-control" id="id" name="patronId2" value={{id}} readonly="readonly" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">First Name</label>
-                                <input type="text" placeholder="First Name" required class="form-control" id="selectedFirstName" name="firstName" value="{{firstName}}" />
+                                <input type="text" placeholder="First Name" required class="form-control" id="firstName" name="firstName" value="{{firstName}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="control-label">Last First</label>
-                                <input type="text" id="selectedLastName" required class="form-control" placeholder="Last Name" name="lastName" value="{{lastName}}" />
+                                <label class="control-label">Last Name</label>
+                                <input type="text" id="lastName" required class="form-control" placeholder="Last Name" name="lastName" value="{{lastName}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">E-mail</label>
-                                <input type="text" id="selectedEmail" required class="form-control" placeholder="Email" name="email" value="{{email}}" />
+                                <input type="text" id="email" required class="form-control" placeholder="Email" name="email" value="{{email}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Telephone Number</label>
-                                <input type='tel' data-mask="(999) 999-9999" id="selectedPhoneNumber" required class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
+                                <input type='tel' data-mask="(999) 999-9999" id="phoneNumber" required class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Address</label>
-                                <input type="text" id="selectedAddress" required class="form-control" placeholder="Address" name="address" value="{{address}}" />
+                                <input type="text" id="address" required class="form-control" placeholder="Address" name="address" value="{{address}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">City</label>
-                                <input type="text" id="selectedCity" required class="form-control" placeholder="City" name="city" value="{{city}}" />
+                                <input type="text" id="city" required class="form-control" placeholder="City" name="city" value="{{city}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -163,30 +162,27 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Zip Code</label>
-                                <input type="text" id="selectedZipCode" required class="form-control" placeholder="Zip Code" name="zipCode" value="{{zipCode}}" />
+                                <input type="text" id="zipCode" required class="form-control" placeholder="Zip Code" name="zipCode" value="{{zipCode}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <section>
                                 <label class="control-label">Gender</label>
                                 <select class="form-control" name="gender" id="gender">
-                                    {% if gender == 'male' %}
-                                    <option value="">Choose your gender</option>
-                                    <option selected value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option value="noAnswer">Prefer Not to Answer</option>
+                                    {% if gender == 'Male' %}
+                                    <option selected value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="No Answer">Prefer Not to Answer</option>
                                     {% endif %}
-                                    {% if gender == 'female' %}
-                                    <option value="">Choose your gender</option>
-                                    <option value="male">Male</option>
-                                    <option selected value="female">Female</option>
-                                    <option value="noAnswer">Prefer Not to Answer</option>
+                                    {% if gender == 'Female' %}
+                                    <option value="Male">Male</option>
+                                    <option selected value="Female">Female</option>
+                                    <option value="No Answer">Prefer Not to Answer</option>
                                     {% endif %}
-                                    {% if gender == 'noAnswer' %}
-                                    <option value="">Choose your gender</option>
-                                    <option value="male">Male</option>
-                                    <option value="female">Female</option>
-                                    <option selected value="noAnswer">Prefer Not to Answer</option>
+                                    {% if gender == 'No Answer' %}
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option selected value="No Answer">Prefer Not to Answer</option>
                                     {% endif %}
                                 </select>
                             </section>
@@ -206,47 +202,18 @@
     </div>
 </form>
 
-<div id="bigBox" class="bigBox animated fadeIn fast" style="background-color: rgb(50, 118, 177);">
-    <div id="bigBoxColor2">
-        <i class="botClose fa fa-times"></i><span>
-            Welcome! <br />
-        </span><p>#BlueTeam</p>
-        <div class="bigboxicon">
-            <i class="fa fa-check animated"></i>
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript">
 
-    $(document).ready(function () {
+    var number = document.getElementById('patronId');
 
-        let previousUrl = document.referrer;
-        if (previousUrl == "http://localhost:4000/patronCheckIn" || previousUrl == "http://www.matthewgollaher.com/patronCheckIn") {
-            $('.bigBox').show();
-            setTimeout(function () {
-                $('.bigBox').hide();
-            }, 7000);
+    number.onkeydown = function (e) {
+        if (!((e.keyCode > 95 && e.keyCode < 106)
+          || (e.keyCode > 47 && e.keyCode < 58)
+          || e.keyCode == 8)) {
+            return false;
         }
-        else {
-            $(".bigBox").remove();
-        }
-
-    });
-
-    var messageBagContent = '{{ session['messageCheckIn'] }}';
-    var messageBag = $("#messageBag");
-
-    if (messageBagContent.length > 0)
-    {
-        messageBagContent = "&nbsp;" + messageBagContent;
-        messageBag.css("display","block")
-        messageBag[0].innerHTML = messageBagContent;
     }
-
-    $(document).keypress(function () {
-        messageBag.css("display","none")
-    });
 
     window.onload = function(){
 
@@ -258,12 +225,90 @@
         }
     }
 
-    $(".bigBox").click(function () {
-        $(".bigBox").remove();
+    $(document).keypress(function () {
+        $(".pageError").remove();
     });
 
+    $(function () {
+        $("#form-checkInUpdate").validate({
 
+            rules: {
+                id: {
+                    required: true,
+                    minlength: 1,
+                    maxlength: 20
+                },
+                firstName: {
+                    required: true,
+                },
+                lastName: {
+                    required: true,
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                phoneNumber: {
+                    required: true
+                },
+                address: {
+                    required: true
+                },
+                state: {
+                    required: true
+                },
+                city: {
+                    required: true
+                },
+                zipCode: {
+                    required: true
+                },
+                gender: {
+                    required: true
+                },
+            },
 
+            messages: {
+                id: {
+                    required: 'Please enter a new ID number',
+                    minlength: 'ID may not be less than 1 digits',
+                    maxlength: 'ID may not be longer than 20 digits'
+                },
+                firstName: {
+                    required: 'Please enter your first name',
+                },
+                lastName: {
+                    required: 'Please enter your last name',
+                },
+                email: {
+                    required: 'Please enter your email address',
+                    email: 'Please enter a VALID email address'
+                },
+                phoneNumber: {
+                    tel: 'Please enter a valid phone number'
+                },
+                address: {
+                    required: 'Please enter your address'
+                },
+                state: {
+                    required: 'Please enter the state that you live in'
+                },
+                city: {
+                    required: 'Please enter the city that you live in'
+                },
+                zipCode: {
+                    required: 'Please enter your zip code'
+                },
+                gender: {
+                    required: 'Please enter your gender'
+                }
+            },
+
+            errorPlacement: function (error, element) {
+                error.insertAfter(element.parent());
+            }
+        });
+    });
 
 
 </script>

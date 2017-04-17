@@ -1,6 +1,6 @@
 ﻿{% extends "layout.html" %}
 {% block body %}
-
+<title>Dashboard</title>
 <div id="main" role="main">
     <div id="content">
         <div class="row">
@@ -102,7 +102,7 @@
 
     $(document).ready(function () {
         let previousUrl = document.referrer;
-        if (previousUrl == "http://localhost:4000/login" || previousUrl == "http://www.matthewgollaher/login") {
+        if (previousUrl == "http://www.matthewgollaher/login") {
             $('.bigBox').show();
             setTimeout(function () {
                 $('.bigBox').hide();

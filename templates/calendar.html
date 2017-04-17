@@ -1,8 +1,7 @@
 ﻿{% extends "layout.html" %}
 {% block body %}
-
+<title>Calendar</title>
 <div id="main" role="main">
-    <!-- MAIN CONTENT -->
     <div id="content">
         <div class="row">
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
@@ -14,15 +13,11 @@
                 </h1>
             </div>
         </div>
-        <!-- row -->
         <div class="row">
             <div class="col-sm-12 col-md-12 col-lg-3">
-                <!-- new widget -->
                 <div class="jarviswidget jarviswidget-color-blueDark">
-                    <!-- widget div-->
                     <div>
                         <div class="widget-body">
-                            <!-- content goes here -->
                             <style>
                                 label.btn.btn-default.active {
                                     background-color: lightblue;
@@ -61,7 +56,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Event Title</label>
-                                        <input class="form-control" id="title" name="title" maxlength="40" type="text" placeholder="Title">
+                                        <input class="form-control" id="title" name="title" required type="text" placeholder="Title" >
                                     </div>
                                     <div class="form-group">
                                         <label>Event Date</label>
@@ -73,7 +68,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Event Description</label>
-                                        <textarea class="form-control" placeholder="Please be brief" rows="3" maxlength="40" id="description"></textarea>
+                                        <textarea class="form-control" placeholder="Please be brief" rows="3" required maxlength="40" id="description"></textarea>
                                         <p class="note">Max description is 40 characters</p>
                                     </div>
                                     <div class="form-group">
@@ -109,7 +104,7 @@
                                 <div class="form-actions">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <button class="btn btn-default" type="button" id="add-event">
+                                            <button class="btn btn-default" type="submit" id="add-event">
                                                 Add Event
                                             </button>
                                         </div>
@@ -139,7 +134,6 @@
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-0" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <div>
                             <div class="widget-body no-padding">
-                                <!-- content goes here -->
                                 <div class="widget-body-toolbar">
                                     <div id="calendar-buttons">
                                         <div class="btn-group">
@@ -149,24 +143,15 @@
                                     </div>
                                 </div>
                                 <div id="calendar"></div>
-                                <!-- end content -->
                             </div>
                         </div>
-                        <!-- end widget div -->
                     </div>
                 </div>
-                <!-- end widget -->
             </div>
         </div>
-        <!-- end row -->
     </div>
-    <!-- END MAIN CONTENT -->
 </div>
-<!-- END MAIN PANEL -->
-<!-- SHORTCUT AREA : With large tiles (activated via clicking user name tag)
-Note: These tiles are completely responsive,
-you can add as many as you like
--->
+
 <div id="shortcut">
     <ul>
         <li>
@@ -232,22 +217,15 @@ you can add as many as you like
         minTime: 0
     });
 
-    $('#selectedRetirementDate').datepicker({
-        minDate: 0,
-        navigationAsDateFormat: true,
-        nextText: '>',
-        prevText: '<',
-        donetext: 'Done'
-    });
-
+    var $datepicker = $('#datepicker');
     $('#datepicker').datepicker({
         minDate: 0,
         navigationAsDateFormat: true,
         nextText: '>',
-        prevText: '<',
-        donetext: 'Done'
-
+        prevText: '<'
     });
+    $datepicker.datepicker('setDate', new Date());
+
 
     $(document).ready(function () {
 
@@ -267,14 +245,12 @@ you can add as many as you like
                 icon: $.trim(e.children('span').attr('data-icon')),
                 className: $.trim(e.children('span').attr('class')) // use the element's children as the event class
             };
-            // store the Event Object in the DOM element so we can get to it later
             e.data('eventObject', eventObject);
 
-            // make the event draggable using jQuery UI
             e.draggable({
                 zIndex: 999,
-                revert: true, // will cause the event to go back to its
-                revertDuration: 0 //  original position after the drag
+                revert: true, 
+                revertDuration: 0 
             });
         };
 
@@ -292,9 +268,6 @@ you can add as many as you like
 
             initDrag(html);
         };
-
-        /* initialize the external events
-         -----------------------------------------------------------------*/
 
         $('#external-events > li').each(function () {
             initDrag($(this));
@@ -316,8 +289,25 @@ you can add as many as you like
             calendarItem.description = description;
             calendarItem.color = priority;
 
-            runCalendarInsertPython(calendarItem.id, calendarItem.title, calendarItem.start, calendarItem.description, calendarItem.icon, calendarItem.color)
-            location.reload();
+            if (calendarItem.title.length == 0)
+            {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Event must have a title.'
+                });            
+            }
+            else if (date.length == 0)
+            {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Event must have a title.'
+                });   
+            }
+            else
+            {
+                runCalendarInsertPython(calendarItem.id, calendarItem.title, calendarItem.start, calendarItem.description, calendarItem.icon, calendarItem.color);
+                location.reload();
+            }
         });
 
         /* initialize the calendar

@@ -28,7 +28,6 @@ app.secret_key = os.urandom(12)
 @app.route('/index')
 @app.route('/menu')
 @app.route('/home')
-
 def index():
     return loginModule.index()
 
@@ -105,6 +104,10 @@ def editInventoryRoute():
 @app.route('/inventoryDelete', methods=['POST'])
 def inventoryDelete():
     return inventoryModule.inventoryDelete()
+
+@app.route('/inventoryMessageClear', methods=['POST'])
+def inventoryMessageClear():
+    return inventoryModule.inventoryMessageClear()
 
 @app.route('/inventoryUpdate', methods=['POST'])
 def inventoryUpdate():
@@ -248,6 +251,9 @@ def patronViewMaster():
 def editPatronRoute():
     return patronViewModule.editPatronRoute()
 
+@app.route('/editPatronCertificationRoute', methods=['POST'])
+def editPatronCertificationRoute():
+    return patronViewModule.editPatronCertificationRoute()
 
 @app.route('/patronDelete', methods=['POST'])
 def patronDelete():

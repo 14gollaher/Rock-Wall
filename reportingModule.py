@@ -21,7 +21,7 @@ class IncidentReport:
 
 class Patron:
 
-    def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, isSoloClimbCertified, isSuspended, suspendedStartDate, suspendedEndDate):
+    def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, belayStartDate, belayEndDate, isLeadClimbCertified, leadClimbStartDate, leadClimbEndDate, isSuspended, suspendedStartDate, suspendedEndDate, listServ):
         self.id = id
         self.firstName = firstName
         self.lastName = lastName
@@ -34,10 +34,15 @@ class Patron:
         self.waiverFile = waiverFile
         self.state = state
         self.isBelayCertified = isBelayCertified
-        self.isSoloClimbCertified = isSoloClimbCertified
+        self.belayStartDate = belayStartDate
+        self.belayEndDate = belayEndDate
+        self.isLeadClimbCertified = isLeadClimbCertified
+        self.leadClimbStartDate = leadClimbStartDate
+        self.leadClimbEndDate = leadClimbEndDate
         self.isSuspended = isSuspended
         self.suspendedStartDate = suspendedStartDate
         self.suspendedEndDate = suspendedEndDate
+        self.listServ = listServ
 
 def reporting():
 
@@ -152,7 +157,7 @@ def editPatronSuspensionRoute():
     except:
         patronUpdatedStartDate = ""
         patronUpdatedEndDate = ""
-    newPatronItem = Patron(str(request.form['updatedPatronId']), "", "", "", "", "", "", "", "", "", "", "", "", str(request.form['updatedPatronSuspensionStatus']),  patronUpdatedStartDate, patronUpdatedEndDate)
+    newPatronItem = Patron(str(request.form['updatedPatronId']), "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", str(request.form['updatedPatronSuspensionStatus']),  patronUpdatedStartDate, patronUpdatedEndDate)
     databaseFunctions.editPatronSuspensions(newPatronItem)
     if session.get('currentUserAccountType') == 'administrator':
         return redirect('reportingAdmin')

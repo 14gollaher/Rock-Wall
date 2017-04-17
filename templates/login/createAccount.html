@@ -1,23 +1,17 @@
 {% extends "layout.html" %}
 {%block body %}
-
+<title>Create Account</title>
 <!-- MAIN CONTENT -->
 <div id="content" class="container" style="padding-top: 100px; margin-left: 30%;">
     <div class="col-md-8">
         <div class="well no-padding">
             <form action="createAccountRoute" method="post" id="form-createAccount" class="smart-form client-form">
-                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+                <header class="bannerYellow" align="center">
                     Account Creation
                 </header>
                 <fieldset>
                     <section>
-                        {% if messageCreateAccount %}
-                        <div class="pageError" style="color: white">
-                            {{ messageCreateAccount }}
-                        </div>
-                        {% endif %}
-                    </section>
-                    <section>
+                        <p id="messageBag" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
                         <label class="input">
                             <i class="icon-append fa fa-user"></i>
                             <input type="text" name="firstName" id="firstName" placeholder="First Name">
@@ -53,11 +47,14 @@
                         </label>
                     </section>
                     <section>
-                        <select class="form-control" name="accountType" id="accountType">
-                            <option value="">Choose an Account Type</option>
-                            <option value="Employee">Employee</option>
-                            <option value="Administrator">Administrator</option>
-                        </select>
+                        <i class="icon-append fa fa-male"></i>
+                        <label class="select">
+                            <select class="form-control" name="accountType" id="accountType">
+                                <option selected="" disabled="" value="">&nbsp;&nbsp;Account Type</option>
+                                <option value="Employee">&nbsp;&nbsp;Employee</option>
+                                <option value="Administrator">&nbsp;&nbsp;Administrator</option>
+                            </select>
+                        </label>
                     </section>
                 </fieldset>
                 <footer>
@@ -76,13 +73,81 @@
     </div>
 </div>
 
+<form action="authenticateCreateAccount" method="post">
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Authenticaticating Account Creation For: <br />{{firstName}} {{lastName}} - {{accountType}}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <p id="messageBagModal" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
+                                <div class="form-group">
+                                    <input type="email" required class="form-control" placeholder="Email Address" name="validateEmail" />
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <input type="password" required class="form-control" placeholder="Password" name="validatePassword" />
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary">
+                                    Authenticate New Account
+                                </button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <script type="text/javascript">
 
     $(document).keypress(function () {
         $(".pageError").remove();
     });
 
-    runAllForms();
+    window.onload = function(){
+
+        var prePass2 = {{pass2|tojson}}
+        var pass2 = JSON.parse(prePass2);
+        if (pass2[0] == 'T')
+        {
+            var messageBagModalContent = '{{ session['messageBag'] }}';
+            var messageBagModal = $("#messageBagModal");
+
+            if (messageBagContent != "&nbsp;Email already exists!")
+            {
+                $('#myModal').modal({
+                    backdrop: 'static',
+                    keyboard: false
+                })
+
+                if (messageBagContent.length > 0)
+                {
+                    messageBagModalContent = "&nbsp;" + messageBagModalContent;
+                    messageBagModal.css("display","block")
+                    messageBagModal[0].innerHTML = messageBagModalContent;
+                }
+            }
+            $(document).keypress(function () {
+                messageBagModal.css("display","none")
+            });
+        }
+    }
 
     $(function () {
         $("#form-createAccount").validate({

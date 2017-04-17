@@ -12,34 +12,23 @@ body {
     color: white !important;
 }
 *:-moz-placeholder {
-    /* FF 4-18 */
     color: white !important;
 }
 *::-moz-placeholder {
-    /* FF 19+ */
     color: white !important;
 }
 *:-ms-input-placeholder {
-    /* IE 10+ */
     color: white !important;
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
     -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    margin: 0; 
 }
 
-.bannerYellowGradient {
+.bannerYellow {
+    background-color: yellow !important;
     color: rgb(3, 75, 133) !important;
     font-size: 25px !important;
-    background: rgba(241,231,103,1) !important;
-    background: -moz-radial-gradient(center, ellipse cover, rgba(241,231,103,1) 0%, rgba(255,209,0,0.7) 100%) !important;
-    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, rgba(241,231,103,1)), color-stop(100%, rgba(255,209,0,0.7))) !important;
-    background: -webkit-radial-gradient(center, ellipse cover, rgba(241,231,103,1) 0%, rgba(255,209,0,0.7) 100%) !important;
-    background: -o-radial-gradient(center, ellipse cover, rgba(241,231,103,1) 0%, rgba(255,209,0,0.7) 100%) !important;
-    background: -ms-radial-gradient(center, ellipse cover, rgba(241,231,103,1) 0%, rgba(255,209,0,0.7) 100%) !important;
-    background: radial-gradient(ellipse at center, rgba(241,231,103,1) 0%, rgba(255,209,0,0.7) 100%) !important;
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1e767', endColorstr='#ffd100', GradientType=1 );
 }

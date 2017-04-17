@@ -1,21 +1,16 @@
 ﻿{% extends "layout.html" %}
 {%block body %}
-
+<title>Login</title>
 <!-- MAIN CONTENT -->
 <div id="content" class="container" style="padding-top: 100px; margin-left: 30%;">
     <div class="col-md-8">
         <div class="well no-padding">
             <form action="loginRoute" method="post" id="form-login" class="smart-form client-form">
-                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+                <header class="bannerYellow" align="center">
                     SDSU Wellness Center Rock Wall
                 </header>
                 <fieldset>
                     <section>
-                        {% if messageCreateAccount %}
-                        <div class="pageError" style="color: white">
-                            {{ messageCreateAccount }}
-                        </div>
-                        {% endif %}
                         <label class="input">
                             <i class="icon-append fa fa-envelope"></i>
                             <input type="email" name="email" id="email" placeholder="Email address">
@@ -29,6 +24,7 @@
                             <b class="tooltip tooltip-bottom-right">Don't forget your password</b>
                         </label>
                     </section>
+                    <p id="messageBag" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
                 </fieldset>
                 <footer>
                     <button type="submit" class="btn btn-primary" style="float: left">
@@ -46,16 +42,8 @@
         </div>
     </div>
 </div>
-<!--[if IE 8]>
-
-    <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
-
-<![endif]-->
-
 
 <script type="text/javascript">
-
-
 
     $(function () {
         // Validation

@@ -1,0 +1,954 @@
+﻿{% extends "layout.html" %}
+{% block body %}
+<title>Patrons</title>
+<div id="main" role="main">
+    <div id="content">
+        <div class="row">
+            <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+                <h1 class="page-title txt-color-blueDark">
+                    <i class="fa-fw fa fa-users"></i>
+                    Patrons
+                </h1>
+            </div>
+        </div>
+        <section id="widget-grid" class="">
+            <div class="row">
+                <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-users"></i> </span>
+                            <h2 style="line-height:15px"><strong>Patron General Information</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div style="padding-bottom:10px; padding-right: 5px; padding-top: 7px;">
+                                    <button class="btn btn-primary" id="editPatron" style="margin-left:6px;" data-target="#editModal">
+                                        <i class="fa fa-plus"></i> <span class="hidden-mobile">Edit Selected Patron</span>
+                                    </button>
+                                    <button class="btn btn-primary" style="margin-left:6px;" id="deleteButton">
+                                        <i class="fa fa-times"></i> <span class="hidden-mobile">Delete Selected Patron</span>
+                                    </button>
+                                </div>
+                                <table id="datatable" class="display table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
+                                            <th>Gender</th>
+                                            <th>Address</th>
+                                            <th>City</th>
+                                            <th>Zip Code</th>
+                                            <th>State</th>
+                                            <th style="display:none;">Belay Certified</th>
+                                            <th style="display:none;">Belay Start Date</th>
+                                            <th style="display:none;">Belay End Date</th>
+                                            <th style="display:none;">Lead Certified</th>
+                                            <th style="display:none;">Lead Climb Start Date</th>
+                                            <th style="display:none;">Lead Climb End Date</th>
+                                            <th style="display:none;">Suspension Status</th>
+                                            <th style="display:none;">Suspension Start Date</th>
+                                            <th style="display:none;">Suspension End Date</th>
+                                            <th>ListServ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in patronTable %}
+                                        <tr id="tr">
+                                            <td>{{ row['id']|tojson|safe }}</td>
+                                            <td>{{ row['firstName'] }}</td>
+                                            <td>{{ row['lastName'] }}</td>
+                                            <td>{{ row['email'] }}</td>
+                                            <td>{{ row['phoneNumber'] }}</td>
+                                            <td>{{ row['gender'] }}</td>
+                                            <td>{{ row['address'] }}</td>
+                                            <td>{{ row['city'] }}</td>
+                                            <td>{{ row['zipCode'] }}</td>
+                                            <td>{{ row['state'] }}</td>
+                                            {% if row['isBelayCertified'] == 'False' %}
+                                            <td style="display:none;">No</td>
+                                            {% else %}
+                                            <td style="display:none;">Yes</td>
+                                            {% endif %}
+                                            <td style="display:none;">{{ row['belayStartDate'] }}</td>
+                                            <td style="display:none;">{{ row['belayEndDate'] }}</td>
+                                            {% if row['isLeadClimbCertified'] == 'False' %}
+                                            <td style="display:none;">No</td>
+                                            {% else %}
+                                            <td style="display:none;">Yes</td>
+                                            {% endif %}
+                                            <td style="display:none;"> {{ row['leadClimbStartDate'] }} </td>
+                                            <td style="display:none;"> {{ row['leadClimbEndDate'] }}</td>
+                                            {% if row['isSuspended'] == 'False' %}
+                                            <td style="display:none;">No</td>
+                                            {% else %}
+                                            <td style="display:none;">Yes</td>
+                                            {% endif %}
+                                            <td style="display:none;">{{ row['suspendedStartDate'] }}</td>
+                                            <td style="display:none;">{{ row['suspendedEndDate'] }}</td>
+                                            {% if row['listServ'] == 'False' %}
+                                            <td>No</td>
+                                            {% else %}
+                                            <td>Yes</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-users"></i> </span>
+                            <h2 style="line-height:15px"><strong>Patron Certification Information</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div style="padding-bottom:10px; padding-right: 5px; padding-top: 7px;">
+                                    <button class="btn btn-primary" id="certificationPatron" style="margin-left:6px;" data-target="#editModal">
+                                        <i class="fa fa-plus"></i> <span class="hidden-mobile">Edit Patron Certifications</span>
+                                    </button>
+                                </div>
+                                <table id="patronDatatable" class="display table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th style="display:none;">Email</th>
+                                            <th style="display:none;">Phone Number</th>
+                                            <th style="display:none;">Gender</th>
+                                            <th style="display:none;">Address</th>
+                                            <th style="display:none;">City</th>
+                                            <th style="display:none;">Zip Code</th>
+                                            <th style="display:none;">State</th>
+                                            <th>Belay Certified</th>
+                                            <th>Belay Start Date</th>
+                                            <th>Belay End Date</th>
+                                            <th>Lead Certified</th>
+                                            <th>Lead Climb Start Date</th>
+                                            <th>Lead Climb End Date</th>
+                                            <th style="display:none;">Suspension Status</th>
+                                            <th style="display:none;">Suspension Start Date</th>
+                                            <th style="display:none;">Suspension End Date</th>
+                                            <th style="display:none;">ListServ</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in patronTable %}
+                                        <tr id="tr">
+                                            <td>{{ row['id']|tojson|safe }}</td>
+                                            <td>{{ row['firstName'] }}</td>
+                                            <td>{{ row['lastName'] }}</td>
+                                            <td style="display:none;">{{ row['email'] }}</td>
+                                            <td style="display:none;">{{ row['phoneNumber'] }}</td>
+                                            <td style="display:none;">{{ row['gender'] }}</td>
+                                            <td style="display:none;">{{ row['address'] }}</td>
+                                            <td style="display:none;">{{ row['city'] }}</td>
+                                            <td style="display:none;">{{ row['zipCode'] }}</td>
+                                            <td style="display:none;">{{ row['state'] }}</td>
+                                            {% if row['isBelayCertified'] == 'False' %}
+                                            <td>No</td>
+                                            {% else %}
+                                            <td>Yes</td>
+                                            {% endif %}
+                                            <td>{{ row['belayStartDate'] }}</td>
+                                            <td>{{ row['belayEndDate'] }}</td>
+                                            {% if row['isLeadClimbCertified'] == 'False' %}
+                                            <td>No</td>
+                                            {% else %}
+                                            <td>Yes</td>
+                                            {% endif %}
+                                            <td> {{ row['leadClimbStartDate'] }} </td>
+                                            <td>{{ row['leadClimbEndDate'] }} </td>
+                                            {% if row['isSuspended'] == 'False' %}
+                                            <td style="display:none;">No</td>
+                                            {% else %}
+                                            <td style="display:none;">Yes</td>
+                                            {% endif %}
+                                            <td style="display:none;">{{ row['suspendedStartDate'] }}</td>
+                                            <td style="display:none;">{{ row['suspendedEndDate'] }}</td>
+                                            {% if row['listServ'] == 'False' %}
+                                            <td style="display:none;">No</td>
+                                            {% else %}
+                                            <td style="display:none;">Yes</td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-users"></i> </span>
+                            <h2 style="line-height:15px"><strong>Patron Visit History</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body no-padding">
+                                <div style="padding-bottom:10px; padding-right: 5px; padding-top: 7px;">
+                                </div>
+                                <table id="visitTable" class="display table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th style="display:none;">ID</th>
+                                            <th>Id</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                            <th>Visit Date</th>
+                                            <th>Visit Time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in visitTable %}
+                                        <tr id="tr">
+                                            <td style="display:none;">{{ row['id']|tojson|safe }}</td>
+                                            <td>{{ row['patronId'] }}</td>
+                                            <td>{{ row['patronFirstName'] }}</td>
+                                            <td>{{ row['patronLastName'] }}</td>
+                                            <td>{{ row['patronVistDate'] }}</td>
+                                            <td>{{ row['patronVisitTime'] }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+    </div>
+</div>
+
+<form action="editPatronRoute" method="post">
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Patron</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Patron ID</label>
+                                <input type="text" placeholder="Select a patron to edit..." class="form-control" id="selectedId" name="updatedId" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">First Name</label>
+                                <input type="text" placeholder="First Name" required class="form-control" id="selectedFirstName" name="updatedFirstName" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Last Name" id="selectedLastName" name="updatedLastName" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Email</label>
+                                <input type="email" class="form-control" placeholder="Email" id="selectedEmail" name="updatedEmail" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Phone Number</label>
+                                <input type='tel' data-mask="(999) 999-9999" class="form-control" placeholder="Phone Number" id="selectedPhoneNumber" name="updatedPhoneNumber" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">Gender</label>
+                            <select class="form-control" name="updatedGender" id="selectedGender" style="margin-bottom:15px">
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="No Answer">Prefer Not to Answer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Address</label>
+                                <input type="text" class="form-control" placeholder="Address" id="selectedAddress" name="updatedAddress" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">City</label>
+                                <input type="text" class="form-control" placeholder="City" id="selectedCity" name="updatedCity" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">State</label>
+                                <input type="text" class="form-control" placeholder="State" id="selectedState" name="updatedState" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Zip Code</label>
+                                <input type="text" class="form-control" placeholder="Zip Code" id="selectedZipCode" name="updatedZipCode" />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">Belay Certified</label>
+                            <select class="form-control" name="updatedBelayStatus" id="selectedBelayStatus" style="margin-bottom:15px">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Belay Certified Start Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Belay Certified Start Date" id="selectedBelayStartDate" name="updatedBelayStartDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Belay Certified End Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Belay Certified End Date" id="selectedBelayEndDate" name="updatedBelayEndDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">Lead Climb Certified</label>
+                            <select class="form-control" name="updatedLeadClimbStatus" id="selectedLeadClimbStatus" style="margin-bottom:15px">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Lead Climb Certified Start Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Lead Climb Certified Start Date" id="selectedLeadClimbStartDate" name="updatedLeadClimbStartDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Lead Climb Certified End Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Lead Climb Certified End Date" id="selectedLeadClimbEndDate" name="updatedLeadClimbEndDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">Suspended</label>
+                            <select class="form-control" name="updatedIsSuspended" id="selectedIsSuspended" style="margin-bottom:15px">
+                                <option value="">Suspension Status</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Suspension Start Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Suspension Start Date" id="selectedSuspendedStartDate" name="updatedSuspendedStartDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Suspension End Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Suspension End Date" id="selectedSuspendedEndDate" name="updatedSuspendedEndDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">ListServ</label>
+                            <select class="form-control" name="updatedListServ" id="selectedListServ" style="margin-bottom:15px">
+                                <option value="">ListServ</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Save Changes
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<form action="editPatronCertificationRoute" method="post">
+    <div class="modal fade" id="certificateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel">Edit Patron</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Patron ID</label>
+                                <input type="text" placeholder="Select a patron to edit..." class="form-control" id="certificateId" name="certificateId" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">First Name</label>
+                                <input type="text" placeholder="First Name" required class="form-control" id="certificateFirstName" name="certificateFirstName" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Last Name</label>
+                                <input type="text" class="form-control" placeholder="Last Name" id="certificateLastName" name="certificateLastName" readonly/>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">Belay Certified</label>
+                            <select class="form-control" name="certificateBelayStatus" id="certificateBelayStatus" style="margin-bottom:15px">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Belay Certified Start Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Belay Certified Start Date" id="certificateBelayStartDate" name="certificateBelayStartDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Belay Certified End Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Belay Certified End Date" id="certificateBelayEndDate" name="certificateBelayEndDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label">Lead Climb Certified</label>
+                            <select class="form-control" name="certificateLeadClimbStatus" id="certificateLeadClimbStatus" style="margin-bottom:15px">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Lead Climb Certified Start Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Lead Climb Certified Start Date" id="certificateLeadClimbStartDate" name="certificateLeadClimbStartDate" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Lead Climb Certified End Date</label>
+                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Lead Climb Certified End Date" id="certificateLeadClimbEndDate" name="certificateLeadClimbEndDate" readonly />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">
+                                Save Changes
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $($("#navbarList > li")[4]).addClass('active')
+
+    var selectedId = "";
+    var selectedFirstName = "";
+    var selectedLastName = "";
+    var selectedEmail = "";
+    var selectedPhoneNumber = "";
+    var selectedGender = "";
+    var selectedAddress = "";
+    var selectedCity = "";
+    var selectedZipCode = "";
+    var selectedState = "";
+    var selectedBelayStatus = "";
+    var selectedBelayStartDate = "";
+    var selectedBelayEndDate = "";
+    var selectedLeadClimbStatus = "";
+    var selectedLeadClimbStartDate = "";
+    var selectedLeadClimbEndDate = "";
+    var selectedIsSuspended = "";
+    var selectedSuspendedStartDate = "";
+    var selectedSuspendedEndDate = "";
+    var selectedListServ = "";
+    var maxStartDate
+    var minEndDate
+
+    $('body').addClass('smart-style-5')
+
+    $(document).ready(function () {
+
+        $('table.display').DataTable({
+            stateSave: true,
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
+                    "t" +
+                    "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+            "oLanguage": {
+                "sSearch": '<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>'
+            },
+            "oTableTools": {
+                "aButtons": [
+                "copy",
+                "xls",
+                   {
+                       "sExtends": "pdf",
+                       "sPdfSize": "letter"
+                   },
+                   {
+                       "sExtends": "print",
+                       "sMessage": "<i>(press Esc to close)</i>"
+                   }
+                ],
+                "sSwfPath": "static/js/plugin/datatables/swf/copy_csv_xls_pdf.swf"
+            },
+            "autoWidth": true
+        });
+
+        var table = $('#datatable').DataTable();
+        var table2 = $('#patronDatatable').DataTable();
+        var table3 = $('#visitTable').DataTable();
+
+        $('table.display tbody').on('click', 'tr', function () {
+
+            if ($(this).hasClass('selected')) {
+                $(this).removeClass('selected');
+                $(this).removeClass('rowSelect');
+            }
+            else {
+
+                table.$('tr.selected').removeClass('rowSelect');
+                table.$('tr.selected').removeClass('selected');
+                table2.$('tr.selected').removeClass('rowSelect');
+                table2.$('tr.selected').removeClass('selected');
+                $(this).addClass('selected');
+                $(this).addClass('rowSelect');
+                table3.$('tr.selected').removeClass('rowSelect');
+                table3.$('tr.selected').removeClass('selected');
+            }
+        });
+
+        $('#editPatron').click(function () {
+            let selectedRow = document.querySelectorAll(".selected");
+
+            if (!selectedRow[0] || table2.$('tr.selected').hasClass('selected')) {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a patron to edit.'
+                });
+            }
+            else {
+
+                $("#editModal").modal()
+                selectedRow = selectedRow[0].textContent.split("\n");
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
+                selectedFirstName = selectedRow[2].trim(" ");
+                selectedLastName = selectedRow[3].trim(" ");
+                selectedEmail = selectedRow[4].trim(" ");
+                selectedPhoneNumber = selectedRow[5].trim(" ");
+                selectedGender = selectedRow[6].trim(" ");
+                selectedAddress = selectedRow[7].trim(" ");
+                selectedCity = selectedRow[8].trim(" ");
+                selectedZipCode = selectedRow[9].trim(" ");
+                selectedState = selectedRow[10].trim(" ");
+                selectedBelayStatus = selectedRow[12].trim(" ");
+                selectedBelayStartDate = selectedRow[14].trim(" ");
+                selectedBelayEndDate = selectedRow[15].trim(" ");
+                selectedLeadClimbStatus = selectedRow[17].trim(" ");
+                selectedLeadClimbStartDate = selectedRow[19].trim(" ");
+                selectedLeadClimbEndDate = selectedRow[20].trim(" ");
+                selectedIsSuspended = selectedRow[22].trim(" ");
+                selectedSuspendedStartDate = selectedRow[24].trim(" ");
+                selectedSuspendedEndDate = selectedRow[25].trim(" ");
+                selectedListServ = selectedRow[27].trim(" ");
+
+                document.getElementById("selectedId").value = selectedId;
+                document.getElementById("selectedFirstName").value = selectedFirstName;
+                document.getElementById("selectedLastName").value = selectedLastName;
+                document.getElementById("selectedEmail").value = selectedEmail;
+                document.getElementById("selectedPhoneNumber").value = selectedPhoneNumber;
+                document.getElementById("selectedGender").value = selectedGender;
+                document.getElementById("selectedAddress").value = selectedAddress;
+                document.getElementById("selectedCity").value = selectedCity;
+                document.getElementById("selectedZipCode").value = selectedZipCode;
+                document.getElementById("selectedState").value = selectedState;
+                document.getElementById("selectedBelayStatus").value = selectedBelayStatus;
+                document.getElementById("selectedBelayStartDate").value = selectedBelayStartDate;
+                document.getElementById("selectedBelayEndDate").value = selectedBelayEndDate;
+                document.getElementById("selectedLeadClimbStatus").value = selectedLeadClimbStatus;
+                document.getElementById("selectedLeadClimbStartDate").value = selectedLeadClimbStartDate;
+                document.getElementById("selectedLeadClimbEndDate").value = selectedLeadClimbEndDate;
+                document.getElementById("selectedIsSuspended").value = selectedIsSuspended;
+                document.getElementById("selectedSuspendedStartDate").value = selectedSuspendedStartDate;
+                document.getElementById("selectedSuspendedEndDate").value = selectedSuspendedEndDate;
+                document.getElementById("selectedListServ").value = selectedListServ;
+
+                if ($('#selectedIsSuspended')[0].value == 'Yes') {
+
+                    $('#selectedSuspendedStartDate').addClass('disabled', false);
+                    $('#selectedSuspendedStartDate').datepicker('enable');
+
+                    $('#selectedSuspendedEndDate').addClass('disabled', false);
+                    $('#selectedSuspendedEndDate').datepicker('enable');
+                } else {
+                    $('#selectedSuspendedStartDate').addClass('disabled', true);
+                    $('#selectedSuspendedStartDate').datepicker('disable');
+
+                    $('#selectedSuspendedEndDate').addClass('disabled', true);
+                    $('#selectedSuspendedEndDate').datepicker('disable');
+                }
+
+                if ($('#selectedBelayStatus')[0].value == 'Yes') {
+
+                    $('#selectedBelayStartDate').addClass('disabled', false);
+                    $('#selectedBelayStartDate').datepicker('enable');
+
+                    $('#selectedBelayEndDate').addClass('disabled', false);
+                    $('#selectedBelayEndDate').datepicker('enable');
+                } else {
+                    $('#selectedBelayStartDate').addClass('disabled', true);
+                    $('#selectedBelayStartDate').datepicker('disable');
+
+                    $('#selectedBelayEndDate').addClass('disabled', true);
+                    $('#selectedBelayEndDate').datepicker('disable');
+                }
+
+                if ($('#selectedLeadClimbStatus')[0].value == 'Yes') {
+
+                    $('#selectedLeadClimbStartDate').addClass('disabled', false);
+                    $('#selectedLeadClimbStartDate').datepicker('enable');
+
+                    $('#selectedLeadClimbEndDate').addClass('disabled', false);
+                    $('#selectedLeadClimbEndDate').datepicker('enable');
+                } else {
+                    $('#selectedLeadClimbStartDate').addClass('disabled', true);
+                    $('#selectedLeadClimbStartDate').datepicker('disable');
+
+                    $('#selectedLeadClimbEndDate').addClass('disabled', true);
+                    $('#selectedLeadClimbEndDate').datepicker('disable');
+                }
+            }
+        });
+
+        $('#certificationPatron').click(function () {
+
+            let selectedRow = document.querySelectorAll(".selected");
+
+            if (!selectedRow[0] || table.$('tr.selected').hasClass('selected'))
+            {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a patron to edit.'
+                });
+            }
+            else
+            {
+                $("#certificateModal").modal()
+
+                selectedRow = selectedRow[0].textContent.split("\n");
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
+                selectedFirstName = selectedRow[2].trim(" ");
+                selectedLastName = selectedRow[3].trim(" ");
+                selectedBelayStatus = selectedRow[12].trim(" ");
+                selectedBelayStartDate = selectedRow[14].trim(" ");
+                selectedBelayEndDate = selectedRow[15].trim(" ");
+                selectedLeadClimbStatus = selectedRow[17].trim(" ");
+                selectedLeadClimbStartDate = selectedRow[19].trim(" ");
+                selectedLeadClimbEndDate = selectedRow[20].trim(" ");
+
+                document.getElementById("certificateId").value = selectedId;
+                document.getElementById("certificateFirstName").value = selectedFirstName;
+                document.getElementById("certificateLastName").value = selectedLastName;
+                document.getElementById("certificateBelayStatus").value = selectedBelayStatus;
+                document.getElementById("certificateBelayStartDate").value = selectedBelayStartDate;
+                document.getElementById("certificateBelayEndDate").value = selectedBelayEndDate;
+                document.getElementById("certificateLeadClimbStatus").value = selectedLeadClimbStatus;
+                document.getElementById("certificateLeadClimbStartDate").value = selectedLeadClimbStartDate;
+                document.getElementById("certificateLeadClimbEndDate").value = selectedLeadClimbEndDate;
+                document.getElementById("certificateIsSuspended").value = selectedIsSuspended;
+
+                if ($('#selectedBelayStatus')[0].value == 'Yes')
+                {
+
+                    $('#selectedBelayStartDate').addClass('disabled', false);
+                    $('#selectedBelayStartDate').datepicker('enable');
+
+                    $('#selectedBelayEndDate').addClass('disabled', false);
+                    $('#selectedBelayEndDate').datepicker('enable');
+                }
+                else
+                {
+                    $('#selectedBelayStartDate').addClass('disabled', true);
+                    $('#selectedBelayStartDate').datepicker('disable');
+
+                    $('#selectedBelayEndDate').addClass('disabled', true);
+                    $('#selectedBelayEndDate').datepicker('disable');
+                }
+
+                if ($('#selectedLeadClimbStatus')[0].value == 'Yes')
+                {
+
+                    $('#selectedLeadClimbStartDate').addClass('disabled', false);
+                    $('#selectedLeadClimbStartDate').datepicker('enable');
+
+                    $('#selectedLeadClimbEndDate').addClass('disabled', false);
+                    $('#selectedLeadClimbEndDate').datepicker('enable');
+                }
+                else
+                {
+                    $('#selectedLeadClimbStartDate').addClass('disabled', true);
+                    $('#selectedLeadClimbStartDate').datepicker('disable');
+
+                    $('#selectedLeadClimbEndDate').addClass('disabled', true);
+                    $('#selectedLeadClimbEndDate').datepicker('disable');
+                }
+            }
+        });
+
+        $('#deleteButton').click(function () {
+            let selectedRow = document.querySelectorAll(".selected");
+            if (!selectedRow[0] || table2.$('tr.selected').hasClass('selected')) {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a patron to delete.'
+                });
+            }
+            else {
+                selectedRow = selectedRow[0].textContent.split("\n");
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
+                selectedFirstName = selectedRow[2]
+                selectedLastName = selectedRow[3]
+
+                $.confirm({
+                    title: 'Are You Sure?',
+                    content: 'Delete Patron: ' + selectedFirstName + ' ' + selectedLastName,
+                    buttons: {
+                        confirm: function () {
+                            table.row('.selected').remove().draw(false);
+                            runPatronDeletePython(selectedId)
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
+            }
+        });
+
+        $('#selectedIsSuspended').change(function () {
+            if ($('#selectedIsSuspended')[0].value == 'Yes') {
+
+                $('#selectedSuspendedStartDate').addClass('disabled', false);
+                $('#selectedSuspendedStartDate').datepicker('enable');
+                $('#selectedSuspendedStartDate')[0].value = '';
+
+                $('#selectedSuspendedEndDate').addClass('disabled', false);
+                $('#selectedSuspendedEndDate').datepicker('enable');
+                $('#selectedSuspendedEndDate')[0].value = '';
+            } else {
+                $('#selectedSuspendedStartDate').addClass('disabled', true);
+                $('#selectedSuspendedStartDate').datepicker('disable');
+                $('#selectedSuspendedStartDate')[0].value = '';
+
+                $('#selectedSuspendedEndDate').addClass('disabled', true);
+                $('#selectedSuspendedEndDate').datepicker('disable');
+                $('#selectedSuspendedEndDate')[0].value = '';
+            }
+        });
+
+        $('#selectedBelayStatus').change(function () {
+            if ($('#selectedBelayStatus')[0].value == 'Yes') {
+
+                $('#selectedBelayStartDate').addClass('disabled', false);
+                $('#selectedBelayStartDate').datepicker('enable');
+                $('#selectedBelayStartDate')[0].value = '';
+
+                $('#selectedBelayEndDate').addClass('disabled', false);
+                $('#selectedBelayEndDate').datepicker('enable');
+                $('#selectedBelayEndDate')[0].value = '';
+            } else {
+                $('#selectedBelayStartDate').addClass('disabled', true);
+                $('#selectedBelayStartDate').datepicker('disable');
+                $('#selectedBelayStartDate')[0].value = '';
+
+                $('#selectedBelayEndDate').addClass('disabled', true);
+                $('#selectedBelayEndDate').datepicker('disable');
+                $('#selectedBelayEndDate')[0].value = '';
+            }
+        });
+
+        $('#selectedLeadClimbStatus').change(function () {
+            if ($('#selectedLeadClimbStatus')[0].value == 'Yes') {
+
+                $('#selectedLeadClimbStartDate').addClass('disabled', false);
+                $('#selectedLeadClimbStartDate').datepicker('enable');
+                $('#selectedLeadClimbStartDate')[0].value = '';
+
+                $('#selectedLeadClimbEndDate').addClass('disabled', false);
+                $('#selectedLeadClimbEndDate').datepicker('enable');
+                $('#selectedLeadClimbEndDate')[0].value = '';
+            } else {
+                $('#selectedLeadClimbStartDate').addClass('disabled', true);
+                $('#selectedLeadClimbStartDate').datepicker('disable');
+                $('#selectedLeadClimbStartDate')[0].value = '';
+
+                $('#selectedLeadClimbEndDate').addClass('disabled', true);
+                $('#selectedLeadClimbEndDate').datepicker('disable');
+                $('#selectedLeadClimbEndDate')[0].value = '';
+            }
+        });
+
+
+        $('#certificateBelayStatus').change(function () {
+            if ($('#certificateBelayStatus')[0].value == 'Yes') {
+
+                $('#certificateBelayStartDate').addClass('disabled', false);
+                $('#certificateBelayStartDate').datepicker('enable');
+                $('#certificateBelayStartDate')[0].value = '';
+
+                $('#certificateBelayEndDate').addClass('disabled', false);
+                $('#certificateBelayEndDate').datepicker('enable');
+                $('#certificateBelayEndDate')[0].value = '';
+            } else {
+                $('#certificateBelayStartDate').addClass('disabled', true);
+                $('#certificateBelayStartDate').datepicker('disable');
+                $('#certificateBelayStartDate')[0].value = '';
+
+                $('#certificateBelayEndDate').addClass('disabled', true);
+                $('#certificateBelayEndDate').datepicker('disable');
+                $('#certificateBelayEndDate')[0].value = '';
+            }
+        });
+
+        $('#certificateLeadClimbStatus').change(function () {
+            if ($('#certificateLeadClimbStatus')[0].value == 'Yes') {
+                $('#certificateLeadClimbStartDate').addClass('disabled', false);
+                $('#certificateLeadClimbStartDate').datepicker('enable');
+                $('#certificateLeadClimbStartDate')[0].value = '';
+
+                $('#certificateLeadClimbEndDate').addClass('disabled', false);
+                $('#certificateLeadClimbEndDate').datepicker('enable');
+                $('#certificateLeadClimbEndDate')[0].value = '';
+            } else {
+                $('#certificateLeadClimbStartDate').addClass('disabled', true);
+                $('#certificateLeadClimbStartDate').datepicker('disable');
+                $('#certificateLeadClimbStartDate')[0].value = '';
+
+                $('#certificateLeadClimbEndDate').addClass('disabled', true);
+                $('#certificateLeadClimbEndDate').datepicker('disable');
+                $('#certificateLeadClimbEndDate')[0].value = '';
+            }
+        });
+    });
+
+    function runPatronDeletePython(aId) {
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "/patronDelete",
+            data: { id: aId },
+            async: false
+        });
+        return jqXHR.responseText;
+    }
+
+    $("#selectedSuspendedStartDate").datepicker({
+        minDate: 0,
+        onSelect: function (selected) {
+            $("#selectedSuspendedEndDate").datepicker("option", "minDate", selected)
+        }
+    });
+
+    $("#selectedSuspendedEndDate").datepicker({
+        minDate: 0,
+        onSelect: function (selected) {
+            $("#selectedSuspendedStartDate").datepicker("option", "maxDate", selected)
+        }
+    });
+
+    $("#selectedBelayStartDate").datepicker({
+        minDate: 0,
+        onSelect: function (selected) {
+            $("#selectedBelayEndDate").datepicker("option", "minDate", selected)
+        }
+    });
+
+    $("#selectedBelayEndDate").datepicker({
+        minDate: 0,
+        onSelect: function (selected) {
+            $("#selectedBelayStartDate").datepicker("option", "maxDate", selected)
+        }
+    });
+
+    $("#selectedLeadClimbStartDate").datepicker({
+        minDate: 0,
+        onSelect: function (selected) {
+            $("#selectedLeadClimbEndDate").datepicker("option", "minDate", selected)
+        }
+    });
+
+    $("#selectedLeadClimbEndDate").datepicker({
+        minDate: 0,
+        onSelect: function (selected) {
+            $("#selectedLeadClimbStartDate").datepicker("option", "maxDate", selected)
+        }
+    });
+
+    $("#certificateSuspendedStartDate").datepicker({
+        minDate: 0,
+        onSelect: function (certificate) {
+            $("#certificateSuspendedEndDate").datepicker("option", "minDate", selected)
+        }
+    });
+
+    $("#certificateSuspendedEndDate").datepicker({
+        minDate: 0,
+        onSelect: function (certificate) {
+            $("#certificateSuspendedStartDate").datepicker("option", "maxDate", selected)
+        }
+    });
+
+    $("#certificateBelayStartDate").datepicker({
+        minDate: 0,
+        onSelect: function (certificate) {
+            $("#certificateBelayEndDate").datepicker("option", "minDate", selected)
+        }
+    });
+
+    $("#certificateBelayEndDate").datepicker({
+        minDate: 0,
+        onSelect: function (certificate) {
+            $("#certificateBelayStartDate").datepicker("option", "maxDate", selected)
+        }
+    });
+
+    $("#certificateLeadClimbStartDate").datepicker({
+        minDate: 0,
+        onSelect: function (certificate) {
+            $("#certificateLeadClimbEndDate").datepicker("option", "minDate", selected)
+        }
+    });
+
+    $("#certificateLeadClimbEndDate").datepicker({
+        minDate: 0,
+        onSelect: function (certificate) {
+            $("#certificateLeadClimbStartDate").datepicker("option", "maxDate", selected)
+        }
+    });
+
+</script>
+    {% endblock %}

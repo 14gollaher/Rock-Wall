@@ -45,7 +45,7 @@ def addInventoryRoute():
     if not databaseFunctions.getInventoryItemId(newInventoryItem):
         databaseFunctions.insertNewInventoryItem(newInventoryItem)
     else: 
-        session['addInventoryMessage'] = 'Item Id already exists!'
+        session['inventoryMessage'] = 'Item Id already exists!'
 
     return redirect('inventory')
 
@@ -86,3 +86,7 @@ def inventoryDelete():
 
     return redirect('inventory')
 
+def inventoryMessageClear():  
+  
+    session['inventoryMessage'] = "";
+    return ('Badda bing badda boo', 204)

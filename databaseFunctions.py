@@ -309,8 +309,8 @@ def getHighestMessageId():
 #########################################################################
 
 def insertNewPatron(Patron):
-    sqlText = text("INSERT INTO Patron VALUES (:id, :firstName, :lastName, :email, :phoneNumber, :gender, :address, :city, :zipCode, :waiverFile, :state, :isBelayCertified, :isSoloClimbCertified, :isSuspended, :suspendedStartDate, :suspendedEndDate)")
-    engine.execute(sqlText, {"id": Patron.id, "firstName": Patron.firstName, "lastName": Patron.lastName, "email": Patron.email, "phoneNumber": Patron.phoneNumber, "gender": Patron.gender, "address": Patron.address, "city": Patron.city, "zipCode": Patron.zipCode, "waiverFile": Patron.waiverFile, "state": Patron.state, "isBelayCertified": "False", "isSoloClimbCertified": "False", "isSuspended": "False", "suspendedStartDate": Patron.suspendedStartDate, "suspendedEndDate": Patron.suspendedEndDate})
+    sqlText = text("INSERT INTO Patron VALUES (:id, :firstName, :lastName, :email, :phoneNumber, :gender, :address, :city, :zipCode, :waiverFile, :state, :isBelayCertified, :belayStartDate, :belayEndDate, :isLeadClimbCertified, :leadClimbStartDate, :leadClimbEndDate, :isSuspended, :suspendedStartDate, :suspendedEndDate, :listServ)")
+    engine.execute(sqlText, {"id": Patron.id, "firstName": Patron.firstName, "lastName": Patron.lastName, "email": Patron.email, "phoneNumber": Patron.phoneNumber, "gender": Patron.gender, "address": Patron.address, "city": Patron.city, "zipCode": Patron.zipCode, "waiverFile": Patron.waiverFile, "state": Patron.state, "isBelayCertified": "False", "belayStartDate": Patron.belayStartDate, "belayEndDate": Patron.belayEndDate, "isLeadClimbCertified": "False", "leadClimbStartDate": Patron.leadClimbStartDate, "leadClimbEndDate": Patron.leadClimbEndDate,  "isSuspended": "False", "suspendedStartDate": Patron.suspendedStartDate, "suspendedEndDate": Patron.suspendedEndDate, "listServ": Patron.listServ})
 
 def editPatronAccount(PatronItem):
     sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber , Gender = :gender , Address = :address , City = :city , Zip = :zipCode, State =:state  WHERE Id = :id")
@@ -479,19 +479,75 @@ def getAllPatronBelayCertifications():
         else:	
             return isBelayCertifications
 
-def getAllPatronSoloClimbCertifications():
+def getAllPatronBelayStartDates():
     with engine.connect() as connection:
-        sqlText = text("SELECT IsSoloClimbCertified FROM Patron ORDER by LastName, FirstName, Id")
+        sqlText = text("SELECT BelayStartDate FROM Patron ORDER by LastName, FirstName, Id")
         result = engine.execute(sqlText)
-        isSoloClimbCertifications = []
+        belayStartDates = []
     
         for row in result:
-            isSoloClimbCertifications.append(row[0])    
+            belayStartDates.append(row[0])    
 
-        if not isSoloClimbCertifications:
+        if not belayStartDates:
             return None
         else:	
-            return isSoloClimbCertifications
+            return belayStartDates
+
+def getAllPatronBelayEndDates():
+    with engine.connect() as connection:
+        sqlText = text("SELECT BelayEndDate FROM Patron ORDER by LastName, FirstName, Id")
+        result = engine.execute(sqlText)
+        belayEndDates = []
+    
+        for row in result:
+            belayEndDates.append(row[0])    
+
+        if not belayEndDates:
+            return None
+        else:	
+            return belayEndDates
+
+def getAllPatronLeadClimbCertifications():
+    with engine.connect() as connection:
+        sqlText = text("SELECT IsLeadClimbCertified FROM Patron ORDER by LastName, FirstName, Id")
+        result = engine.execute(sqlText)
+        isLeadClimbCertifications = []
+    
+        for row in result:
+            isLeadClimbCertifications.append(row[0])    
+
+        if not isLeadClimbCertifications:
+            return None
+        else:	
+            return isLeadClimbCertifications
+
+def getAllPatronLeadClimbStartDates():
+    with engine.connect() as connection:
+        sqlText = text("SELECT LeadClimbStartDate FROM Patron ORDER by LastName, FirstName, Id")
+        result = engine.execute(sqlText)
+        leadClimbStartDates = []
+    
+        for row in result:
+            leadClimbStartDates.append(row[0])    
+
+        if not leadClimbStartDates:
+            return None
+        else:	
+            return leadClimbStartDates
+
+def getAllPatronLeadClimbEndDates():
+    with engine.connect() as connection:
+        sqlText = text("SELECT LeadClimbEndDate FROM Patron ORDER by LastName, FirstName, Id")
+        result = engine.execute(sqlText)
+        leadClimbEndDates = []
+    
+        for row in result:
+            leadClimbEndDates.append(row[0])    
+
+        if not leadClimbEndDates:
+            return None
+        else:	
+            return leadClimbEndDates
 
 def getAllPatronSuspensions():
     with engine.connect() as connection:
@@ -534,6 +590,20 @@ def getAllPatronSuspensionEndDates():
             return None
         else:	
             return suspendedEndDates
+
+def getAllPatronListServ():
+    with engine.connect() as connection:
+        sqlText = text("SELECT ListServ FROM Patron ORDER by LastName, FirstName, Id")
+        result = engine.execute(sqlText)
+        ListServ = []
+    
+        for row in result:
+            ListServ.append(row[0])    
+
+        if not ListServ:
+            return None
+        else:	
+            return ListServ
 
 def getCurrentPatronFirstName(id):
 	sqlText = text("SELECT FirstName FROM Patron WHERE Id = :id")
@@ -625,20 +695,43 @@ def getCurrentPatronSuspension(id):
 		row = result
 		return row['IsSuspended']
 
+def getCurrentPatronSuspensionStartDate(id):
+	sqlText = text("SELECT SuspendedStartDate FROM Patron WHERE Id = :id")
+	result = engine.execute(sqlText, {"id": id}).fetchone()
+	if not result:
+		return result
+	else:	
+		row = result
+		return row['SuspendedStartDate']
+
+def getCurrentPatronSuspensionEndDate(id):
+	sqlText = text("SELECT SuspendedEndDate FROM Patron WHERE Id = :id")
+	result = engine.execute(sqlText, {"id": id}).fetchone()
+	if not result:
+		return result
+	else:	
+		row = result
+		return row['SuspendedEndDate']
+
 def deletePatronItem(PatronItem):
 	sqlText = text("DELETE FROM Patron WHERE Id = :id")
 	engine.execute(sqlText, {"id": PatronItem.id})
 
 def editPatron(PatronItem):
+
     if PatronItem.isBelayCertified == 'Yes':
         belayBooleanStatus = True
     else:
+        PatronItem.belayStartDate = ''
+        PatronItem.belayEndDate = ''
         belayBooleanStatus = False
 
-    if PatronItem.isSoloClimbCertified == 'Yes':
-        soloClimbBooleanStatus = True
+    if PatronItem.isLeadClimbCertified == 'Yes':
+        leadClimbBooleanStatus = True
     else:
-        soloClimbBooleanStatus = False
+        PatronItem.leadClimbStartDate = ''
+        PatronItem.leadClimbEndDate = ''
+        leadClimbBooleanStatus = False
     
     if PatronItem.isSuspended == 'Yes':
         suspendedBooleanStatus = True
@@ -647,9 +740,27 @@ def editPatron(PatronItem):
         PatronItem.suspendedEndDate = ''
         suspendedBooleanStatus = False
 
-    sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber, Gender = :gender, Address = :address, City = :city, Zip = :zipCode, State = :state, IsBelayCertified = :isBelayCertified, IsSoloClimbCertified = :isSoloClimbCertified, IsSuspended = :isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
-    engine.execute(sqlText, {"id": PatronItem.id, "firstName": PatronItem.firstName, "lastName": PatronItem.lastName, "email": PatronItem.email, "phoneNumber": PatronItem.phoneNumber, "gender": PatronItem.gender, "address": PatronItem.address, "city": PatronItem.city, "zipCode": PatronItem.zipCode, "state": PatronItem.state, "isBelayCertified": str(belayBooleanStatus), "isSoloClimbCertified": str(soloClimbBooleanStatus), "isSuspended": str(suspendedBooleanStatus),  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
+    sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber, Gender = :gender, Address = :address, City = :city, Zip = :zipCode, State = :state, IsBelayCertified = :isBelayCertified, BelayStartDate = :belayStartDate, BelayEndDate = :belayEndDate, IsLeadClimbCertified = :isLeadClimbCertified, LeadClimbStartDate = :leadClimbStartDate, LeadClimbEndDate = :leadClimbEndDate, IsSuspended = :isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
+    engine.execute(sqlText, {"id": PatronItem.id, "firstName": PatronItem.firstName, "lastName": PatronItem.lastName, "email": PatronItem.email, "phoneNumber": PatronItem.phoneNumber, "gender": PatronItem.gender, "address": PatronItem.address, "city": PatronItem.city, "zipCode": PatronItem.zipCode, "state": PatronItem.state, "isBelayCertified": str(belayBooleanStatus), "belayStartDate": PatronItem.belayStartDate, "belayEndDate": PatronItem.belayEndDate, "isLeadClimbCertified": str(leadClimbBooleanStatus), "leadClimbStartDate": PatronItem.leadClimbStartDate, "leadClimbEndDate": PatronItem.leadClimbEndDate,"isSuspended": str(suspendedBooleanStatus),  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
 
+def editPatronCertifications(PatronItem):
+
+    if PatronItem.isBelayCertified == 'Yes':
+        belayBooleanStatus = True
+    else:
+        PatronItem.belayStartDate = ''
+        PatronItem.belayEndDate = ''
+        belayBooleanStatus = False
+
+    if PatronItem.isLeadClimbCertified == 'Yes':
+        leadClimbBooleanStatus = True
+    else:
+        PatronItem.leadClimbStartDate = ''
+        PatronItem.leadClimbEndDate = ''
+        leadClimbBooleanStatus = False
+
+    sqlText = text("UPDATE Patron SET IsBelayCertified = :isBelayCertified, BelayStartDate = :belayStartDate, BelayEndDate = :belayEndDate, IsLeadClimbCertified = :isLeadClimbCertified, LeadClimbStartDate = :leadClimbStartDate, LeadClimbEndDate = :leadClimbEndDate WHERE Id = :id")
+    engine.execute(sqlText, {"id": PatronItem.id, "isBelayCertified": str(belayBooleanStatus), "belayStartDate": PatronItem.belayStartDate, "belayEndDate": PatronItem.belayEndDate, "isLeadClimbCertified": str(leadClimbBooleanStatus), "leadClimbStartDate": PatronItem.leadClimbStartDate, "leadClimbEndDate": PatronItem.leadClimbEndDate})
 
 def editPatronSuspensions(PatronItem):
     
@@ -662,6 +773,16 @@ def editPatronSuspensions(PatronItem):
 
     sqlText = text("UPDATE Patron SET IsSuspended = :isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
     engine.execute(sqlText, {"id": PatronItem.id, "isSuspended": str(suspendedBooleanStatus),  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
+
+
+def getPatronEmailIfExists(PatronItem):
+	sqlText = text("SELECT Email FROM Patron WHERE Email = :email")
+	result = engine.execute(sqlText, {"email": PatronItem.email}).fetchone()
+	if not result:
+		return result
+	else:	
+		row = result
+		return row['Email']
 
 #########################################################################
 ###                                                                   ###

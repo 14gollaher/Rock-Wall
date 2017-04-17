@@ -1,5 +1,5 @@
 import os
-from flask import Flask, flash, redirect, render_template, request, session, abort
+from flask import Flask, flash, redirect, render_template, request, session, abort, url_for
 from sqlalchemy.orm import sessionmaker, scoped_session
 from datetime import date
 from datetime import time
@@ -15,6 +15,7 @@ from itertools import *
 import re
 import pytz
 from passlib.hash import pbkdf2_sha256
+import simplejson as json
 
 class UserAccount:
 
@@ -34,11 +35,20 @@ class Message:
         self.content = content
 
 def login():
-  
+    # Code Snippet to add the Master Account
+    #hashedPassword = hashedPassword = pbkdf2_sha256.hash('abc123')
+    #newUser = UserAccount('master@gmail.com', hashedPassword, 'Master', 'Justin', 'Parks')
+    #databaseFunctions.insertNewUser(newUser) 
+    try:
+        if checkPreviousPage(['login']) == False:
+            session['messageBag'] = ""
+    except:
+        session['messageBag'] = ""
+
     if session.get('isLoggedIn'):
         return redirect('/')
     else:
-        return render_template('login/login.html', messageLogin = session.get('messageLogin'))
+        return render_template('login/login.html')
 
 def index():
     
@@ -85,7 +95,6 @@ def populateTodaysVisitsTable ():
             todaysTimes.append(allPatronsVisitsTimes[i])
    
     todaysVisitsTable = [0] * 12
-
 
     for visit in todaysTimes:
         
@@ -182,7 +191,6 @@ def populateMonthVisitTable():
     return monthVisitsTable
 
 
-
 def timeInRange(start, end, x):
 
     if start <= end:
@@ -193,13 +201,10 @@ def timeInRange(start, end, x):
 def logout():
 
     session['isLoggedIn'] = False
-    # session.clear() # Can't use this as it'd clear the patrons sessions as well. 
-                      # Need to write an individual "clear desktop site" sessions function
+
     return redirect('login')
 
 def loginRoute():
-
-    session['messageLogin'] = ""
 
     userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "", "", "")
     
@@ -214,7 +219,7 @@ def loginRoute():
         if databaseFunctions.getAccountType(userAccount) == 'Master':
             session['sessionType'] = 'Master'
     else:
-        session['messageLogin'] = 'Invalid Credentials!'
+        session['messageBag'] = 'Invalid Credentials!'
         return redirect('login')
     
     session['currentUserFirstName'] = databaseFunctions.getAccountFirstName(userAccount)
@@ -223,134 +228,169 @@ def loginRoute():
     return redirect('/')
 
 def createAccount():
-
+    
     if session.get('isLoggedIn'):
         return redirect('/')
-    return render_template('login/createAccount.html', messageCreateAccount = session.get('messageCreateAccount'))
+
+    if checkPreviousPage(['createAccountRoute', 'createAccount']) == False:
+            session['messageBag'] = ""
+            
+    
+    if checkPreviousPage(['createAccountRoute', 'createAccount']):
+            pass2 = []
+            pass2.append('T')
+            pass2 = json.dumps(pass2)
+            createAccount = UserAccount("", "", session.get('newAccountType'), session.get('newAccountFirstName'), session.get('newAccountLastName'))
+    else:
+        createAccount = UserAccount("", "", "", "", "")
+        pass2 = []
+        pass2.append('F')
+        pass2 = json.dumps(pass2)
+
+    return render_template('login/createAccount.html', firstName = createAccount.firstName, lastName = createAccount.lastName, accountType = createAccount.accountType, pass2 = pass2) 
 
 def createAccountRoute(): 
+    
+    if checkPreviousPage(['createAccountRoute', 'createAccount']) == False:
+        session['messageBag'] = ""
 
-    session['messageCreateAccount'] = ""
-
-    userAccount = UserAccount(str(request.form['email']), str(request.form['password']), str(request.form['accountType']), str(request.form['firstName']), str(request.form['lastName']))
+    createAccount = UserAccount(str(request.form['email']), str(request.form['password']), str(request.form['accountType']), str(request.form['firstName']), str(request.form['lastName']))
     postConfirmPassword = str(request.form['confirmPassword'])
 
-    isCreateAccountSuccess = True
 
-    if databaseFunctions.getAccountEmail(userAccount):
-        session['messageCreateAccount'] = 'Email already exists!'
-        isCreateAccountSuccess = False
+    if databaseFunctions.getAccountEmail(createAccount):
+        print ('True')
+        session['messageBag'] = 'Email already exists!'
+        return redirect('createAccount')        
 
-    elif userAccount.password != postConfirmPassword:
-        isCreateAccountSuccess = False  
+    session['newAccountEmail'] = createAccount.email
+    session['newAccountPassword'] = createAccount.password 
+    session['newAccountType'] = createAccount.accountType
+    session['newAccountFirstName'] = createAccount.firstName
+    session['newAccountLastName'] = createAccount.lastName
 
-    if isCreateAccountSuccess == False: 
-        return redirect('createAccount')
+    pass2 = []
+    pass2.append('T')
+    pass2 = json.dumps(pass2)   
 
-    session['newAccountEmail'] = userAccount.email
-    session['newAccountPassword'] = userAccount.password 
-    session['newAccountType'] = userAccount.accountType
-    session['newFirstName'] = userAccount.firstName
-    session['newLastName'] = userAccount.lastName
-    newAccountType = userAccount.accountType
-   
-    return render_template('login/authenticateCreateAccount.html', accountType = session.get('newAccountType'))
+    return render_template('login/createAccount.html', firstName = createAccount.firstName, lastName = createAccount.lastName, accountType = createAccount.accountType, pass2 = pass2) 
 
 def authenticateCreateAccount():
 
-    session['messageCreateAccount'] = ""
-
-    userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "", "", "")
-    userAccount.accountType = databaseFunctions.getAccountType(userAccount)
-
+    validateAccount  = UserAccount(str(request.form['validateEmail']), str(request.form['validatePassword']), "", "", "")
+    validateAccount.accountType = databaseFunctions.getAccountType(validateAccount)
+    print (session.get('newAccountPassword'))
     hashedPassword = pbkdf2_sha256.hash(session.get('newAccountPassword'))
 
-    newUser = UserAccount(session.get('newAccountEmail'), hashedPassword, session.get('newAccountType'), session.get('newFirstName'), session.get('newLastName'))
+    createAccount = UserAccount(session.get('newAccountEmail'), hashedPassword, session.get('newAccountType'), session.get('newAccountFirstName'), session.get('newAccountLastName'))
     
-    if validateCredentials(userAccount):
-        if checkPermissionsPasswordChange(userAccount, newUser):
-            databaseFunctions.insertNewUser(newUser)
+    if validateCredentials(validateAccount):
+        if checkPermissionsPasswordChange(validateAccount, createAccount):
+            databaseFunctions.insertNewUser(createAccount)
         else:
-            session['messageCreateAccount'] = 'Invalid Permissions!'
-            return render_template('login/authenticateCreateAccount.html', messageCreateAccount = session.get('messageCreateAccount'))  
+            session['messageBag'] = 'Invalid Authorization Permissions!'
+            return redirect ('createAccount')
     else:
-        session['messageCreateAccount'] = 'Invalid credentials!'
-        return render_template('login/authenticateCreateAccount.html', messageCreateAccount = session.get('messageCreateAccount'))  
+        session['messageBag'] = 'Invalid Authorization Credentials!'
+        return redirect ('createAccount')
 
-    session['isLoggedIn'] = False
     return redirect('login')
 
 def changePassword():
-
+    
     if session.get('isLoggedIn'):
         return redirect('/')
-    return render_template('login/changePassword.html', messageChangePassword = session.get('messageChangePassword')) 
+
+    if checkPreviousPage(['changePasswordRoute', 'changePassword']) == False:
+            session['messageBag'] = ""
+    
+    if checkPreviousPage(['changePasswordRoute']):
+        pass2 = []
+        pass2.append('T')
+        pass2 = json.dumps(pass2)
+
+        changePasswordAccount = UserAccount("", "", session.get('changePasswordAccountType'), session.get('changePasswordFirstName'), session.get('changePasswordLastName'))
+
+    else:
+        changePasswordAccount = UserAccount("", "", "", "", "")
+        pass2 = []
+        pass2.append('F')
+        pass2 = json.dumps(pass2)
+   
+    return render_template('login/changePassword.html', firstName = changePasswordAccount.firstName, lastName = changePasswordAccount.lastName, accountType = changePasswordAccount.accountType, pass2 = pass2) 
+
 
 def changePasswordRoute():
 
-    session['messageChangePassword'] = ""
+    if checkPreviousPage(['changePasswordRoute', 'changePassword']) == False:
+            session['messageBag'] = ""
 
-    userAccount = UserAccount(str(request.form['email']), str(request.form['newPassword']), "", "", "")
-    userAccount.accountType = databaseFunctions.getAccountType(userAccount)
+    changePasswordAccount = UserAccount(str(request.form['email']), str(request.form['newPassword']), "", "", "")
+    changePasswordAccount.accountType = databaseFunctions.getAccountType(changePasswordAccount)
+    changePasswordAccount.firstName = databaseFunctions.getAccountFirstName(changePasswordAccount)
+    changePasswordAccount.lastName = databaseFunctions.getAccountLastName(changePasswordAccount)
+
     postConfirmNewPassword = str(request.form['newConfirmPassword'])
 
-    isChangePasswordSuccess = True
-    
-    if not databaseFunctions.getAccountEmail(userAccount):
-        session['messageChangePassword'] = 'Email does not exist!'
-        isChangePasswordSuccess = False
-
-    elif userAccount.password != postConfirmNewPassword:
-        isChangePasswordSuccess = False
-
-    if isChangePasswordSuccess == False: 
+    if not databaseFunctions.getAccountEmail(changePasswordAccount):
+        session['messageBag'] = 'Email does not exist!'
         return redirect('changePassword')
 
-    session['changePasswordEmail'] = userAccount.email
-    session['changePasswordNewPassword'] = userAccount.password
-    session['changePasswordAccountType'] = databaseFunctions.getAccountType(userAccount)
 
-    return render_template('login/authenticateChangePassword.html', accountType = session.get('changePasswordAccountType')) 
+    elif changePasswordAccount.password != postConfirmNewPassword:
+        session['messageBag'] = 'Passwords do not match!'
+        return redirect('changePassword')
+    
+    session['changePasswordEmail'] = changePasswordAccount.email
+    session['changePasswordAccountType'] = changePasswordAccount.accountType
+    session['changePasswordFirstName'] = changePasswordAccount.firstName
+    session['changePasswordLastName'] = changePasswordAccount.lastName
+    session['changePasswordNewPassword'] = postConfirmNewPassword  
+
+    pass2 = []
+    pass2.append('T')
+    pass2 = json.dumps(pass2)
+
+    return render_template('login/changePassword.html', email = changePasswordAccount.email, firstName = changePasswordAccount.firstName, lastName = changePasswordAccount.lastName, accountType = changePasswordAccount.accountType, pass2 = pass2) 
 
 
 def authenticateChangePassword():
-    session['messageChangePassword'] = ""
 
-    userAccount = UserAccount(str(request.form['email']), str(request.form['password']), "", "", "")
-    userAccount.accountType = databaseFunctions.getAccountType(userAccount)
-    passwordChangeAccount = UserAccount(session['changePasswordEmail'], session['changePasswordNewPassword'], session['changePasswordAccountType'], "", "")
-
-    if validateCredentials(userAccount):
-        if checkPermissionsPasswordChange(userAccount, passwordChangeAccount):
-            databaseFunctions.changePassword(passwordChangeAccount, session.get('changePasswordNewPassword'))
+    validateAccount = UserAccount(str(request.form['validateEmail']), str(request.form['validatePassword']), "", "", "")
+    validateAccount.accountType = databaseFunctions.getAccountType(validateAccount)
+    passwordChangeAccount = UserAccount(session['changePasswordEmail'], session['changePasswordNewPassword'], "", "", "")
+    passwordChangeAccount.accountType = databaseFunctions.getAccountType(passwordChangeAccount)
+    
+    if validateCredentials(validateAccount):
+        if checkPermissionsPasswordChange(validateAccount, passwordChangeAccount):
+            hashedPassword = pbkdf2_sha256.hash(session.get('changePasswordNewPassword'))
+            databaseFunctions.changePassword(passwordChangeAccount, hashedPassword)
+            
         else:
-            session['messageChangePassword'] = 'Invalid Permissions!'
-            return render_template('authenticateChangePassword.html', messageChangePassword = session.get('messageChangePassword'))  
+            session['messageBag'] = 'Invalid Authorization Permissions!'
+            return redirect('changePassword')  
     else:
-        session['messageChangePassword'] = 'Invalid credentials!'
-        return render_template('login/authenticateChangePassword.html', messageChangePassword = session.get('messageChangePassword'))  
-
-    session['isLoggedIn'] = False
+        session['messageBag'] = 'Invalid Authorization Credentials!'
+        return redirect('changePassword')
     return redirect('login')
 
 def validateCredentials(userAccount):
-
-    # Code Snippet to add the Master Account
-    #hashedPassword = hashedPassword = pbkdf2_sha256.hash('abc123')
-    #newUser = UserAccount('master@gmail.com', hashedPassword, 'Master', 'Justin', 'Parks')
-    #databaseFunctions.insertNewUser(newUser)    
-
-    if pbkdf2_sha256.verify(userAccount.password, databaseFunctions.getAccountPassword(userAccount)):
-        return True
-    else:
+   
+    try:
+        if pbkdf2_sha256.verify(userAccount.password, databaseFunctions.getAccountPassword(userAccount)):
+            return True
+        else:
+            return False
+    except:
         return False
 
 def checkPermissionsPasswordChange(userAccount, userChangeAccount):
-    if userChangeAccount.accountType == 'Employee' and databaseFunctions.getAccountType(userAccount) == 'Administrator':
+
+    if userChangeAccount.accountType == 'Employee' and userAccount.accountType == 'Administrator':
        return True
-    elif userChangeAccount.accountType == 'Employee' and databaseFunctions.getAccountType(userAccount) == 'Master':
+    elif userChangeAccount.accountType == 'Employee' and userAccount.accountType == 'Master':
        return True
-    elif userChangeAccount.accountType == 'Administrator' and databaseFunctions.getAccountType(userAccount) == 'Master':
+    elif userChangeAccount.accountType == 'Administrator' and userAccount.accountType == 'Master':
         return True
     else:
         return False
@@ -362,3 +402,15 @@ def addMessage():
     newMessage.content = newMessage.content
     databaseFunctions.insertNewMessage(newMessage)
     return redirect('/')
+
+def checkPreviousPage(listGoodPages):
+    
+    checkValue = request.referrer.split('/')
+    
+    for page in listGoodPages:
+        print ('Checking if: ' + checkValue[3] + ' == ' + page)
+        if checkValue[3] == page:
+             return True
+    return False
+   
+

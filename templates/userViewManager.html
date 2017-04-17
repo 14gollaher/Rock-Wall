@@ -1,6 +1,6 @@
 ﻿{% extends "layout.html" %}
 {% block body %}
-
+<title>Users</title>
 <div id="main" role="main">
     <div id="content">
         <div class="row">
@@ -120,6 +120,8 @@
 
 <script type="text/javascript">
 
+    $($("#navbarList > li")[5]).addClass('active')
+
     var selectedEmail = "";
     var selectedFirstName = "";
     var selectedLastName = "";
@@ -189,7 +191,10 @@
             let selectedRow = document.querySelectorAll(".selected");
 
             if (!selectedRow[0]) {
-                alert('Please select a User to edit.');
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a user to edit.'
+                });
             }
             else {
 
@@ -211,19 +216,29 @@
         $('#deleteButton').click(function () {
             let selectedRow = document.querySelectorAll(".selected");
             if (!selectedRow[0]) {
-                alert('Please select a user to delete.');
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a user to delete.'
+                });
             }
             else {
-                debugger;
                 selectedRow = selectedRow[0].textContent.split("\n");
-                selectedEmail = selectedRow[2].trim(" ").replace(/^"(.*)"$/, '$1');
-                var buttonPress = confirm("Are you sure you want to delete this user?");
-                if (buttonPress == true) {
-                    table.row('.selected').remove().draw(false);
-                    runUserDeletePython(selectedEmail)
-                } else {
-                    confirmation = false;
-                }
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
+                selectedFirstName = selectedRow[2]
+                selectedLastName = selectedRow[3]
+
+                $.confirm({
+                    title: 'Are You Sure?',
+                    content: 'Delete User: ' + selectedFirstName + ' ' + selectedLastName,
+                    buttons: {
+                        confirm: function () {
+                            table.row('.selected').remove().draw(false);
+                            runUserDeletePython(selectedId)
+                        },
+                        cancel: function () {
+                        }
+                    }
+                });
             }
         });
 

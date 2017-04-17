@@ -1,12 +1,12 @@
 ﻿{% extends "layout.html" %}
 {%block body %}
-
+<title>Reporting</title>
 <div id="main" role="main">
     <div id="content">
         <div class="row">
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
                 <h1 class="page-title txt-color-blueDark">
-                    <i class="fa-fw fa fa-list"></i>
+                    <i class="fa-fw fa fa-exclamation"></i>
                     Reporting
                 </h1>
             </div>
@@ -16,8 +16,8 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
-                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                            <h2 style="line-height:15px"><strong>Reporting</strong></h2>
+                            <span class="widget-icon"> <i class="fa fa-exclamation"></i> </span>
+                            <h2 style="line-height:15px"><strong>Incident Report Form</strong></h2>
                         </header>
                         <div>
                             <div class="widget-body">
@@ -107,7 +107,7 @@
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-3" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
                             <span class="widget-icon"> <i class="fa fa-users"></i> </span>
-                            <h2 style="line-height:15px"><strong>Patron List</strong></h2>
+                            <h2 style="line-height:15px"><strong>Patron Suspension Information</strong></h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -115,7 +115,6 @@
                                     <button class="btn btn-primary" id="editSuspension" style="margin-left:6px;" data-target="#suspensionModal">
                                         <i class="fa fa-plus"></i> <span class="hidden-mobile">Edit Suspension Details</span>
                                     </button>
-
                                 </div>
                                 <table id="patronDatatable" class="display table table-striped table-bordered table-hover">
                                     <thead>
@@ -173,7 +172,7 @@
                 <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
                     &times;
                 </button>
-                <h4 class="modal-title" id="myModalLabel">Edit Suspension Details</h4>
+                <h4 class="modal-title" id="myModalLabel">Incident Report Details<h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -251,7 +250,6 @@
                             <div class="form-group">
                                 <label class="control-label">Suspended</label>
                                 <select class="form-control" name="updatedPatronSuspensionStatus" id="selectedPatronSuspensionStatus" style="margin-bottom:15px">
-                                    <option value="">Suspension Status</option>
                                     <option value="Yes">Yes</option>
                                     <option value="No">No</option>
                                 </select>
@@ -270,11 +268,11 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                Cancel
-                            </button>
                             <button type="submit" class="btn btn-primary">
                                 Save Changes
+                            </button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                Cancel
                             </button>
                         </div>
                     </div>
@@ -338,7 +336,6 @@
 
     $(document).ready(function () {
 
-
         let previousUrl = document.referrer;
         if (previousUrl == "http://localhost:4000/reporting" || previousUrl == "http://www.matthew.gollaher/reporting") {
             $('.bigBox').show();
@@ -384,7 +381,8 @@
 
         var table = $('#datatable').DataTable();
         var table2 = $('#patronDatatable').DataTable();
-        $('table.display').on('click', 'tr', function () {
+
+        $('table.display tbody').on('click', 'tr', function () {
 
             if ($(this).hasClass('selected')) {
                 $(this).removeClass('selected');
@@ -400,13 +398,14 @@
                 $(this).addClass('rowSelect');
             }
         });
-
-
         $('#toggleReviewReport').click(function () {
 
             let selectedRow = document.querySelectorAll(".selected");
-            if (!selectedRow[0]) {
-                alert('Please select a report to toggle review status.');
+            if (!selectedRow[0] || table2.$('tr.selected').hasClass('selected')) {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a report to toggle view status.'
+                });
             }
             else {
                 let selectedRow = document.querySelectorAll(".selected");
@@ -421,76 +420,83 @@
                 }
             }
         });
-    });
 
-    $('#viewReport').click(function () {
+        $('#viewReport').click(function () {
 
-        let selectedRow = document.querySelectorAll(".selected");
-        if (!selectedRow[0]) {
-            alert('Please select a report to view more details.');
-        }
-        else {
-            $("#viewReportModal").modal()
-            selectedRow = selectedRow[0].textContent.split("\n");
-
-            selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
-            selectedTime = selectedRow[2].trim(" ");
-            selectedDate = selectedRow[3].trim(" ");
-            selectedAuthor = selectedRow[5].trim(" ");
-            selectedIsReviewed = selectedRow[6].trim(" ");
-
-            document.getElementById("selectedId").value = selectedId;
-            document.getElementById("selectedTime").value = selectedTime;
-            document.getElementById("selectedDate").value = selectedDate;
-            document.getElementById("selectedDescription").value = findSelectedDescription();
-            document.getElementById("selectedAuthor").value = selectedAuthor;
-            document.getElementById("selectedIsReviewed").value = selectedIsReviewed;
-        }
-
-    });
-
-    $('#editSuspension').click(function () {
-        debugger;
-        let selectedRow = document.querySelectorAll(".selected");
-        if (!selectedRow[0]) {
-            alert('Please select a patron to edit suspension privileges.');
-        }
-        else {
-            $("#suspensionModal").modal()
-            selectedRow = selectedRow[0].textContent.split("\n");
-            selectedPatronId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
-            selectedPatronFirstName = selectedRow[2].trim(" ");
-            selectedPatronLastName = selectedRow[3].trim(" ");
-            selectedPatronSuspensionStatus = selectedRow[5].trim(" ");
-            selectedPatronSuspensionStartDate = selectedRow[7].trim(" ");
-            selectedPatronSuspensionEndDate = selectedRow[8].trim(" ");
-
-            document.getElementById("selectedPatronId").value = selectedPatronId;
-            document.getElementById("selectedPatronFirstName").value = selectedPatronFirstName;
-            document.getElementById("selectedPatronLastName").value = selectedPatronLastName;
-            document.getElementById("selectedPatronSuspensionStatus").value = selectedPatronSuspensionStatus;
-            document.getElementById("selectedPatronSuspensionStartDate").value = selectedPatronSuspensionStartDate;
-            document.getElementById("selectedPatronSuspensionEndDate").value = selectedPatronSuspensionEndDate;
-
-
-            if ($('#selectedPatronSuspensionStatus')[0].value == 'Yes') {
-
-                $('#selectedPatronSuspensionStartDate').addClass('disabled', false);
-                $('#selectedPatronSuspensionStartDate').datepicker('enable');
-
-                $('#selectedPatronSuspensionEndDate').addClass('disabled', false);
-                $('#selectedPatronSuspensionEndDate').datepicker('enable');
-
-            } else {
-
-                $('#selectedPatronSuspensionStartDate').addClass('disabled', true);
-                $('#selectedPatronSuspensionStartDate').datepicker('disable');
-
-                $('#selectedPatronSuspensionEndDate').addClass('disabled', true);
-                $('#selectedPatronSuspensionEndDate').datepicker('disable');
+            let selectedRow = document.querySelectorAll(".selected");
+            if (!selectedRow[0] || table2.$('tr.selected').hasClass('selected')) {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a report view.'
+                });
             }
-        }
+            else {
+                $("#viewReportModal").modal()
+                selectedRow = selectedRow[0].textContent.split("\n");
+
+                selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
+                selectedTime = selectedRow[2].trim(" ");
+                selectedDate = selectedRow[3].trim(" ");
+                selectedAuthor = selectedRow[5].trim(" ");
+                selectedIsReviewed = selectedRow[6].trim(" ");
+
+                document.getElementById("selectedId").value = selectedId;
+                document.getElementById("selectedTime").value = selectedTime;
+                document.getElementById("selectedDate").value = selectedDate;
+                document.getElementById("selectedDescription").value = findSelectedDescription();
+                document.getElementById("selectedAuthor").value = selectedAuthor;
+                document.getElementById("selectedIsReviewed").value = selectedIsReviewed;
+            }
+
+        });
+
+        $('#editSuspension').click(function () {
+
+            let selectedRow = document.querySelectorAll(".selected");
+            if (!selectedRow[0] || table.$('tr.selected').hasClass('selected')) {
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please select a patron to edit suspension status.'
+                });
+            }
+            else {
+                $("#suspensionModal").modal()
+                selectedRow = selectedRow[0].textContent.split("\n");
+                selectedPatronId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
+                selectedPatronFirstName = selectedRow[2].trim(" ");
+                selectedPatronLastName = selectedRow[3].trim(" ");
+                selectedPatronSuspensionStatus = selectedRow[5].trim(" ");
+                selectedPatronSuspensionStartDate = selectedRow[7].trim(" ");
+                selectedPatronSuspensionEndDate = selectedRow[8].trim(" ");
+
+                document.getElementById("selectedPatronId").value = selectedPatronId;
+                document.getElementById("selectedPatronFirstName").value = selectedPatronFirstName;
+                document.getElementById("selectedPatronLastName").value = selectedPatronLastName;
+                document.getElementById("selectedPatronSuspensionStatus").value = selectedPatronSuspensionStatus;
+                document.getElementById("selectedPatronSuspensionStartDate").value = selectedPatronSuspensionStartDate;
+                document.getElementById("selectedPatronSuspensionEndDate").value = selectedPatronSuspensionEndDate;
+
+
+                if ($('#selectedPatronSuspensionStatus')[0].value == 'Yes') {
+
+                    $('#selectedPatronSuspensionStartDate').addClass('disabled', false);
+                    $('#selectedPatronSuspensionStartDate').datepicker('enable');
+
+                    $('#selectedPatronSuspensionEndDate').addClass('disabled', false);
+                    $('#selectedPatronSuspensionEndDate').datepicker('enable');
+
+                } else {
+
+                    $('#selectedPatronSuspensionStartDate').addClass('disabled', true);
+                    $('#selectedPatronSuspensionStartDate').datepicker('disable');
+
+                    $('#selectedPatronSuspensionEndDate').addClass('disabled', true);
+                    $('#selectedPatronSuspensionEndDate').datepicker('disable');
+                }
+            }
+        });
     });
+
 
     $('#selectedPatronSuspensionStatus').change(function () {
         if ($('#selectedPatronSuspensionStatus')[0].value == 'Yes') {
@@ -515,19 +521,6 @@
         }
     });
 
-    $('#toggleReviewReport').click(function () {
-
-        let selectedRow = document.querySelectorAll(".selected");
-        selectedRow = selectedRow[0].textContent.split("\n");
-
-        selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');;
-        selectedIsReviewed = selectedRow[6].trim(" ");
-
-        if (selectedId != "") {
-            runToggleReviewPython(selectedId, selectedIsReviewed);
-            location.reload();
-        }
-    });
 
     $("#selectedPatronSuspensionStartDate").datepicker({
         minDate: 0,
@@ -547,8 +540,7 @@
             allDescriptions.push(row[3])
             allDesciptionIds.push(row[0])
             return type === 'display' && data.length > 165 ?
-                data.substr(0, 165) + '…' :
-                data;
+                data.substr(0, 165) + '…' : data;
         }
     };
 

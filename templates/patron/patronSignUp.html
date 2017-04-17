@@ -1,22 +1,22 @@
 {% extends "layoutCheckin.html" %}
 {%block body %}
-
+<title>Patron Sign Up</title>
 <!-- MAIN CONTENT -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div id="content" class="container" style="padding-top: 100px;">
     <div class="col-md-8">
         <div class="well no-padding">
             <form action="patronSignUpRoute" method="post" id="form-createAccount" class="smart-form client-form">
-                <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
+                <header class="bannerYellow" align="center">
                     Patron Sign Up
                 </header>
                 <fieldset>
+                    <p id="messageBag" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
                     <section>
                         ID Number
                         <label class="input control-label">
                             <i class="icon-append fa fa-info"></i>
-
-                            <input type="number" name="id" id="id" placeholder="Student or Wellness Center ID">
+                            <input type="number" min="0" name="id" id="id" placeholder="Student or Wellness Center ID">
                             <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                         </label>
                     </section>
@@ -48,9 +48,10 @@
                         Telephone Number
                         <label class="input control-label">
                             <i class="icon-append fa fa-phone"></i>
-                            <input type='tel' data-mask="(999) 999-9999" name="phoneNumber" id="phoneNumber" placeholder="Phone Number">
+                            <input type='tel' data-mask="(999) 999-9999" id="phoneNumber" required class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
                             <b class="tooltip tooltip-bottom-right">Phone number is required</b>
                         </label>
+
                     </section>
                     <section>
                         Address
@@ -68,9 +69,9 @@
                             <b class="tooltip tooltip-bottom-right">City is required</b>
                         </label>
                     </section>
-                        State
+                    State
                     <section>
-                            <i class="icon-append fa fa-map"></i>
+                        <i class="icon-append fa fa-map"></i>
                         <label class="select">
                             <select class="form-control" name="state" id="state">
                                 <option value="" selected="" disabled="">&nbsp;State</option>
@@ -147,17 +148,23 @@
                             <b class="tooltip tooltip-bottom-right">Zip code is required</b>
                         </label>
                     </section>
-                        Gender
+                    Gender
                     <section>
                         <i class="icon-append fa fa-male"></i>
                         <label class="select">
                             <select class="form-control" name="gender" id="gender">
                                 <option selected="" disabled="" value="">&nbsp;Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                                <option value="noAnswer">Prefer not to answer</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="No Answer">Prefer Not to Answer</option>
                             </select>
                         </label>
+                    </section>
+                    <section>
+                        <label class="control-label">
+                            <input type="checkbox" name="listServ" id="listServ" value="True" checked>
+                        </label>
+                        I would like to receive emails from the SDSU Wellness Center Rock Wall.
                     </section>
                 </fieldset>
                 <footer>
@@ -165,7 +172,7 @@
                         Proceed to Waiver
                     </button>
                     <a href="patronCheckIn">
-                        <input type="button" class="btn btn-primary patronButton" value="Back to Check In" style="float: right" />
+                        <input type="button" class="btn btn-primary patronButton" id ="checkIn" value="Back to Check In" style="float: right" />
                     </a>
                 </footer>
             </form>
@@ -175,16 +182,23 @@
 
 <script type="text/javascript">
 
+
+    var number = document.getElementById('id');
+
+    number.onkeydown = function (e) {
+        if (!((e.keyCode > 95 && e.keyCode < 106)
+          || (e.keyCode > 47 && e.keyCode < 58)
+          || e.keyCode == 8)) {
+            return false;
+        }
+    }
+
     $(document).keypress(function () {
         $(".pageError").remove();
     });
 
-    // Validation
     $(function () {
-        // Validation
         $("#form-createAccount").validate({
-
-            // Rules for form validation
             rules: {
                 id: {
                     required: true,
@@ -203,7 +217,6 @@
                 },
                 phoneNumber: {
                     required: true,
-                    tel: true
                 },
                 address: {
                     required: true
@@ -239,7 +252,6 @@
                     email: 'Please enter a VALID email address'
                 },
                 phoneNumber: {
-                    required: 'Please enter your phone number',
                     tel: 'Please enter a valid phone number'
                 },
                 address: {
