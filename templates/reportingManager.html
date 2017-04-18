@@ -70,7 +70,7 @@
                             <div class="widget-body no-padding">
                                 <div style="padding-bottom:10px; padding-right: 5px; padding-top: 7px;">
                                     <button class="btn btn-primary" id="toggleReviewReport" style="margin-left:6px;">
-                                        <i class="fa fa-plus"></i> <span class="hidden-mobile">Toggle Report Status</span>
+                                        <i class="fa fa-plus"></i> <span class="hidden-mobile">Toggle Review Status</span>
                                     </button>
                                     <button class="btn btn-primary" id="viewReport" style="margin-left:6px;" data-target="#viewReportModal">
                                         <i class="fa fa-plus"></i> <span class="hidden-mobile">Expand Selected Report</span>
@@ -91,7 +91,7 @@
                                     <tbody>
                                         {% for row in reportTable %}
                                         <tr id="tr">
-                                            <td style="display:none;">{{ row['id']|tojson|safe }}</td>
+                                            <td style="display:none;">{{ row['id'] }}</td>
                                             <td>{{ row['time'] }}</td>
                                             <td>{{ row['date'] }}</td>
                                             <td title="{{ row['description'] }}"> {{ row['description'] }}</td>
@@ -130,7 +130,7 @@
                                     <tbody>
                                         {% for row in patronTable %}
                                         <tr id="tr">
-                                            <td>{{ row['id']|tojson|safe }}</td>
+                                            <td>{{ row['id'] }}</td>
                                             <td>{{ row['firstName'] }}</td>
                                             <td>{{ row['lastName'] }}</td>
                                             {% if row['isSuspended'] == 'False' %}
@@ -404,7 +404,7 @@
             if (!selectedRow[0] || table2.$('tr.selected').hasClass('selected')) {
                 $.alert({
                     title: 'Whoops!!',
-                    content: 'Please select a report to toggle view status.'
+                    content: 'Please select a report to toggle review status.'
                 });
             }
             else {

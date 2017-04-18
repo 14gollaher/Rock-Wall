@@ -41,7 +41,7 @@
                                     <tbody>
                                         {% for row in userTable %}
                                         <tr id="tr">
-                                            <td>{{ row['email']|tojson|safe }}</td>
+                                            <td>{{ row['email'] }}</td>
                                             <td>{{ row['firstName'] }}</td>
                                             <td>{{ row['lastName'] }}</td>
                                             <td>{{ row['accountType'] }}</td>

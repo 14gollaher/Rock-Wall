@@ -52,7 +52,7 @@
                                     <tbody>
                                         {% for row in inventoryTable %}
                                         <tr id="tr">
-                                            <td>{{ row['id']|tojson|safe }}</td>
+                                            <td>{{ row['id'] }}</td>
                                             <td>{{ row['name'] }}</td>
                                             <td>{{ row['description'] }}</td>
                                             <td>{{ row['purchaseDate'] }}</td>
@@ -269,7 +269,6 @@
             runClearInventoryMessage("trash");
         }
         
-
 
         $('#datatable').dataTable({
             stateSave: true,

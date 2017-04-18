@@ -41,7 +41,7 @@
                                     <tbody>
                                         {% for row in patronTable %}
                                         <tr id="tr">
-                                            <td>{{ row['id']|tojson|safe }}</td>
+                                            <td>{{ row['id'] }}</td>
                                             <td>{{ row['firstName'] }}</td>
                                             <td>{{ row['lastName'] }}</td>
                                             {% if row['isBelayCertified'] == 'False' %}
