@@ -352,8 +352,7 @@ def logMessage(log):
     currentTime = datetime.now(pytz.timezone('US/Central'))
 
     with open("debugLog.txt", "a") as logFile:
-        print(str(request.environ['REMOTE_ADDR']) + ' - {:%Y-%m-%d %H:%M:%S}'.format(datetime.now(pytz.timezone('US/Central'))) + ': ' + str(log) + '\n')
-        logFile.write(str(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)) + '- {:%Y-%m-%d %H:%M:%S}'.format(datetime.now(pytz.timezone('US/Central'))) + ': ' + str(log) + '\n')
+        logFile.write(str(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)) + ' - {:%Y-%m-%d %H:%M:%S}'.format(datetime.now(pytz.timezone('US/Central'))) + ': ' + str(log) + '\n')
 
 if __name__ == '__main__':
      HOST = environ.get('SERVER_HOST', 'localhost')
