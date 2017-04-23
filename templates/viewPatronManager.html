@@ -930,6 +930,8 @@
 
     $("#selectedSuspendedStartDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedSuspendedEndDate").datepicker("option", "minDate", selected)
         }
@@ -937,6 +939,8 @@
 
     $("#selectedSuspendedEndDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedSuspendedStartDate").datepicker("option", "maxDate", selected)
         }
@@ -944,6 +948,8 @@
 
     $("#selectedBelayStartDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedBelayEndDate").datepicker("option", "minDate", selected)
         }
@@ -951,6 +957,8 @@
 
     $("#selectedBelayEndDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedBelayStartDate").datepicker("option", "maxDate", selected)
         }
@@ -958,6 +966,8 @@
 
     $("#selectedLeadClimbStartDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedLeadClimbEndDate").datepicker("option", "minDate", selected)
         }
@@ -965,6 +975,8 @@
 
     $("#selectedLeadClimbEndDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedLeadClimbStartDate").datepicker("option", "maxDate", selected)
         }
@@ -972,6 +984,8 @@
 
     $("#certificateSuspendedStartDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (certificate) {
             $("#certificateSuspendedEndDate").datepicker("option", "minDate", selected)
         }
@@ -979,6 +993,8 @@
 
     $("#certificateSuspendedEndDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (certificate) {
             $("#certificateSuspendedStartDate").datepicker("option", "maxDate", selected)
         }
@@ -986,6 +1002,8 @@
 
     $("#certificateBelayStartDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (certificate) {
             $("#certificateBelayEndDate").datepicker("option", "minDate", selected)
         }
@@ -993,6 +1011,8 @@
 
     $("#certificateBelayEndDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (certificate) {
             $("#certificateBelayStartDate").datepicker("option", "maxDate", selected)
         }
@@ -1000,6 +1020,8 @@
 
     $("#certificateLeadClimbStartDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (certificate) {
             $("#certificateLeadClimbEndDate").datepicker("option", "minDate", selected)
         }
@@ -1007,6 +1029,8 @@
 
     $("#certificateLeadClimbEndDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (certificate) {
             $("#certificateLeadClimbStartDate").datepicker("option", "maxDate", selected)
         }

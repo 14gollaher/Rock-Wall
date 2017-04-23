@@ -327,21 +327,9 @@
         maxTime: 0
     });
 
-    $("#selectedSuspendedStartDate").datepicker({
-        minDate: 0,
-        onSelect: function (selected) {
-            $("#selectedSuspendedEndDate").datepicker("option", "minDate", selected)
-        }
-    });
-    $("#selectedSuspendedEndDate").datepicker({
-        minDate: 0,
-        onSelect: function (selected) {
-            $("#selectedSuspendedStartDate").datepicker("option", "maxDate", selected)
-        }
-    });
 
     $(document).ready(function () {
-
+    
         $('table.display').DataTable({
             stateSave: true,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
@@ -515,12 +503,16 @@
 
     $("#selectedPatronSuspensionStartDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedPatronSuspensionEndDate").datepicker("option", "minDate", selected)
         }
     });
     $("#selectedPatronSuspensionEndDate").datepicker({
         minDate: 0,
+        nextText: '>',
+        prevText: '<',
         onSelect: function (selected) {
             $("#selectedPatronSuspensionStartDate").datepicker("option", "maxDate", selected)
         }
