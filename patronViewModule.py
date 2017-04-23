@@ -9,31 +9,7 @@ import databaseFunctions
 import itertools
 from itertools import *
 import re
-
-class Patron:
-
- def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, belayStartDate, belayEndDate, isLeadClimbCertified, leadClimbStartDate, leadClimbEndDate, isSuspended, suspendedStartDate, suspendedEndDate, listServ):
-        self.id = id
-        self.firstName = firstName
-        self.lastName = lastName
-        self.email = email
-        self.phoneNumber = phoneNumber
-        self.gender = gender
-        self.address = address
-        self.city = city
-        self.zipCode = zipCode
-        self.waiverFile = waiverFile
-        self.state = state
-        self.isBelayCertified = isBelayCertified
-        self.belayStartDate = belayStartDate
-        self.belayEndDate = belayEndDate
-        self.isLeadClimbCertified = isLeadClimbCertified
-        self.leadClimbStartDate = leadClimbStartDate
-        self.leadClimbEndDate = leadClimbEndDate
-        self.isSuspended = isSuspended
-        self.suspendedStartDate = suspendedStartDate
-        self.suspendedEndDate = suspendedEndDate
-        self.listServ = listServ
+from globals import *
 
 def patrons():
 
@@ -117,6 +93,7 @@ def patronViewMaster():
     patronTable['city'] = databaseFunctions.getAllPatronCities()
     patronTable['zipCode'] = databaseFunctions.getAllPatronZipCodes()
     patronTable['state'] = databaseFunctions.getAllPatronStates()
+    patronTable['waiver'] = databaseFunctions.getAllPatronWaivers()
     patronTable['isBelayCertified'] = databaseFunctions.getAllPatronBelayCertifications()
     patronTable['belayStartDate'] = databaseFunctions.getAllPatronBelayStartDates()
     patronTable['belayEndDate'] = databaseFunctions.getAllPatronBelayEndDates()
@@ -128,7 +105,7 @@ def patronViewMaster():
     patronTable['suspendedEndDate'] = databaseFunctions.getAllPatronSuspensionEndDates()
     patronTable['listServ'] = databaseFunctions.getAllPatronListServ()
     
-    patronTable = [dict(id=i, firstName=f, lastName=l, email=e, phoneNumber=p, gender=g, address=a, city=c, zipCode=z, state=s, isBelayCertified = b, belayStartDate =bsd, belayEndDate =bed, isLeadClimbCertified = lcc, leadClimbStartDate = lcsd, leadClimbEndDate = lced, isSuspended = su, suspendedStartDate = ss, suspendedEndDate = se, listServ = ls) for i, f, l, e, p, g, a, c, z, s, b, bsd, bed, lcc, lcsd, lced, su, ss, se, ls in zip(patronTable['id'], patronTable['firstName'], patronTable['lastName'], patronTable['email'], patronTable['phoneNumber'], patronTable['gender'], patronTable['address'], patronTable['city'], patronTable['zipCode'], patronTable['state'], patronTable['isBelayCertified'], patronTable['belayStartDate'], patronTable['belayEndDate'], patronTable['isLeadClimbCertified'], patronTable['leadClimbStartDate'], patronTable['leadClimbEndDate'], patronTable['isSuspended'], patronTable['suspendedStartDate'], patronTable['suspendedEndDate'], patronTable['listServ'])]
+    patronTable = [dict(id=i, firstName=f, lastName=l, email=e, phoneNumber=p, gender=g, address=a, city=c, zipCode=z, state=s, waiver=w, isBelayCertified = b, belayStartDate =bsd, belayEndDate =bed, isLeadClimbCertified = lcc, leadClimbStartDate = lcsd, leadClimbEndDate = lced, isSuspended = su, suspendedStartDate = ss, suspendedEndDate = se, listServ = ls) for i, f, l, e, p, g, a, c, z, s, w, b, bsd, bed, lcc, lcsd, lced, su, ss, se, ls in zip(patronTable['id'], patronTable['firstName'], patronTable['lastName'], patronTable['email'], patronTable['phoneNumber'], patronTable['gender'], patronTable['address'], patronTable['city'], patronTable['zipCode'], patronTable['state'], patronTable['waiver'], patronTable['isBelayCertified'], patronTable['belayStartDate'], patronTable['belayEndDate'], patronTable['isLeadClimbCertified'], patronTable['leadClimbStartDate'], patronTable['leadClimbEndDate'], patronTable['isSuspended'], patronTable['suspendedStartDate'], patronTable['suspendedEndDate'], patronTable['listServ'])]
     
     visitTable = {}
     visitTable['Id'] = databaseFunctions.getAllVisitIds()

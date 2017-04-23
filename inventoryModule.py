@@ -9,16 +9,7 @@ import databaseFunctions
 import itertools
 from itertools import *
 import re
-
-class InventoryItem:
-
-    def __init__(self, id, name, description, purchaseDate, retirementDate, checkOutStatus):
-        self.id = id
-        self.name = name
-        self.description = description
-        self.purchaseDate = purchaseDate
-        self.retirementDate = retirementDate
-        self.checkOutStatus = checkOutStatus
+from globals import *
 
 def inventory():
 

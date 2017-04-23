@@ -118,7 +118,7 @@ def getAllVisitPatronVisitDates():
 
 #########################################################################
 ###                                                                   ###
-###                     Incident Report Table ###
+###                     Incident Report Table                         ###
 ###                                                                   ###
 #########################################################################
 
@@ -464,6 +464,20 @@ def getAllPatronStates():
             return None
         else:	
             return states
+
+def getAllPatronWaivers():
+    with engine.connect() as connection:
+        sqlText = text("SELECT WaiverFile FROM Patron ORDER by LastName, FirstName, Id")
+        result = engine.execute(sqlText)
+        waivers = []
+    
+        for row in result:
+            waivers.append(row[0])    
+
+        if not waivers:
+            return None
+        else:	
+            return waivers
 
 def getAllPatronBelayCertifications():
     with engine.connect() as connection:

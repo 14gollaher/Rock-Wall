@@ -44,6 +44,21 @@
 </div>
 
 <script type="text/javascript">
+    
+    $(document).keypress(function () {
+        messageBag.css("display","none")
+    });
+
+    var messageBagContent = '{{ session['messageBag'] }}';
+
+    var messageBag = $("#messageBag");
+
+    if (messageBagContent.length > 0)
+    {
+        messageBagContent = "&nbsp;" + messageBagContent;
+        messageBag.css("display","block")
+        messageBag[0].innerHTML = messageBagContent;
+    }
 
     $(function () {
         // Validation

@@ -51,6 +51,7 @@
                                             <th style="display:none;">Suspension Status</th>
                                             <th style="display:none;">Suspension Start Date</th>
                                             <th style="display:none;">Suspension End Date</th>
+                                            <th>Waiver</th>
                                             <th>ListServ</th>
                                         </tr>
                                     </thead>
@@ -67,6 +68,10 @@
                                             <td>{{ row['city'] }}</td>
                                             <td>{{ row['zipCode'] }}</td>
                                             <td>{{ row['state'] }}</td>
+                                            <td>
+                                                <a style="padding-left:10px;" class="fa fa-pencil-square-o fa-2x" href="{{ row['waiver'] }}" onclick="window.open('{{ row['waiver'] }}', 'newwindow', 'width=750, height=650'); return false;"></a>
+                                            </td>
+
                                             {% if row['isBelayCertified'] == 'False' %}
                                             <td style="display:none;">No</td>
                                             {% else %}
@@ -568,10 +573,6 @@
                 "aButtons": [
                 "copy",
                 "xls",
-                   {
-                       "sExtends": "pdf",
-                       "sPdfSize": "letter"
-                   },
                    {
                        "sExtends": "print",
                        "sMessage": "<i>(press Esc to close)</i>"

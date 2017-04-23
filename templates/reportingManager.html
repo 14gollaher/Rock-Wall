@@ -29,7 +29,7 @@
                                         <div class="form-group">
                                             <div>
                                                 <label class="control-label">Time of Incident</label>
-                                                <input type="text" name="incidentTime" id="incidentTime" placeholder="Time" class="form-control timepicker" required />
+                                                <input type="text" name="incidentTime" id="incidentTime" placeholder="Time" class="form-control timepicker" required readonly/>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -37,14 +37,14 @@
                                         <div class="form-group">
                                             <div>
                                                 <label class="control-label">Date of Incident</label>
-                                                <input type="text" name="incidentDate" id="incidentDate" placeholder="Date" class="form-control datepicker" required />
+                                                <input type="text" name="incidentDate" id="incidentDate" placeholder="Date" class="form-control datepicker" required readonly />
                                             </div>
                                         </div>
                                     </fieldset>
                                     <fieldset>
                                         <div class="form-group">
                                             <label class="control-label">Description of Incident </label>
-                                            <textarea class="form-control" name="incidentDescription" rows="10" placeholder="Description the Incident" maxlength="1000" required></textarea>
+                                            <textarea class="form-control" name="incidentDescription" rows="10" placeholder="Describe the Incident" maxlength="1000" required style="resize: vertical"></textarea>
                                         </div>
                                     </fieldset>
                                     <div class="form-actions">
@@ -154,17 +154,6 @@
     </div>
 </div>
 
-<div id="bigBox" class="bigBox animated fadeIn fast" style="background-color: rgb(50, 118, 177);">
-    <div id="bigBoxColor2">
-        <i class="botClose fa fa-times"></i><span>
-            Report was sucessfully submitted! <br />
-        </span>
-        <div class="bigboxicon">
-            <i class="fa fa-check animated"></i>
-        </div>
-    </div>
-</div>
-
 <div class="modal fade" id="viewReportModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -178,32 +167,32 @@
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group" style="display:none;">
-                            <input type="text" class="form-control" id="selectedId" readonly="readonly" />
+                            <input type="text" class="form-control" id="selectedId" readonly />
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="selectedTime" readonly="readonly" />
+                            <input type="text" class="form-control" id="selectedTime" readonly />
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="selectedDate" readonly="readonly" />
+                            <input type="text" class="form-control" id="selectedDate" readonly />
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <textarea rows="10" class="form-control" id="selectedDescription" maxlength="500" readonly="readonly"></textarea>
+                            <textarea rows="10" class="form-control" id="selectedDescription" maxlength="500" readonly style="resize: vertical"></textarea>
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="selectedAuthor" readonly="readonly" />
+                            <input type="text" class="form-control" id="selectedAuthor" readonly />
                         </div>
                     </div>
                     <div class="col-md-12">
                         <div class="form-group">
-                            <input type="text" class="form-control" id="selectedIsReviewed" readonly="readonly" />
+                            <input type="text" class="form-control" id="selectedIsReviewed" readonly />
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -231,19 +220,19 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Patron ID</label>
-                                <input type="text" class="form-control" name="updatedPatronId" id="selectedPatronId" readonly="readonly" />
+                                <input type="text" class="form-control" name="updatedPatronId" id="selectedPatronId" readonly />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">First Name</label>
-                                <input type="text" class="form-control" id="selectedPatronFirstName" readonly="readonly" />
+                                <input type="text" class="form-control" id="selectedPatronFirstName" readonly />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Last Name</label>
-                                <input type="text" class="form-control" id="selectedPatronLastName" readonly="readonly" />
+                                <input type="text" class="form-control" id="selectedPatronLastName" readonly />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -283,6 +272,17 @@
 </form>
 <script type="text/javascript">
 
+    $('#reportForm').on('submit', function (e) {
+        var form = this;
+        setTimeout(function () {
+            form.submit();
+        }, 3000);
+        $.alert({
+            title: 'Success!',
+            content: 'Report has been sent to the Rock Wall Administration! <br /><br /> Refreshing in 3 seconds. Do not leave this page!'
+        });
+        return false;
+    });
 
     $($("#navbarList > li")[2]).addClass('active')
 
@@ -307,13 +307,14 @@
         $(".bigBox").remove();
     });
 
+    var $datepicker = $('#incidentDate');
     $('#incidentDate').datepicker({
         maxDate: 0,
+        navigationAsDateFormat: true,
         nextText: '>',
-        prevText: '<',
-        donetext: 'Done',
-        navigationAsDateFormat: true
+        prevText: '<'
     });
+    $datepicker.datepicker('setDate', new Date());
 
 
     $('#incidentTime').timepicker({
@@ -336,17 +337,6 @@
 
     $(document).ready(function () {
 
-        let previousUrl = document.referrer;
-        if (previousUrl == "http://localhost:4000/reporting" || previousUrl == "http://www.matthew.gollaher/reporting") {
-            $('.bigBox').show();
-            setTimeout(function () {
-                $('.bigBox').hide();
-            }, 3000);
-        }
-        else {
-            $(".bigBox").remove();
-        }
-
         $('table.display').DataTable({
             stateSave: true,
             "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'T>r>" +
@@ -359,10 +349,6 @@
                 "aButtons": [
                 "copy",
                 "xls",
-                   {
-                       "sExtends": "pdf",
-                       "sPdfSize": "letter"
-                   },
                    {
                        "sExtends": "print",
                        "sMessage": "<i>(press Esc to close)</i>"

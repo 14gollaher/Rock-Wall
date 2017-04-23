@@ -8,17 +8,7 @@ import sqlalchemy
 import sys
 import databaseFunctions
 import simplejson as json
-
-class CalendarItem:
-
-    def __init__(self, id, title, startTime, description, icon, color):
-
-        self.id = id
-        self.title = title
-        self.startTime = startTime
-        self.description = description
-        self.icon = icon
-        self.color = color
+from globals import *
 
 def calendar():
 

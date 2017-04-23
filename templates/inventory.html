@@ -17,7 +17,7 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
-                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                            <span class="widget-icon"> <i class="fa fa-list"></i> </span>
                             <h2 style="line-height:15px"><strong>Inventory</strong></h2>
                         </header>
                         <div>
@@ -35,7 +35,6 @@
                                     <button class="btn btn-primary" style="margin-left:6px; float:right" id="deleteButton">
                                         <i class="fa fa-times"></i> <span class="hidden-mobile">Delete Selected Item</span>
                                     </button>
-                                    <p id="messageBag" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
                                 </div>
 
                                 <table id="datatable" class="table table-striped table-bordered table-hover">
@@ -102,7 +101,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Description</label>
-                                <textarea class="form-control" placeholder="Description" rows="5" name="newDescription" maxlength="500" ></textarea>
+                                <textarea class="form-control" placeholder="Description" rows="5" name="newDescription" maxlength="500" style="resize: vertical"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -147,7 +146,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Item ID</label>
-                                <input type="text" placeholder="Select an item to edit..." class="form-control" id="selectedId" name="updatedId" readonly="readonly" />
+                                <input type="text" placeholder="Select an item to edit..." class="form-control" id="selectedId" name="updatedId" readonly />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -159,7 +158,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Description</label>
-                                <textarea class="form-control" placeholder="Description" rows="5" id="selectedDescription" name="updatedDescription" maxlength="500"></textarea>
+                                <textarea class="form-control" placeholder="Description" rows="5" id="selectedDescription" name="updatedDescription" maxlength="500" style="resize: vertical"></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -284,10 +283,6 @@
                 "copy",
                 "xls",
                    {
-                       "sExtends": "pdf",
-                       "sPdfSize": "letter"
-                   },
-                   {
                        "sExtends": "print",
                        "sMessage": "<i>(press Esc to close)</i>"
                    }
@@ -348,7 +343,7 @@
             let selectedRow = document.querySelectorAll(".selected");
             if (!selectedRow[0]) {
                 $.alert({
-                    title: 'Whoops!',
+                    title: 'Whoops!!',
                     content: 'Please select an item to edit.'
                 });
             }

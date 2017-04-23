@@ -17,16 +17,20 @@ DESKTOP ENVIRONMENT:
 	a) In Chrome, enter the following URL into the search bar: "chrome://flags"
 	b) Turn Touch Events API to Disabled.
 
-3. As the system is used by multiple users, incognito or private browsing is suggested to avoid caching and security issues between users. 
+3. Adobe Flash must be turned on. To do this:
+	a) In Chrome, enter the following URL into the search bar: "chrome://settings/content"
+	b) In the "Flash" section, allow the page to run Adobe Flash by either selecting "Allow sites to run Flash" or adding an exception.
+
+4. As the system is used by multiple users, incognito or private browsing is suggested to avoid caching and security issues between users. 
 	a) To active private browsing, click "CTRL + SHIFT + N" within Chrome to open a new
            private browing window. 
 
-4. The system is best viewed in full screen mode. Failure to utilize full screen mode may result incorrectly rendered browser content.
+5. The system is best viewed in full screen mode. Failure to utilize full screen mode may result incorrectly rendered browser content.
         a) To activate full-screen mode, from Chrome click "F11".
 
-5. To access the desktop system, proceed to the URL: "www.matthewgollaher.com"
+6. To access the desktop system, proceed to the URL: "www.matthewgollaher.com"
 
-6. There are 3 tiers of access - Employee, Master, and Administration. Three different accounts are setup for the system demonstration:
+7. There are 3 tiers of access - Employee, Master, and Administration. Three different accounts are setup for the system demonstration:
 	a) Employee:
 	    - USERNAME: e@gmail.com
 	    - PASSWORD: abc123
@@ -37,7 +41,7 @@ DESKTOP ENVIRONMENT:
 	    - USERNAME: m@gmail.com
             - PASSWORD: abc123
 
-7. The desktop system is now fully accessible.
+8. The desktop system is now fully accessible.
 
 =====================================================================================================================================
 

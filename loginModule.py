@@ -16,29 +16,15 @@ import re
 import pytz
 from passlib.hash import pbkdf2_sha256
 import simplejson as json
-
-class UserAccount:
-
-    def __init__(self, email, password, accountType, firstName, lastName):
-        self.email = email
-        self.password = password
-        self.accountType = accountType
-        self.firstName = firstName
-        self.lastName = lastName
-
-class Message:
-
-    def __init__(self, id, author, time, content):
-        self.id = id
-        self.author = author
-        self.time = time
-        self.content = content
+from globals import *
 
 def login():
+
     # Code Snippet to add the Master Account
     #hashedPassword = hashedPassword = pbkdf2_sha256.hash('abc123')
     #newUser = UserAccount('master@gmail.com', hashedPassword, 'Master', 'Justin', 'Parks')
     #databaseFunctions.insertNewUser(newUser) 
+
     try:
         if checkPreviousPage(['login']) == False:
             session['messageBag'] = ""
@@ -257,12 +243,10 @@ def createAccountRoute():
     createAccount = UserAccount(str(request.form['email']), str(request.form['password']), str(request.form['accountType']), str(request.form['firstName']), str(request.form['lastName']))
     postConfirmPassword = str(request.form['confirmPassword'])
 
-
     if databaseFunctions.getAccountEmail(createAccount):
-        print ('True')
         session['messageBag'] = 'Email already exists!'
         return redirect('createAccount')        
-
+    session['messageBag'] = ""
     session['newAccountEmail'] = createAccount.email
     session['newAccountPassword'] = createAccount.password 
     session['newAccountType'] = createAccount.accountType
@@ -322,7 +306,7 @@ def changePassword():
 
 def changePasswordRoute():
 
-    if checkPreviousPage(['changePasswordRoute', 'changePassword']) == False:
+    if checkPreviousPage(['changePasswordRoute']) == False:
             session['messageBag'] = ""
 
     changePasswordAccount = UserAccount(str(request.form['email']), str(request.form['newPassword']), "", "", "")
@@ -335,7 +319,6 @@ def changePasswordRoute():
     if not databaseFunctions.getAccountEmail(changePasswordAccount):
         session['messageBag'] = 'Email does not exist!'
         return redirect('changePassword')
-
 
     elif changePasswordAccount.password != postConfirmNewPassword:
         session['messageBag'] = 'Passwords do not match!'
@@ -396,6 +379,7 @@ def checkPermissionsPasswordChange(userAccount, userChangeAccount):
         return False
 
 def addMessage():
+
     currentUserFullName = session.get('currentUserFirstName') + ' ' + session.get('currentUserLastName')
     currentTime = datetime.now(pytz.timezone('US/Central'))
     newMessage = Message('-1Nullx0', str(currentUserFullName), str(currentTime.strftime('%b-%d %I:%M %p')), str(request.form['content']))
@@ -404,11 +388,9 @@ def addMessage():
     return redirect('/')
 
 def checkPreviousPage(listGoodPages):
-    
+
     checkValue = request.referrer.split('/')
-    
     for page in listGoodPages:
-        print ('Checking if: ' + checkValue[3] + ' == ' + page)
         if checkValue[3] == page:
              return True
     return False

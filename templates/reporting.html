@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
                 <h1 class="page-title txt-color-blueDark">
-                    <i class="fa-fw fa fa-list"></i>
+                    <i class="fa-fw fa fa-exclamation"></i>
                     Reporting
                 </h1>
             </div>
@@ -16,7 +16,7 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
-                            <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                            <span class="widget-icon"> <i class="fa fa-exclamation"></i> </span>
                             <h2 style="line-height:15px"><strong>Reporting</strong></h2>
                         </header>
                         <div>
@@ -29,7 +29,7 @@
                                         <div class="form-group">
                                             <div>
                                                 <label class="control-label">Time of Incident</label>
-                                                <input type="text" name="incidentTime" id="incidentTime" placeholder="Time" class="form-control timepicker" required />
+                                                <input type="text" name="incidentTime" id="incidentTime" placeholder="Time" class="form-control timepicker" required readonly/>
                                             </div>
                                         </div>
                                     </fieldset>
@@ -37,20 +37,20 @@
                                         <div class="form-group">
                                             <div>
                                                 <label class="control-label">Date of Incident</label>
-                                                <input type="text" name="incidentDate" id="incidentDate" placeholder="Date" class="form-control datepicker" required />
+                                                <input type="text" name="incidentDate" id="incidentDate" placeholder="Date" class="form-control datepicker" required readonly />
                                             </div>
                                         </div>
                                     </fieldset>
                                     <fieldset>
                                         <div class="form-group">
                                             <label class="control-label">Description of Incident </label>
-                                            <textarea maxlength="500" class="form-control" name="incidentDescription" rows="8" placeholder="Description the Incident" required></textarea>
+                                            <textarea maxlength="500" class="form-control" id="incidentDescription" name="incidentDescription" rows="8" placeholder="Describe the Incident" required style="resize: vertical"></textarea>
                                         </div>
                                     </fieldset>
                                     <div class="form-actions">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <button class="btn btn-default" type="submit">
+                                                <button id="submitButton" class="btn btn-default" type="submit">
                                                     <i class="fa fa-check"></i>
                                                     Submit Incident Report
                                                 </button>
@@ -67,50 +67,37 @@
     </div>
 </div>
 
-<div id="bigBox" class="bigBox animated fadeIn fast" style="background-color: rgb(50, 118, 177);">
-    <div id="bigBoxColor2">
-        <i class="botClose fa fa-times"></i><span>
-            Report was sucessfully submitted! <br />
-        </span>
-        <div class="bigboxicon">
-            <i class="fa fa-check animated"></i>
-        </div>
-    </div>
-</div>
-
-
 <script type="text/javascript">
+
+    $('#reportForm').on('submit', function (e) {
+        var form = this;
+        setTimeout(function () {
+            form.submit();
+        }, 3000);
+        $.alert({
+            title: 'Success!',
+            content: 'Report has been sent to the Rock Wall Administration! <br /><br /> Refreshing in 3 seconds. Do not leave this page!'
+        });
+        return false;
+    });
+
     $($("#navbarList > li")[2]).addClass('active')
 
+    var $datepicker = $('#incidentDate');
     $('#incidentDate').datepicker({
         maxDate: 0,
+        navigationAsDateFormat: true,
         nextText: '>',
-        prevText: '<',
-        donetext: 'Done',
-        navigationAsDateFormat: true
+        prevText: '<'
     });
+    $datepicker.datepicker('setDate', new Date());
 
 
     $('#incidentTime').timepicker({
         maxDate: 0,
         maxTime: 0
     });
-    $(document).ready(function () {
-        let previousUrl = document.referrer;
-        if (previousUrl == "http://localhost:4000/reporting" || previousUrl == "http://www.matthew.gollaher/reporting") {
-            $('.bigBox').show();
-            setTimeout(function () {
-                $('.bigBox').hide();
-            }, 3000);
-        }
-        else {
-            $(".bigBox").remove();
-        }
-    });
 
-    $(".bigBox").click(function () {
-        $(".bigBox").remove();
-    });
 
 </script>
     {% endblock %}
