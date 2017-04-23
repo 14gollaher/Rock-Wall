@@ -616,7 +616,7 @@
                 });
             }
             else {
-
+                debugger;
                 $("#editModal").modal()
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
@@ -629,16 +629,16 @@
                 selectedCity = selectedRow[8].trim(" ");
                 selectedZipCode = selectedRow[9].trim(" ");
                 selectedState = selectedRow[10].trim(" ");
-                selectedBelayStatus = selectedRow[12].trim(" ");
-                selectedBelayStartDate = selectedRow[14].trim(" ");
-                selectedBelayEndDate = selectedRow[15].trim(" ");
-                selectedLeadClimbStatus = selectedRow[17].trim(" ");
-                selectedLeadClimbStartDate = selectedRow[19].trim(" ");
-                selectedLeadClimbEndDate = selectedRow[20].trim(" ");
-                selectedIsSuspended = selectedRow[22].trim(" ");
-                selectedSuspendedStartDate = selectedRow[24].trim(" ");
-                selectedSuspendedEndDate = selectedRow[25].trim(" ");
-                selectedListServ = selectedRow[27].trim(" ");
+                selectedBelayStatus = selectedRow[16].trim(" ");
+                selectedBelayStartDate = selectedRow[18].trim(" ");
+                selectedBelayEndDate = selectedRow[19].trim(" ");
+                selectedLeadClimbStatus = selectedRow[21].trim(" ");
+                selectedLeadClimbStartDate = selectedRow[22].trim(" ");
+                selectedLeadClimbEndDate = selectedRow[24].trim(" ");
+                selectedIsSuspended = selectedRow[26].trim(" ");
+                selectedSuspendedStartDate = selectedRow[28].trim(" ");
+                selectedSuspendedEndDate = selectedRow[29].trim(" ");
+                selectedListServ = selectedRow[31].trim(" ");
 
                 document.getElementById("selectedId").value = selectedId;
                 document.getElementById("selectedFirstName").value = selectedFirstName;

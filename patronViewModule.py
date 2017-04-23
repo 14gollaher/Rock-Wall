@@ -62,6 +62,7 @@ def patronViewAdmin():
     patronTable['city'] = databaseFunctions.getAllPatronCities()
     patronTable['zipCode'] = databaseFunctions.getAllPatronZipCodes()
     patronTable['state'] = databaseFunctions.getAllPatronStates()
+    patronTable['waiver'] = databaseFunctions.getAllPatronWaivers()
     patronTable['isBelayCertified'] = databaseFunctions.getAllPatronBelayCertifications()
     patronTable['belayStartDate'] = databaseFunctions.getAllPatronBelayStartDates()
     patronTable['belayEndDate'] = databaseFunctions.getAllPatronBelayEndDates()
@@ -73,9 +74,19 @@ def patronViewAdmin():
     patronTable['suspendedEndDate'] = databaseFunctions.getAllPatronSuspensionEndDates()
     patronTable['listServ'] = databaseFunctions.getAllPatronListServ()
     
-    patronTable = [dict(id=i, firstName=f, lastName=l, email=e, phoneNumber=p, gender=g, address=a, city=c, zipCode=z, state=s, isBelayCertified=b, belayStartDate=bsd, belayEndDate=bed, isLeadClimbCertified = lcc, leadClimbStartDate=lcsd, leadClimbEndDate=lced, isSuspended=su, suspendedStartDate=ss, suspendedEndDate=se, listServ=ls) for i, f, l, e, p, g, a, c, z, s, b, bsd, bed, lcc, lcsd, lced, su, ss, se, ls in zip(patronTable['id'], patronTable['firstName'], patronTable['lastName'], patronTable['email'], patronTable['phoneNumber'], patronTable['gender'], patronTable['address'], patronTable['city'], patronTable['zipCode'], patronTable['state'], patronTable['isBelayCertified'], patronTable['belayStartDate'], patronTable['belayEndDate'], patronTable['isLeadClimbCertified'], patronTable['leadClimbStartDate'], patronTable['leadClimbEndDate'], patronTable['isSuspended'], patronTable['suspendedStartDate'], patronTable['suspendedEndDate'], patronTable['listServ'])]
+    patronTable = [dict(id=i, firstName=f, lastName=l, email=e, phoneNumber=p, gender=g, address=a, city=c, zipCode=z, state=s, waiver=w, isBelayCertified = b, belayStartDate =bsd, belayEndDate =bed, isLeadClimbCertified = lcc, leadClimbStartDate = lcsd, leadClimbEndDate = lced, isSuspended = su, suspendedStartDate = ss, suspendedEndDate = se, listServ = ls) for i, f, l, e, p, g, a, c, z, s, w, b, bsd, bed, lcc, lcsd, lced, su, ss, se, ls in zip(patronTable['id'], patronTable['firstName'], patronTable['lastName'], patronTable['email'], patronTable['phoneNumber'], patronTable['gender'], patronTable['address'], patronTable['city'], patronTable['zipCode'], patronTable['state'], patronTable['waiver'], patronTable['isBelayCertified'], patronTable['belayStartDate'], patronTable['belayEndDate'], patronTable['isLeadClimbCertified'], patronTable['leadClimbStartDate'], patronTable['leadClimbEndDate'], patronTable['isSuspended'], patronTable['suspendedStartDate'], patronTable['suspendedEndDate'], patronTable['listServ'])]
+    
+    visitTable = {}
+    visitTable['Id'] = databaseFunctions.getAllVisitIds()
+    visitTable['PatronId'] = databaseFunctions.getAllVisitPatronIds()
+    visitTable['PatronFirstName'] = databaseFunctions.getAllVisitPatronFirstNames()
+    visitTable['PatronLastName'] = databaseFunctions.getAllVisitPatronLastNames()
+    visitTable['PatronVisitDate'] = databaseFunctions.getAllVisitPatronVisitDates()
+    visitTable['PatronVisitTime'] = databaseFunctions.getAllVisitPatronVisitTimes()
 
-    return render_template('viewPatronManager.html', patronTable = patronTable)
+    visitTable = [dict(id=i, patronId=pI, patronFirstName=f, patronLastName=l, patronVistDate=d, patronVisitTime=t) for i, pI, f, l, d, t in zip(visitTable['Id'], visitTable['PatronId'], visitTable['PatronFirstName'], visitTable['PatronLastName'], visitTable['PatronVisitDate'], visitTable['PatronVisitTime'])]
+        
+    return render_template('viewPatronManager.html', patronTable = patronTable, visitTable = visitTable)
 
 def patronViewMaster():
 
