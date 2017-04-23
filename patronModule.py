@@ -6,7 +6,7 @@ from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from sqlalchemy import text, create_engine
-import sqlalchemy 
+import sqlalchemy
 import sys
 import databaseFunctions
 import simplejson as json
@@ -22,12 +22,12 @@ from PIL import Image
 import numpy as np
 
 def patronCheckIn():
-    
+
     try:
         if checkPreviousPage(['patronCheckIn', 'patronCheckInRoute']) == False:
-            session['messageBagPatron'] = ""    
+            session['messageBagPatron'] = ""
     except:
-        session['messageBagPatron'] = ""    
+        session['messageBagPatron'] = ""
 
 
     pass2 = []
@@ -39,13 +39,13 @@ def patronCheckIn():
 def patronCheckInRoute():
 
     if checkPreviousPage(['patronCheckIn', 'patronCheckInRoute']) == False:
-        session['messageBagPatron'] = ""  
+        session['messageBagPatron'] = ""
 
     patronAccount = Patron(str(request.form['patronId']), "", "", "", "", "" ,"" ,"" ,"","" ,"" , False,"" ,"", False, "", "", False, "", "", "")
     session['currentPatronId'] = patronAccount.id
 
-    if validateCredentials(patronAccount): 
-        session['messageBagPatron'] = ""  
+    if validateCredentials(patronAccount):
+        session['messageBagPatron'] = ""
         currentPatronId = session.get('currentPatronId')
         currentPatronFirstName = databaseFunctions.getCurrentPatronFirstName(currentPatronId)
         currentPatronLastName = databaseFunctions.getCurrentPatronLastName(currentPatronId)
@@ -73,7 +73,7 @@ def patronCheckInRoute():
         today = datetime.today()
         if timeInRange(startDate, endDate, today):
             return redirect('patronSuspension')
-   
+
     return render_template('patron/patronCheckIn.html', id = currentPatronId, firstName = currentPatronFirstName, lastName = currentPatronLastName, email = currentPatronEmail, phoneNumber = currentPatronPhoneNumber, address = currentPatronAddress, state = currentPatronState, city = currentPatronCity, zipCode = currentPatronZipCode, gender = currentPatronGender, isSuspended = currentPatronSuspension, pass2 = pass2)
 
 def patronCheckInRoute2():
@@ -94,18 +94,18 @@ def validateCredentials(patronAccount):
         return False
 
 def patronSignUp():
-    
+
     if checkPreviousPage(['patronSignUp', 'patronSignUpRoute']) == False:
-        session['messageBagPatron'] = ""    
+        session['messageBagPatron'] = ""
 
     return render_template('patron/patronSignUp.html')
 
-def patronSignUpRoute(): 
+def patronSignUpRoute():
 
     if checkPreviousPage(['patronSignUp', 'patronSignUpRoute']) == False:
-        session['messageBagPatron'] = ""    
+        session['messageBagPatron'] = ""
 
-    try: 
+    try:
         str(request.form['listServ'])
         patronListServRequest = "True"
     except:
@@ -131,27 +131,27 @@ def patronSignUpRoute():
     session['newPatronCity'] = str(request.form['city'])
     session['newPatronZipCode'] = str(request.form['zipCode'])
     session['newPatronListServ'] = patronListServRequest
-    
+
     return redirect('signWaiver')
 
 def signWaiver():
-    
+
     if checkPreviousPage(['signWaiver']) == False:
-        session['messageBagPatron'] = ""    
+        session['messageBagPatron'] = ""
 
     return render_template('patron/patronSignWaiver.html')
-    
+
 def patronSuspension():
     return render_template('patron/patronSuspension.html')
 
 def createPatronAccountRoute():
-    
+
 
     file = open("sysSig.bteam", "r")
     waiverUrl = file.read()
 
     newPatron = Patron(session.get('newPatronId'), session.get('newPatronFirstName'), session.get('newPatronLastName'), session.get('newPatronEmail'), session.get('newPatronPhoneNumber'), session.get('newPatronGender'), session.get('newPatronAddress'), session.get('newPatronCity'), session.get('newPatronZipCode'), waiverUrl, session.get('newPatronState'), False, "", "", False, "", "", False, "", "", session.get('newPatronListServ'))
-   
+
     databaseFunctions.insertNewPatron(newPatron)
     file.close()
 
@@ -162,7 +162,7 @@ def storeImage():
     url = request.form['data']
     file = open("sysSig.bteam", "w")
 
-    filename = os.getcwd() + '\signature.jpg'
+    filename = 'signature.jpg'
 
     urllib.request.urlretrieve(url, filename)
 
@@ -170,12 +170,12 @@ def storeImage():
     signature = alpha_to_color(signature)
     signatureW, signatureH = signature.size
 
-    doc =  os.getcwd() + '\static\img\waiverImages\document.jpg'
+    doc = 'document.jpg'
 
     unsigned = Image.open(doc)
     unsignedW, unsignedH = unsigned.size
 
-    filename = os.getcwd() + '\signed.jpg'
+    filename = 'signed.jpg'
     signed = Image.new('RGB', (unsignedW, (signatureH * 2) + unsignedH), 'white')
 
     signed.paste(signature, ( (unsignedW - signatureW) // 2, unsignedH))
@@ -184,12 +184,11 @@ def storeImage():
     signed.save(filename)
 
     encoded = base64.b64encode(open("signed.jpg", "rb").read())
-    
+
     stringEncode = str(encoded)
     stringEncode = stringEncode[2:-1]
-    print(stringEncode)
     file.write("data:image/png;base64," + stringEncode)
-    file.close() 
+    file.close()
 
     return redirect('signWaiver')
 
@@ -204,14 +203,14 @@ def alpha_to_color(image, color=(255, 255, 255)):
     return Image.fromarray(x, 'RGBA')
 
 def checkPreviousPage(listGoodPages):
-    
+
     checkValue = request.referrer.split('/')
-    
+
     for page in listGoodPages:
         if checkValue[3] == page:
              return True
     return False
-   
+
 def timeInRange(start, end, x):
 
     if start <= end:
