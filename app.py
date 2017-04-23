@@ -355,13 +355,13 @@ def logMessage(log):
         print(str(request.environ['REMOTE_ADDR']) + '- {:%Y-%m-%d %H:%M:%S}'.format(datetime.now(pytz.timezone('US/Central'))) + ': ' + str(log) + '\n')
         logFile.write(str(request.environ['REMOTE_ADDR']) + '- {:%Y-%m-%d %H:%M:%S}'.format(datetime.now(pytz.timezone('US/Central'))) + ': ' + str(log) + '\n')
 
-#if __name__ == '__main__':
-#     HOST = environ.get('SERVER_HOST', 'localhost')
-#     try:
-#         PORT = int(environ.get('SERVER_PORT', '5555'))
-#     except ValueError:
-#         PORT = 5555
-#     app.run(HOST, PORT,debug=True)
+if __name__ == '__main__':
+     HOST = environ.get('SERVER_HOST', 'localhost')
+     try:
+         PORT = int(environ.get('SERVER_PORT', '5555'))
+     except ValueError:
+         PORT = 5555
+     app.run(HOST, PORT,debug=True)
 
-if __name__ == "__main__":
-    app.run(debug=False,host='0.0.0.0', port=4000)
+#if __name__ == "__main__":
+#    app.run(debug=False,host='0.0.0.0', port=4000)

@@ -15,6 +15,11 @@ import pytz
 import ctypes
 from globals import *
 import sys
+import base64
+import urllib
+import requests
+from PIL import Image
+import numpy as np
 
 def patronCheckIn():
     
@@ -154,13 +159,49 @@ def createPatronAccountRoute():
 
 def storeImage():
 
-    data = request.form['data']
-    
+    url = request.form['data']
     file = open("sysSig.bteam", "w")
-    file.write(data )
+
+    filename = os.getcwd() + '\signature.jpg'
+
+    urllib.request.urlretrieve(url, filename)
+
+    signature = Image.open(filename)
+    signature = alpha_to_color(signature)
+    signatureW, signatureH = signature.size
+
+    doc =  os.getcwd() + '\static\img\waiverImages\document.jpg'
+
+    unsigned = Image.open(doc)
+    unsignedW, unsignedH = unsigned.size
+
+    filename = os.getcwd() + '\signed.jpg'
+    signed = Image.new('RGB', (unsignedW, (signatureH * 2) + unsignedH), 'white')
+
+    signed.paste(signature, ( (unsignedW - signatureW) // 2, unsignedH))
+    signed.paste(unsigned, (0, 0))
+
+    signed.save(filename)
+
+    encoded = base64.b64encode(open("signed.jpg", "rb").read())
+    
+    stringEncode = str(encoded)
+    stringEncode = stringEncode[2:-1]
+    print(stringEncode)
+    file.write("data:image/png;base64," + stringEncode)
     file.close() 
 
     return redirect('signWaiver')
+
+def alpha_to_color(image, color=(255, 255, 255)):
+
+    x = np.array(image)
+    r, g, b, a = np.rollaxis(x, axis=-1)
+    r[a == 0] = color[0]
+    g[a == 0] = color[1]
+    b[a == 0] = color[2]
+    x = np.dstack([r, g, b, a])
+    return Image.fromarray(x, 'RGBA')
 
 def checkPreviousPage(listGoodPages):
     
