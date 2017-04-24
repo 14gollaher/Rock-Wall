@@ -177,7 +177,7 @@ def editPatronRoute():
         patronUpdatedLeadClimbEndDate = ""
 
 
-    newPatronItem = Patron(str(request.form['updatedId']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']), str(request.form['updatedEmail']), str(request.form['updatedPhoneNumber']), str(request.form['updatedGender']), str(request.form['updatedAddress']), str(request.form['updatedCity']), str(request.form['updatedZipCode']), "", str(request.form['updatedState']), str(request.form['updatedBelayStatus']), patronUpdatedBelayStartDate, patronUpdatedBelayEndDate, str(request.form['updatedLeadClimbStatus']), patronUpdatedLeadClimbStartDate, patronUpdatedLeadClimbEndDate, str(request.form['updatedIsSuspended']), patronUpdatedSuspendedStartDate, patronUpdatedSuspendedEndDate, str(request.form['updatedListServ']))
+    newPatronItem = Patron(str(request.form['updatedId']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']), str(request.form['updatedEmail']).lower(), str(request.form['updatedPhoneNumber']), str(request.form['updatedGender']), str(request.form['updatedAddress']), str(request.form['updatedCity']), str(request.form['updatedZipCode']), "", str(request.form['updatedState']), str(request.form['updatedBelayStatus']), patronUpdatedBelayStartDate, patronUpdatedBelayEndDate, str(request.form['updatedLeadClimbStatus']), patronUpdatedLeadClimbStartDate, patronUpdatedLeadClimbEndDate, str(request.form['updatedIsSuspended']), patronUpdatedSuspendedStartDate, patronUpdatedSuspendedEndDate, str(request.form['updatedListServ']))
     databaseFunctions.editPatron(newPatronItem) 
     if session.get('currentUserAccountType') == 'administrator':
         return redirect('patronViewAdmin')
