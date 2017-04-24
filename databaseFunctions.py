@@ -733,29 +733,13 @@ def deletePatronItem(PatronItem):
 
 def editPatron(PatronItem):
 
-    if PatronItem.isBelayCertified == 'Yes':
-        belayBooleanStatus = True
+    if PatronItem.listServ == 'Yes':
+        listServBooleanStatus = True
     else:
-        PatronItem.belayStartDate = ''
-        PatronItem.belayEndDate = ''
-        belayBooleanStatus = False
+        listServBooleanStatus = False
 
-    if PatronItem.isLeadClimbCertified == 'Yes':
-        leadClimbBooleanStatus = True
-    else:
-        PatronItem.leadClimbStartDate = ''
-        PatronItem.leadClimbEndDate = ''
-        leadClimbBooleanStatus = False
-    
-    if PatronItem.isSuspended == 'Yes':
-        suspendedBooleanStatus = True
-    else:
-        PatronItem.suspendedStartDate = ''
-        PatronItem.suspendedEndDate = ''
-        suspendedBooleanStatus = False
-
-    sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber, Gender = :gender, Address = :address, City = :city, Zip = :zipCode, State = :state, IsBelayCertified = :isBelayCertified, BelayStartDate = :belayStartDate, BelayEndDate = :belayEndDate, IsLeadClimbCertified = :isLeadClimbCertified, LeadClimbStartDate = :leadClimbStartDate, LeadClimbEndDate = :leadClimbEndDate, IsSuspended = :isSuspended, SuspendedStartDate = :suspendedStartDate, SuspendedEndDate = :suspendedEndDate WHERE Id = :id")
-    engine.execute(sqlText, {"id": PatronItem.id, "firstName": PatronItem.firstName, "lastName": PatronItem.lastName, "email": PatronItem.email, "phoneNumber": PatronItem.phoneNumber, "gender": PatronItem.gender, "address": PatronItem.address, "city": PatronItem.city, "zipCode": PatronItem.zipCode, "state": PatronItem.state, "isBelayCertified": str(belayBooleanStatus), "belayStartDate": PatronItem.belayStartDate, "belayEndDate": PatronItem.belayEndDate, "isLeadClimbCertified": str(leadClimbBooleanStatus), "leadClimbStartDate": PatronItem.leadClimbStartDate, "leadClimbEndDate": PatronItem.leadClimbEndDate,"isSuspended": str(suspendedBooleanStatus),  "suspendedStartDate": PatronItem.suspendedStartDate, "suspendedEndDate": PatronItem.suspendedEndDate})
+    sqlText = text("UPDATE Patron SET FirstName = :firstName, LastName = :lastName, Email = :email, PhoneNumber = :phoneNumber, Gender = :gender, Address = :address, City = :city, Zip = :zipCode, State = :state, ListServ = :listServ WHERE Id = :id")
+    engine.execute(sqlText, {"id": PatronItem.id, "firstName": PatronItem.firstName, "lastName": PatronItem.lastName, "email": PatronItem.email, "phoneNumber": PatronItem.phoneNumber, "gender": PatronItem.gender, "address": PatronItem.address, "city": PatronItem.city, "zipCode": PatronItem.zipCode, "state": PatronItem.state, "listServ": str(listServBooleanStatus)})
 
 def editPatronCertifications(PatronItem):
 

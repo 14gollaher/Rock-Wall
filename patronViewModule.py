@@ -62,7 +62,6 @@ def patronViewAdmin():
     patronTable['city'] = databaseFunctions.getAllPatronCities()
     patronTable['zipCode'] = databaseFunctions.getAllPatronZipCodes()
     patronTable['state'] = databaseFunctions.getAllPatronStates()
-    patronTable['waiver'] = databaseFunctions.getAllPatronWaivers()
     patronTable['isBelayCertified'] = databaseFunctions.getAllPatronBelayCertifications()
     patronTable['belayStartDate'] = databaseFunctions.getAllPatronBelayStartDates()
     patronTable['belayEndDate'] = databaseFunctions.getAllPatronBelayEndDates()
@@ -74,7 +73,7 @@ def patronViewAdmin():
     patronTable['suspendedEndDate'] = databaseFunctions.getAllPatronSuspensionEndDates()
     patronTable['listServ'] = databaseFunctions.getAllPatronListServ()
     
-    patronTable = [dict(id=i, firstName=f, lastName=l, email=e, phoneNumber=p, gender=g, address=a, city=c, zipCode=z, state=s, waiver=w, isBelayCertified = b, belayStartDate =bsd, belayEndDate =bed, isLeadClimbCertified = lcc, leadClimbStartDate = lcsd, leadClimbEndDate = lced, isSuspended = su, suspendedStartDate = ss, suspendedEndDate = se, listServ = ls) for i, f, l, e, p, g, a, c, z, s, w, b, bsd, bed, lcc, lcsd, lced, su, ss, se, ls in zip(patronTable['id'], patronTable['firstName'], patronTable['lastName'], patronTable['email'], patronTable['phoneNumber'], patronTable['gender'], patronTable['address'], patronTable['city'], patronTable['zipCode'], patronTable['state'], patronTable['waiver'], patronTable['isBelayCertified'], patronTable['belayStartDate'], patronTable['belayEndDate'], patronTable['isLeadClimbCertified'], patronTable['leadClimbStartDate'], patronTable['leadClimbEndDate'], patronTable['isSuspended'], patronTable['suspendedStartDate'], patronTable['suspendedEndDate'], patronTable['listServ'])]
+    patronTable = [dict(id=i, firstName=f, lastName=l, email=e, phoneNumber=p, gender=g, address=a, city=c, zipCode=z, state=s, isBelayCertified = b, belayStartDate =bsd, belayEndDate =bed, isLeadClimbCertified = lcc, leadClimbStartDate = lcsd, leadClimbEndDate = lced, isSuspended = su, suspendedStartDate = ss, suspendedEndDate = se, listServ = ls) for i, f, l, e, p, g, a, c, z, s, b, bsd, bed, lcc, lcsd, lced, su, ss, se, ls in zip(patronTable['id'], patronTable['firstName'], patronTable['lastName'], patronTable['email'], patronTable['phoneNumber'], patronTable['gender'], patronTable['address'], patronTable['city'], patronTable['zipCode'], patronTable['state'], patronTable['isBelayCertified'], patronTable['belayStartDate'], patronTable['belayEndDate'], patronTable['isLeadClimbCertified'], patronTable['leadClimbStartDate'], patronTable['leadClimbEndDate'], patronTable['isSuspended'], patronTable['suspendedStartDate'], patronTable['suspendedEndDate'], patronTable['listServ'])]
     
     visitTable = {}
     visitTable['Id'] = databaseFunctions.getAllVisitIds()
@@ -146,38 +145,7 @@ def editPatronRoute():
     if not session.get('isLoggedIn'):
         return redirect('login')
 
-    patronUpdatedSuspendedStartDate = ""
-    patronUpdatedSuspendedEndDate = ""
-
-    patronUpdatedBelayStartDate = ""
-    patronUpdatedBelayEndDate = ""
-
-    patronUpdatedLeadClimbStartDate = ""
-    patronUpdatedLeadClimbEndDate = ""
-
-    try:
-        patronUpdatedSuspendedStartDate = str(request.form['updatedSuspendedStartDate'])
-        patronUpdatedSuspendedEndDate = str(request.form['updatedSuspendedEndDate'])
-    except:
-        patronUpdatedSuspendedStartDate = ""
-        patronUpdatedSuspendedEndDate = ""
-
-    try:
-        patronUpdatedBelayStartDate = str(request.form['updatedBelayStartDate'])
-        patronUpdatedBelayEndDate = str(request.form['updatedBelayEndDate'])
-    except:
-        patronUpdatedBelayStartDate = ""
-        patronUpdatedBelayEndDate = ""
-
-    try:
-        patronUpdatedLeadClimbStartDate = str(request.form['updatedLeadClimbStartDate'])
-        patronUpdatedLeadClimbEndDate = str(request.form['updatedLeadClimbEndDate'])
-    except:
-        patronUpdatedLeadClimbStartDate = ""
-        patronUpdatedLeadClimbEndDate = ""
-
-
-    newPatronItem = Patron(str(request.form['updatedId']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']), str(request.form['updatedEmail']).lower(), str(request.form['updatedPhoneNumber']), str(request.form['updatedGender']), str(request.form['updatedAddress']), str(request.form['updatedCity']), str(request.form['updatedZipCode']), "", str(request.form['updatedState']), str(request.form['updatedBelayStatus']), patronUpdatedBelayStartDate, patronUpdatedBelayEndDate, str(request.form['updatedLeadClimbStatus']), patronUpdatedLeadClimbStartDate, patronUpdatedLeadClimbEndDate, str(request.form['updatedIsSuspended']), patronUpdatedSuspendedStartDate, patronUpdatedSuspendedEndDate, str(request.form['updatedListServ']))
+    newPatronItem = Patron(str(request.form['updatedId']), str(request.form['updatedFirstName']), str(request.form['updatedLastName']), str(request.form['updatedEmail']).lower(), str(request.form['updatedPhoneNumber']), str(request.form['updatedGender']), str(request.form['updatedAddress']), str(request.form['updatedCity']), str(request.form['updatedZipCode']), "", str(request.form['updatedState']), "", "", "", "", "", "", "" , "", "", str(request.form['updatedListServ']))
     databaseFunctions.editPatron(newPatronItem) 
     if session.get('currentUserAccountType') == 'administrator':
         return redirect('patronViewAdmin')

@@ -42,17 +42,10 @@
                                             <th>City</th>
                                             <th>Zip Code</th>
                                             <th>State</th>
-                                            <th style="display:none;">Belay Certified</th>
-                                            <th style="display:none;">Belay Start Date</th>
-                                            <th style="display:none;">Belay End Date</th>
-                                            <th style="display:none;">Lead Certified</th>
-                                            <th style="display:none;">Lead Climb Start Date</th>
-                                            <th style="display:none;">Lead Climb End Date</th>
-                                            <th style="display:none;">Suspension Status</th>
-                                            <th style="display:none;">Suspension Start Date</th>
-                                            <th style="display:none;">Suspension End Date</th>
-                                            <th>Waiver</th>
                                             <th>ListServ</th>
+                                            {% if session['currentUserAccountType'] == 'Master' %}
+                                            <th>Waiver</th>
+                                            {% endif %}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -68,35 +61,13 @@
                                             <td>{{ row['city'] }}</td>
                                             <td>{{ row['zipCode'] }}</td>
                                             <td>{{ row['state'] }}</td>
-                                            <td>
-                                                <a style="padding-left:10px;" class="fa fa-pencil-square-o fa-2x" href="{{ row['waiver'] }}" onclick="window.open('{{ row['waiver'] }}', 'newwindow', 'width=750, height=650'); return false;"></a>
-                                            </td>
-
-                                            {% if row['isBelayCertified'] == 'False' %}
-                                            <td style="display:none;">No</td>
-                                            {% else %}
-                                            <td style="display:none;">Yes</td>
-                                            {% endif %}
-                                            <td style="display:none;">{{ row['belayStartDate'] }}</td>
-                                            <td style="display:none;">{{ row['belayEndDate'] }}</td>
-                                            {% if row['isLeadClimbCertified'] == 'False' %}
-                                            <td style="display:none;">No</td>
-                                            {% else %}
-                                            <td style="display:none;">Yes</td>
-                                            {% endif %}
-                                            <td style="display:none;"> {{ row['leadClimbStartDate'] }} </td>
-                                            <td style="display:none;"> {{ row['leadClimbEndDate'] }}</td>
-                                            {% if row['isSuspended'] == 'False' %}
-                                            <td style="display:none;">No</td>
-                                            {% else %}
-                                            <td style="display:none;">Yes</td>
-                                            {% endif %}
-                                            <td style="display:none;">{{ row['suspendedStartDate'] }}</td>
-                                            <td style="display:none;">{{ row['suspendedEndDate'] }}</td>
                                             {% if row['listServ'] == 'False' %}
                                             <td>No</td>
                                             {% else %}
                                             <td>Yes</td>
+                                            {% endif %}
+                                            {% if session['currentUserAccountType'] == 'Master' %}
+                                            <td><a style="padding-left:10px;" class="fa fa-pencil-square-o fa-2x" href="{{ row['waiver'] }}" onclick="window.open('{{ row['waiver'] }}', 'newwindow', 'width=750, height=650'); return false;"></a></td>
                                             {% endif %}
                                         </tr>
                                         {% endfor %}
@@ -123,23 +94,12 @@
                                             <th>ID</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
-                                            <th style="display:none;">Email</th>
-                                            <th style="display:none;">Phone Number</th>
-                                            <th style="display:none;">Gender</th>
-                                            <th style="display:none;">Address</th>
-                                            <th style="display:none;">City</th>
-                                            <th style="display:none;">Zip Code</th>
-                                            <th style="display:none;">State</th>
                                             <th>Belay Certified</th>
                                             <th>Belay Start Date</th>
                                             <th>Belay End Date</th>
                                             <th>Lead Certified</th>
                                             <th>Lead Climb Start Date</th>
                                             <th>Lead Climb End Date</th>
-                                            <th style="display:none;">Suspension Status</th>
-                                            <th style="display:none;">Suspension Start Date</th>
-                                            <th style="display:none;">Suspension End Date</th>
-                                            <th style="display:none;">ListServ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -148,13 +108,6 @@
                                             <td>{{ row['id'] }}</td>
                                             <td>{{ row['firstName'] }}</td>
                                             <td>{{ row['lastName'] }}</td>
-                                            <td style="display:none;">{{ row['email'] }}</td>
-                                            <td style="display:none;">{{ row['phoneNumber'] }}</td>
-                                            <td style="display:none;">{{ row['gender'] }}</td>
-                                            <td style="display:none;">{{ row['address'] }}</td>
-                                            <td style="display:none;">{{ row['city'] }}</td>
-                                            <td style="display:none;">{{ row['zipCode'] }}</td>
-                                            <td style="display:none;">{{ row['state'] }}</td>
                                             {% if row['isBelayCertified'] == 'False' %}
                                             <td>No</td>
                                             {% else %}
@@ -169,18 +122,6 @@
                                             {% endif %}
                                             <td> {{ row['leadClimbStartDate'] }} </td>
                                             <td>{{ row['leadClimbEndDate'] }} </td>
-                                            {% if row['isSuspended'] == 'False' %}
-                                            <td style="display:none;">No</td>
-                                            {% else %}
-                                            <td style="display:none;">Yes</td>
-                                            {% endif %}
-                                            <td style="display:none;">{{ row['suspendedStartDate'] }}</td>
-                                            <td style="display:none;">{{ row['suspendedEndDate'] }}</td>
-                                            {% if row['listServ'] == 'False' %}
-                                            <td style="display:none;">No</td>
-                                            {% else %}
-                                            <td style="display:none;">Yes</td>
-                                            {% endif %}
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -364,64 +305,6 @@
                             <div class="form-group">
                                 <label class="control-label">Zip Code</label>
                                 <input type="text" class="form-control" placeholder="Zip Code" id="selectedZipCode" name="updatedZipCode" />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="control-label">Belay Certified</label>
-                            <select class="form-control" name="updatedBelayStatus" id="selectedBelayStatus" style="margin-bottom:15px">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Belay Certified Start Date</label>
-                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Belay Certified Start Date" id="selectedBelayStartDate" name="updatedBelayStartDate" readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Belay Certified End Date</label>
-                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Belay Certified End Date" id="selectedBelayEndDate" name="updatedBelayEndDate" readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="control-label">Lead Climb Certified</label>
-                            <select class="form-control" name="updatedLeadClimbStatus" id="selectedLeadClimbStatus" style="margin-bottom:15px">
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Lead Climb Certified Start Date</label>
-                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Lead Climb Certified Start Date" id="selectedLeadClimbStartDate" name="updatedLeadClimbStartDate" readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Lead Climb Certified End Date</label>
-                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Lead Climb Certified End Date" id="selectedLeadClimbEndDate" name="updatedLeadClimbEndDate" readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="control-label">Suspended</label>
-                            <select class="form-control" name="updatedIsSuspended" id="selectedIsSuspended" style="margin-bottom:15px">
-                                <option value="">Suspension Status</option>
-                                <option value="Yes">Yes</option>
-                                <option value="No">No</option>
-                            </select>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Suspension Start Date</label>
-                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Suspension Start Date" id="selectedSuspendedStartDate" name="updatedSuspendedStartDate" readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label">Suspension End Date</label>
-                                <input type="text" class="form-control" data-dateformat="mm/dd/yy" placeholder="Suspension End Date" id="selectedSuspendedEndDate" name="updatedSuspendedEndDate" readonly />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -616,7 +499,7 @@
                 });
             }
             else {
-                debugger;
+
                 $("#editModal").modal()
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
@@ -629,16 +512,7 @@
                 selectedCity = selectedRow[8].trim(" ");
                 selectedZipCode = selectedRow[9].trim(" ");
                 selectedState = selectedRow[10].trim(" ");
-                selectedBelayStatus = selectedRow[16].trim(" ");
-                selectedBelayStartDate = selectedRow[18].trim(" ");
-                selectedBelayEndDate = selectedRow[19].trim(" ");
-                selectedLeadClimbStatus = selectedRow[21].trim(" ");
-                selectedLeadClimbStartDate = selectedRow[22].trim(" ");
-                selectedLeadClimbEndDate = selectedRow[24].trim(" ");
-                selectedIsSuspended = selectedRow[26].trim(" ");
-                selectedSuspendedStartDate = selectedRow[28].trim(" ");
-                selectedSuspendedEndDate = selectedRow[29].trim(" ");
-                selectedListServ = selectedRow[31].trim(" ");
+                selectedListServ = selectedRow[12].trim(" ");
 
                 document.getElementById("selectedId").value = selectedId;
                 document.getElementById("selectedFirstName").value = selectedFirstName;
@@ -650,61 +524,7 @@
                 document.getElementById("selectedCity").value = selectedCity;
                 document.getElementById("selectedZipCode").value = selectedZipCode;
                 document.getElementById("selectedState").value = selectedState;
-                document.getElementById("selectedBelayStatus").value = selectedBelayStatus;
-                document.getElementById("selectedBelayStartDate").value = selectedBelayStartDate;
-                document.getElementById("selectedBelayEndDate").value = selectedBelayEndDate;
-                document.getElementById("selectedLeadClimbStatus").value = selectedLeadClimbStatus;
-                document.getElementById("selectedLeadClimbStartDate").value = selectedLeadClimbStartDate;
-                document.getElementById("selectedLeadClimbEndDate").value = selectedLeadClimbEndDate;
-                document.getElementById("selectedIsSuspended").value = selectedIsSuspended;
-                document.getElementById("selectedSuspendedStartDate").value = selectedSuspendedStartDate;
-                document.getElementById("selectedSuspendedEndDate").value = selectedSuspendedEndDate;
                 document.getElementById("selectedListServ").value = selectedListServ;
-
-                if ($('#selectedIsSuspended')[0].value == 'Yes') {
-
-                    $('#selectedSuspendedStartDate').addClass('disabled', false);
-                    $('#selectedSuspendedStartDate').datepicker('enable');
-
-                    $('#selectedSuspendedEndDate').addClass('disabled', false);
-                    $('#selectedSuspendedEndDate').datepicker('enable');
-                } else {
-                    $('#selectedSuspendedStartDate').addClass('disabled', true);
-                    $('#selectedSuspendedStartDate').datepicker('disable');
-
-                    $('#selectedSuspendedEndDate').addClass('disabled', true);
-                    $('#selectedSuspendedEndDate').datepicker('disable');
-                }
-
-                if ($('#selectedBelayStatus')[0].value == 'Yes') {
-
-                    $('#selectedBelayStartDate').addClass('disabled', false);
-                    $('#selectedBelayStartDate').datepicker('enable');
-
-                    $('#selectedBelayEndDate').addClass('disabled', false);
-                    $('#selectedBelayEndDate').datepicker('enable');
-                } else {
-                    $('#selectedBelayStartDate').addClass('disabled', true);
-                    $('#selectedBelayStartDate').datepicker('disable');
-
-                    $('#selectedBelayEndDate').addClass('disabled', true);
-                    $('#selectedBelayEndDate').datepicker('disable');
-                }
-
-                if ($('#selectedLeadClimbStatus')[0].value == 'Yes') {
-
-                    $('#selectedLeadClimbStartDate').addClass('disabled', false);
-                    $('#selectedLeadClimbStartDate').datepicker('enable');
-
-                    $('#selectedLeadClimbEndDate').addClass('disabled', false);
-                    $('#selectedLeadClimbEndDate').datepicker('enable');
-                } else {
-                    $('#selectedLeadClimbStartDate').addClass('disabled', true);
-                    $('#selectedLeadClimbStartDate').datepicker('disable');
-
-                    $('#selectedLeadClimbEndDate').addClass('disabled', true);
-                    $('#selectedLeadClimbEndDate').datepicker('disable');
-                }
             }
         });
 
@@ -722,17 +542,16 @@
             else
             {
                 $("#certificateModal").modal()
-
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
                 selectedFirstName = selectedRow[2].trim(" ");
                 selectedLastName = selectedRow[3].trim(" ");
-                selectedBelayStatus = selectedRow[12].trim(" ");
-                selectedBelayStartDate = selectedRow[14].trim(" ");
-                selectedBelayEndDate = selectedRow[15].trim(" ");
-                selectedLeadClimbStatus = selectedRow[17].trim(" ");
-                selectedLeadClimbStartDate = selectedRow[19].trim(" ");
-                selectedLeadClimbEndDate = selectedRow[20].trim(" ");
+                selectedBelayStatus = selectedRow[5].trim(" ");
+                selectedBelayStartDate = selectedRow[7].trim(" ");
+                selectedBelayEndDate = selectedRow[8].trim(" ");
+                selectedLeadClimbStatus = selectedRow[10].trim(" ");
+                selectedLeadClimbStartDate = selectedRow[12].trim(" ");
+                selectedLeadClimbEndDate = selectedRow[13].trim(" ");
 
                 document.getElementById("certificateId").value = selectedId;
                 document.getElementById("certificateFirstName").value = selectedFirstName;
@@ -743,9 +562,8 @@
                 document.getElementById("certificateLeadClimbStatus").value = selectedLeadClimbStatus;
                 document.getElementById("certificateLeadClimbStartDate").value = selectedLeadClimbStartDate;
                 document.getElementById("certificateLeadClimbEndDate").value = selectedLeadClimbEndDate;
-                document.getElementById("certificateIsSuspended").value = selectedIsSuspended;
-
-                if ($('#selectedBelayStatus')[0].value == 'Yes')
+                debugger;
+                if (selectedBelayStatus == 'Yes')
                 {
 
                     $('#selectedBelayStartDate').addClass('disabled', false);
@@ -763,7 +581,7 @@
                     $('#selectedBelayEndDate').datepicker('disable');
                 }
 
-                if ($('#selectedLeadClimbStatus')[0].value == 'Yes')
+                if (selectedLeadClimbStatus== 'Yes')
                 {
 
                     $('#selectedLeadClimbStartDate').addClass('disabled', false);
@@ -986,7 +804,7 @@
         minDate: 0,
         nextText: '>',
         prevText: '<',
-        onSelect: function (certificate) {
+        onSelect: function (selected) {
             $("#certificateSuspendedEndDate").datepicker("option", "minDate", selected)
         }
     });
@@ -995,7 +813,7 @@
         minDate: 0,
         nextText: '>',
         prevText: '<',
-        onSelect: function (certificate) {
+        onSelect: function (selected) {
             $("#certificateSuspendedStartDate").datepicker("option", "maxDate", selected)
         }
     });
@@ -1004,7 +822,7 @@
         minDate: 0,
         nextText: '>',
         prevText: '<',
-        onSelect: function (certificate) {
+        onSelect: function (selected) {
             $("#certificateBelayEndDate").datepicker("option", "minDate", selected)
         }
     });
@@ -1013,7 +831,7 @@
         minDate: 0,
         nextText: '>',
         prevText: '<',
-        onSelect: function (certificate) {
+        onSelect: function (selected) {
             $("#certificateBelayStartDate").datepicker("option", "maxDate", selected)
         }
     });
@@ -1022,7 +840,7 @@
         minDate: 0,
         nextText: '>',
         prevText: '<',
-        onSelect: function (certificate) {
+        onSelect: function (selected) {
             $("#certificateLeadClimbEndDate").datepicker("option", "minDate", selected)
         }
     });
@@ -1031,7 +849,7 @@
         minDate: 0,
         nextText: '>',
         prevText: '<',
-        onSelect: function (certificate) {
+        onSelect: function (selected) {
             $("#certificateLeadClimbStartDate").datepicker("option", "maxDate", selected)
         }
     });

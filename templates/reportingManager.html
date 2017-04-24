@@ -433,12 +433,14 @@
 
             let selectedRow = document.querySelectorAll(".selected");
             if (!selectedRow[0] || table.$('tr.selected').hasClass('selected')) {
+
                 $.alert({
                     title: 'Whoops!!',
                     content: 'Please select a patron to edit suspension status.'
                 });
             }
             else {
+
                 $("#suspensionModal").modal()
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedPatronId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
@@ -454,7 +456,6 @@
                 document.getElementById("selectedPatronSuspensionStatus").value = selectedPatronSuspensionStatus;
                 document.getElementById("selectedPatronSuspensionStartDate").value = selectedPatronSuspensionStartDate;
                 document.getElementById("selectedPatronSuspensionEndDate").value = selectedPatronSuspensionEndDate;
-
 
                 if ($('#selectedPatronSuspensionStatus')[0].value == 'Yes') {
 
