@@ -266,7 +266,7 @@ def authenticateCreateAccount():
     print (session.get('newAccountPassword'))
     hashedPassword = pbkdf2_sha256.hash(session.get('newAccountPassword'))
 
-    createAccount = UserAccount(session.get('newAccountEmail'), hashedPassword, session.get('newAccountType'), session.get('newAccountFirstName'), session.get('newAccountLastName'))
+    createAccount = UserAccount(session.get('newAccountEmail').lower(), hashedPassword, session.get('newAccountType'), session.get('newAccountFirstName'), session.get('newAccountLastName'))
     
     if validateCredentials(validateAccount):
         if checkPermissionsPasswordChange(validateAccount, createAccount):

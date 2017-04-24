@@ -150,7 +150,7 @@ def createPatronAccountRoute():
     file = open("sysSig.bteam", "r")
     waiverUrl = file.read()
 
-    newPatron = Patron(session.get('newPatronId'), session.get('newPatronFirstName'), session.get('newPatronLastName'), session.get('newPatronEmail'), session.get('newPatronPhoneNumber'), session.get('newPatronGender'), session.get('newPatronAddress'), session.get('newPatronCity'), session.get('newPatronZipCode'), waiverUrl, session.get('newPatronState'), False, "", "", False, "", "", False, "", "", session.get('newPatronListServ'))
+    newPatron = Patron(session.get('newPatronId'), session.get('newPatronFirstName'), session.get('newPatronLastName'), session.get('newPatronEmail').lower(), session.get('newPatronPhoneNumber'), session.get('newPatronGender'), session.get('newPatronAddress'), session.get('newPatronCity'), session.get('newPatronZipCode'), waiverUrl, session.get('newPatronState'), False, "", "", False, "", "", False, "", "", session.get('newPatronListServ'))
 
     databaseFunctions.insertNewPatron(newPatron)
     file.close()
