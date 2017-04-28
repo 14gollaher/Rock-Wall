@@ -357,7 +357,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Last Name</label>
-                                <input type="text" class="form-control" placeholder="Last Name" id="certificateLastName" name="certificateLastName" readonly/>
+                                <input type="text" class="form-control" placeholder="Last Name" id="certificateLastName" name="certificateLastName" readonly />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -532,16 +532,14 @@
 
             let selectedRow = document.querySelectorAll(".selected");
 
-            if (!selectedRow[0] || table.$('tr.selected').hasClass('selected'))
-            {
+            if (!selectedRow[0] || table.$('tr.selected').hasClass('selected')) {
                 $.alert({
                     title: 'Whoops!!',
                     content: 'Please select a patron to edit.'
                 });
             }
-            else
-            {
-                $("#certificateModal").modal()
+            else {
+                $("#certificateModal").modal();
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
                 selectedFirstName = selectedRow[2].trim(" ");
@@ -562,42 +560,38 @@
                 document.getElementById("certificateLeadClimbStatus").value = selectedLeadClimbStatus;
                 document.getElementById("certificateLeadClimbStartDate").value = selectedLeadClimbStartDate;
                 document.getElementById("certificateLeadClimbEndDate").value = selectedLeadClimbEndDate;
-                debugger;
-                if (selectedBelayStatus == 'Yes')
-                {
+                $(document).ready(function () {
 
-                    $('#selectedBelayStartDate').addClass('disabled', false);
-                    $('#selectedBelayStartDate').datepicker('enable');
+                    if (selectedBelayStatus == 'Yes') {
+                        $('#selectedBelayStartDate').addClass('disabled', false);
+                        $('#selectedBelayStartDate').datepicker('enable');
 
-                    $('#selectedBelayEndDate').addClass('disabled', false);
-                    $('#selectedBelayEndDate').datepicker('enable');
-                }
-                else
-                {
-                    $('#selectedBelayStartDate').addClass('disabled', true);
-                    $('#selectedBelayStartDate').datepicker('disable');
+                        $('#selectedBelayEndDate').addClass('disabled', false);
+                        $('#selectedBelayEndDate').datepicker('enable');
+                    }
+                    else {
+                        $('#selectedBelayStartDate').addClass('disabled', true);
+                        $('#selectedBelayStartDate').datepicker('disable');
 
-                    $('#selectedBelayEndDate').addClass('disabled', true);
-                    $('#selectedBelayEndDate').datepicker('disable');
-                }
+                        $('#selectedBelayEndDate').addClass('disabled', true);
+                        $('#selectedBelayEndDate').datepicker('disable');
+                    }
 
-                if (selectedLeadClimbStatus== 'Yes')
-                {
+                    if (selectedLeadClimbStatus == 'Yes') {
+                        $('#selectedLeadClimbStartDate').addClass('disabled', false);
+                        $('#selectedLeadClimbStartDate').datepicker('enable');
 
-                    $('#selectedLeadClimbStartDate').addClass('disabled', false);
-                    $('#selectedLeadClimbStartDate').datepicker('enable');
+                        $('#selectedLeadClimbEndDate').addClass('disabled', false);
+                        $('#selectedLeadClimbEndDate').datepicker('enable');
+                    }
+                    else {
+                        $('#selectedLeadClimbStartDate').addClass('disabled', true);
+                        $('#selectedLeadClimbStartDate').datepicker('disable');
 
-                    $('#selectedLeadClimbEndDate').addClass('disabled', false);
-                    $('#selectedLeadClimbEndDate').datepicker('enable');
-                }
-                else
-                {
-                    $('#selectedLeadClimbStartDate').addClass('disabled', true);
-                    $('#selectedLeadClimbStartDate').datepicker('disable');
-
-                    $('#selectedLeadClimbEndDate').addClass('disabled', true);
-                    $('#selectedLeadClimbEndDate').datepicker('disable');
-                }
+                        $('#selectedLeadClimbEndDate').addClass('disabled', true);
+                        $('#selectedLeadClimbEndDate').datepicker('disable');
+                    }
+                });
             }
         });
 
@@ -609,6 +603,7 @@
                     content: 'Please select a patron to delete.'
                 });
             }
+
             else {
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');

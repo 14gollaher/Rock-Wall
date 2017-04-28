@@ -41,8 +41,10 @@
                 <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
-                            <span class="widget-icon"> <i class="fa fa-comment icon fa-lg"></i> </span>
-                            <h2 style="line-height:15px"><strong>Message Center</strong></h2>
+                            <div>
+                                <span class="widget-icon"> <i class="fa fa-comment icon fa-lg"></i> </span>
+                                <h2 style="line-height:15px"><strong>Message Center</strong></h2>
+                            </div>
                         </header>
                         <div>
                             <div class="widget-body">
@@ -127,7 +129,10 @@
 
             let content = document.getElementsByName("content")[0].value;
             if (content.length == 0) {
-                alert("Please enter a chat message.");
+                $.alert({
+                    title: 'Whoops!!',
+                    content: 'Please enter a message to send!'
+                });
             }
             else {
                 clickedSendOnce = true;

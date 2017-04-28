@@ -65,7 +65,7 @@
                     <button type="submit" class="close" data-dismiss="modal" aria-hidden="true">
                         &times;
                     </button>
-                    <h4 class="modal-title" id="myModalLabel">Edit Patron</h4>
+                    <h4 class="modal-title" id="myModalLabel">Edit User</h4>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -88,16 +88,16 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <label class="control-label">Account Type</label>
                             {% if session['currentUserAccountType'] == 'Master' %}
+                            <label class="control-label">Account Type</label>
                             <select class="form-control" name="updatedAccountType" id="selectedAccountType" style="margin-bottom:15px">
                                 <option value="Employee">Employee</option>
                                 <option value="Administrator">Administrator</option>
                             </select>
                             {% endif %}
                             {% if session['currentUserAccountType'] == 'Administrator' %}
-                            <select class="form-control" name="updatedAccountType" id="selectedAccountType" style="margin-bottom:15px">
-                                <option value="Employee">Employee</option>
+                            <select class="form-control" name="updatedAccountType" id="selectedAccountType" style="margin-bottom:15px; display: none">
+                                <option value="Employee" style="display">Employee</option>
                             </select>
                             {% endif %}
                         </div>
