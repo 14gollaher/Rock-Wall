@@ -32,3 +32,13 @@ input::-webkit-inner-spin-button {
     color: rgb(3, 75, 133) !important;
     font-size: 25px !important;
 }
+
+.error {
+    color: yellow;
+}
+
+
+input[type='checkbox'] {
+    width:20px;
+    height:20px;
+}

@@ -1,5 +1,6 @@
-class CalendarItem:
+from flask import Flask, request
 
+class CalendarItem:
     def __init__(self, id, title, startTime, description, icon, color):
 
         self.id = id
@@ -38,8 +39,9 @@ class Message:
 
 class Patron:
 
- def __init__(self, id, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, belayStartDate, belayEndDate, isLeadClimbCertified, leadClimbStartDate, leadClimbEndDate, isSuspended, suspendedStartDate, suspendedEndDate, listServ):
+    def __init__(self, id, accountType, firstName, lastName, email, phoneNumber, gender, address, city, zipCode, waiverFile, state, isBelayCertified, belayStartDate, belayEndDate, isLeadClimbCertified, leadClimbStartDate, leadClimbEndDate, isSuspended, suspendedStartDate, suspendedEndDate, listServ, waiverSignDate):
         self.id = id
+        self.accountType = accountType
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
@@ -60,14 +62,30 @@ class Patron:
         self.suspendedStartDate = suspendedStartDate
         self.suspendedEndDate = suspendedEndDate
         self.listServ = listServ
+        self.waiverSignDate = waiverSignDate
+
+
+class PatronMinor:
+
+    def __init__(self, patronMinorId, firstName, lastName, patronId):
+        self.patronMinorId = patronMinorId
+        self.firstName = firstName
+        self.lastName = lastName
+        self.patronId = patronId    
 
 class VisitHistoryLogItem:
 
     def __init__(self, id, patronId, patronFirstName, patronLastName, patronVisitDate, patronVisitTime):
-
         self.id = id    
         self.patronId = patronId
         self.patronFirstName = patronFirstName
         self.patronLastName = patronLastName
         self.patronVisitDate = patronVisitDate
         self.patronVisitTime = patronVisitTime
+
+
+def getRequestString(requestName):
+    try:
+        return str(request.form[requestName])
+    except:
+        return ""

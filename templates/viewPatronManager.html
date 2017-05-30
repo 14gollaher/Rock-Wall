@@ -17,7 +17,7 @@
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
                             <span class="widget-icon"> <i class="fa fa-users"></i> </span>
-                            <h2 style="line-height:15px"><strong>Patron General Information</strong></h2>
+                            <h2 style="line-height:15px"><strong> Patron General Information</strong></h2>
                         </header>
                         <div>
                             <div class="widget-body no-padding">
@@ -28,11 +28,17 @@
                                     <button class="btn btn-primary" style="margin-left:6px;" id="deleteButton">
                                         <i class="fa fa-times"></i> <span class="hidden-mobile">Delete Selected Patron</span>
                                     </button>
+                                    {% if session['currentUserAccountType'] == 'Master' %}
+                                    <button class="btn btn-primary" style="margin-left:6px;" id="deleteDatabaseButton">
+                                        <i class="fa fa-times"></i> <span class="hidden-mobile">Delete ALL patrons</span>
+                                    </button>
+                                    {% endif %}
                                 </div>
                                 <table id="datatable" class="display table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
                                             <th>ID</th>
+                                            <th>Account Type</th>
                                             <th>First Name</th>
                                             <th>Last Name</th>
                                             <th>Email</th>
@@ -43,15 +49,13 @@
                                             <th>Zip Code</th>
                                             <th>State</th>
                                             <th>ListServ</th>
-                                            {% if session['currentUserAccountType'] == 'Master' %}
-                                            <th>Waiver</th>
-                                            {% endif %}
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for row in patronTable %}
                                         <tr id="tr">
                                             <td>{{ row['id'] }}</td>
+                                            <td>{{ row['accountType'] }}</td>
                                             <td>{{ row['firstName'] }}</td>
                                             <td>{{ row['lastName'] }}</td>
                                             <td>{{ row['email'] }}</td>
@@ -66,9 +70,6 @@
                                             {% else %}
                                             <td>Yes</td>
                                             {% endif %}
-                                            {% if session['currentUserAccountType'] == 'Master' %}
-                                            <td><a style="padding-left:10px;" class="fa fa-pencil-square-o fa-2x" href="{{ row['waiver'] }}" onclick="window.open('{{ row['waiver'] }}', 'newwindow', 'width=750, height=650'); return false;"></a></td>
-                                            {% endif %}
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -76,6 +77,37 @@
                             </div>
                         </div>
                     </div>
+                    {% if session['currentUserAccountType'] == 'Master' %}
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-6" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-users"></i> </span>
+                            <h2 style="line-height:15px"><strong> Patron Waiver Information</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body no-padding">
+                                <table id="waiverDataTable" class="display table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Waiver Sign Date</th>
+                                            <th>Waiver</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in patronTable %}
+                                        <tr id="tr">
+                                            <td>{{ row['id'] }}</td>
+                                            <td>{{ row['waiverSignDate'] }}</td>
+                                            <td><a style="padding-left:10px;" class="fa fa-pencil-square-o fa-2x" href="{{ row['waiver'] }}" onclick="window.open('{{ row['waiver'] }}', 'newwindow', 'width=750, height=650'); return false;"></a></td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
                     <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-2" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
                         <header style="padding-top:10px">
                             <span class="widget-icon"> <i class="fa fa-users"></i> </span>
@@ -122,6 +154,34 @@
                                             {% endif %}
                                             <td> {{ row['leadClimbStartDate'] }} </td>
                                             <td>{{ row['leadClimbEndDate'] }} </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-deletebutton="false">
+                        <header style="padding-top:10px">
+                            <span class="widget-icon"> <i class="fa fa-users"></i> </span>
+                            <h2 style="line-height:15px"><strong>Rock Wall Minors</strong></h2>
+                        </header>
+                        <div>
+                            <div class="widget-body no-padding">
+                                <table id="patronMinorTable" class="display table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Guardian</th>
+                                            <th>First Name</th>
+                                            <th>Last Name</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for row in patronMinorTable %}
+                                        <tr id="tr">
+                                            <td>{{ row['patronId'] }}</td>
+                                            <td>{{ row['firstName'] }}</td>
+                                            <td>{{ row['lastName'] }}</td>
                                         </tr>
                                         {% endfor %}
                                     </tbody>
@@ -187,6 +247,12 @@
                             <div class="form-group">
                                 <label class="control-label">Patron ID</label>
                                 <input type="text" placeholder="Select a patron to edit..." class="form-control" id="selectedId" name="updatedId" readonly />
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Account Type</label>
+                                <input type="text" placeholder="First Name" required class="form-control" id="selectedAccountType" name="updatedAccountType" readonly />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -420,6 +486,7 @@
     var selectedId = "";
     var selectedFirstName = "";
     var selectedLastName = "";
+    var selectedAccountType = "";
     var selectedEmail = "";
     var selectedPhoneNumber = "";
     var selectedGender = "";
@@ -462,13 +529,14 @@
                    }
                 ],
                 "sSwfPath": "static/js/plugin/datatables/swf/copy_csv_xls_pdf.swf"
-            },
-            "autoWidth": true
+            }
         });
 
         var table = $('#datatable').DataTable();
         var table2 = $('#patronDatatable').DataTable();
         var table3 = $('#visitTable').DataTable();
+        var table4 = $('#patronMinorTable').DataTable();
+        var table5 = $('#waiverDataTable').DataTable();
 
         $('table.display tbody').on('click', 'tr', function () {
 
@@ -477,7 +545,6 @@
                 $(this).removeClass('rowSelect');
             }
             else {
-
                 table.$('tr.selected').removeClass('rowSelect');
                 table.$('tr.selected').removeClass('selected');
                 table2.$('tr.selected').removeClass('rowSelect');
@@ -486,6 +553,10 @@
                 $(this).addClass('rowSelect');
                 table3.$('tr.selected').removeClass('rowSelect');
                 table3.$('tr.selected').removeClass('selected');
+                table4.$('tr.selected').removeClass('rowSelect');
+                table4.$('tr.selected').removeClass('selected');
+                table5.$('tr.selected').removeClass('rowSelect');
+                table5.$('tr.selected').removeClass('selected');
             }
         });
 
@@ -499,22 +570,24 @@
                 });
             }
             else {
-
                 $("#editModal").modal()
+                debugger;
                 selectedRow = selectedRow[0].textContent.split("\n");
                 selectedId = selectedRow[1].trim(" ").replace(/^"(.*)"$/, '$1');
-                selectedFirstName = selectedRow[2].trim(" ");
-                selectedLastName = selectedRow[3].trim(" ");
-                selectedEmail = selectedRow[4].trim(" ");
-                selectedPhoneNumber = selectedRow[5].trim(" ");
-                selectedGender = selectedRow[6].trim(" ");
-                selectedAddress = selectedRow[7].trim(" ");
-                selectedCity = selectedRow[8].trim(" ");
-                selectedZipCode = selectedRow[9].trim(" ");
-                selectedState = selectedRow[10].trim(" ");
-                selectedListServ = selectedRow[12].trim(" ");
+                selectedAccountType = selectedRow[2].trim(" ");
+                selectedFirstName = selectedRow[3].trim(" ");
+                selectedLastName = selectedRow[4].trim(" ");
+                selectedEmail = selectedRow[5].trim(" ");
+                selectedPhoneNumber = selectedRow[6].trim(" ");
+                selectedGender = selectedRow[7].trim(" ");
+                selectedAddress = selectedRow[8].trim(" ");
+                selectedCity = selectedRow[9].trim(" ");
+                selectedZipCode = selectedRow[10].trim(" ");
+                selectedState = selectedRow[11].trim(" ");
+                selectedListServ = selectedRow[13].trim(" ");
 
                 document.getElementById("selectedId").value = selectedId;
+                document.getElementById("selectedAccountType").value = selectedAccountType;
                 document.getElementById("selectedFirstName").value = selectedFirstName;
                 document.getElementById("selectedLastName").value = selectedLastName;
                 document.getElementById("selectedEmail").value = selectedEmail;
@@ -625,6 +698,22 @@
             }
         });
 
+        $('#deleteDatabaseButton').click(function () {
+            $.confirm({
+                title: 'Are You Sure?',
+                content: 'Clicking yes will delete ALL <b>patrons, patron minors, and patron visit history</b> from the database. </br> It is advised to backup the database before committing!',
+                buttons: {
+                    confirm: function () {
+                        runDeleteAllPatronPython();
+                        location.reload();
+                    },
+                    cancel: function () {
+                    }
+                }
+            })
+        });
+
+
         $('#selectedIsSuspended').change(function () {
             if ($('#selectedIsSuspended')[0].value == 'Yes') {
 
@@ -635,7 +724,8 @@
                 $('#selectedSuspendedEndDate').addClass('disabled', false);
                 $('#selectedSuspendedEndDate').datepicker('enable');
                 $('#selectedSuspendedEndDate')[0].value = '';
-            } else {
+            }
+            else {
                 $('#selectedSuspendedStartDate').addClass('disabled', true);
                 $('#selectedSuspendedStartDate').datepicker('disable');
                 $('#selectedSuspendedStartDate')[0].value = '';
@@ -656,7 +746,8 @@
                 $('#selectedBelayEndDate').addClass('disabled', false);
                 $('#selectedBelayEndDate').datepicker('enable');
                 $('#selectedBelayEndDate')[0].value = '';
-            } else {
+            }
+            else {
                 $('#selectedBelayStartDate').addClass('disabled', true);
                 $('#selectedBelayStartDate').datepicker('disable');
                 $('#selectedBelayStartDate')[0].value = '';
@@ -736,6 +827,15 @@
             type: "POST",
             url: "/patronDelete",
             data: { id: aId },
+            async: false
+        });
+        return jqXHR.responseText;
+    }
+
+    function runDeleteAllPatronPython() {
+        var jqXHR = $.ajax({
+            type: "POST",
+            url: "/patronDeleteAll",
             async: false
         });
         return jqXHR.responseText;

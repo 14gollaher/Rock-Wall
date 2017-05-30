@@ -183,6 +183,7 @@ def patronSignUpRoute():
     return patronModule.patronSignUpRoute()
 
 @app.route('/patronCheckIn')
+@app.route('/patron')
 def patronCheckIn():
     logMessage('patronCheckIn')
     return patronModule.patronCheckIn()
@@ -310,6 +311,11 @@ def patronDelete():
     logMessage('patronDelete')
     return patronViewModule.patronDelete()
 
+@app.route('/patronDeleteAll', methods=['POST'])
+def patronDeleteAll():
+    logMessage('patronDeleteAll')
+    return patronViewModule.patronDeleteAll()
+
 #########################################################################
 ###                                                                   ###
 ###                          User View                                ###
@@ -351,7 +357,7 @@ def userDelete():
 def logMessage(log):
     currentTime = datetime.now(pytz.timezone('US/Central'))
 
-    with open("debugLog.txt", "a") as logFile:
+    with open("debugLog.txt", "a") as logFile:                         
         logFile.write(str(request.environ.get('HTTP_X_REAL_IP', request.remote_addr)) + ' - {:%Y-%m-%d %H:%M:%S}'.format(datetime.now(pytz.timezone('US/Central'))) + ': ' + str(log) + '\n')
 
 if __name__ == '__main__':
@@ -360,7 +366,7 @@ if __name__ == '__main__':
          PORT = int(environ.get('SERVER_PORT', '5555'))
      except ValueError:
          PORT = 5555
-     app.run(HOST, PORT,debug=True)
-
-#if __name__ == "__main__":
-#    app.run(debug=False,host='0.0.0.0', port=4000)
+     app.run(HOST, PORT, debug=True)
+ 
+if __name__ == "__main__":
+    app.run(debug=False, host='0.0.0.0', port=4000)

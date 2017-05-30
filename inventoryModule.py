@@ -13,71 +13,73 @@ from globals import *
 
 def inventory():
 
-    if not session.get('isLoggedIn'):
-        return redirect('login');
+	if not session.get('isLoggedIn'):
+		return redirect('login');
+	try:
+		inventoryTable = {}
+		inventoryTable['id'] = databaseFunctions.getAllInventoryIds()
+		inventoryTable['name'] = databaseFunctions.getAllInventoryNames()
+		inventoryTable['description'] = databaseFunctions.getAllInventoryDescriptions()
+		inventoryTable['purchaseDate'] = databaseFunctions.getAllInventoryPurchaseDates()
+		inventoryTable['retirementDate'] = databaseFunctions.getAllInventoryRetirementDates()
+		inventoryTable['checkOutStatus'] = databaseFunctions.getAllInventoryCheckOutStatuses()
+		inventoryTable = [dict(id=i, name=n, description=d, purchaseDate=p, retirementDate=r, checkOutStatus=s) for i, n, d, p, r, s in zip(inventoryTable['id'], inventoryTable['name'], inventoryTable['description'], inventoryTable['purchaseDate'], inventoryTable['retirementDate'], inventoryTable['checkOutStatus'])]
+	except:
+		inventoryTable = {}
 
-    inventoryTable = {}
-    inventoryTable['id'] = databaseFunctions.getAllInventoryIds()
-    inventoryTable['name'] = databaseFunctions.getAllInventoryNames()
-    inventoryTable['description'] = databaseFunctions.getAllInventoryDescriptions()
-    inventoryTable['purchaseDate'] = databaseFunctions.getAllInventoryPurchaseDates()
-    inventoryTable['retirementDate'] = databaseFunctions.getAllInventoryRetirementDates()
-    inventoryTable['checkOutStatus'] = databaseFunctions.getAllInventoryCheckOutStatuses()
-    inventoryTable = [dict(id=i, name=n, description=d, purchaseDate=p, retirementDate=r, checkOutStatus=s) for i, n, d, p, r, s in zip(inventoryTable['id'], inventoryTable['name'], inventoryTable['description'], inventoryTable['purchaseDate'], inventoryTable['retirementDate'], inventoryTable['checkOutStatus'])]
-    
-    return render_template('inventory.html', inventoryTable = inventoryTable)
+	return render_template('inventory.html', inventoryTable = inventoryTable)
 
 def addInventoryRoute():
 
-    if not session.get('isLoggedIn'):
-        return redirect('login')
+	if not session.get('isLoggedIn'):
+		return redirect('login')
 
-    newInventoryItem = InventoryItem(str(request.form['newId']), str(request.form['newName']), str(request.form['newDescription']), str(request.form['newPurchaseDate']), str(request.form['newRetirementDate']), False)
-    if not databaseFunctions.getInventoryItemId(newInventoryItem):
-        databaseFunctions.insertNewInventoryItem(newInventoryItem)
-    else: 
-        session['inventoryMessage'] = 'Item Id already exists!'
+	newInventoryItem = InventoryItem(str(request.form['newId']), str(request.form['newName']), str(request.form['newDescription']), str(request.form['newPurchaseDate']), str(request.form['newRetirementDate']), False)
+	if not databaseFunctions.getInventoryItemId(newInventoryItem):
+		databaseFunctions.insertNewInventoryItem(newInventoryItem)
+	else: 
+		session['inventoryMessage'] = 'Item Id already exists!'
 
-    return redirect('inventory')
+	return redirect('inventory')
 
 def editInventoryRoute():
 
-    if not session.get('isLoggedIn'):
-        return redirect('login')
+	if not session.get('isLoggedIn'):
+		return redirect('login')
 
-    if str(request.form['updatedCheckOutStatus']) == 'Yes':
-        newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedPurchaseDate']), str(request.form['updatedRetirementDate']), True)
-    else:
-        newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedPurchaseDate']), str(request.form['updatedRetirementDate']), False)
+	if str(request.form['updatedCheckOutStatus']) == 'Yes':
+		newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedPurchaseDate']), str(request.form['updatedRetirementDate']), True)
+	else:
+		newInventoryItem = InventoryItem(str(request.form['updatedId']), str(request.form['updatedName']), str(request.form['updatedDescription']), str(request.form['updatedPurchaseDate']), str(request.form['updatedRetirementDate']), False)
 
-    databaseFunctions.editInventoryItem(newInventoryItem)
-    return redirect('inventory')
+	databaseFunctions.editInventoryItem(newInventoryItem)
+	return redirect('inventory')
 
 def inventoryToggleCheckStatus():
 
-    if not session.get('isLoggedIn'):
-        return redirect('login')
+	if not session.get('isLoggedIn'):
+		return redirect('login')
 
-    if str(request.form['isCheckOut']) == 'Yes':
-        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", False)
-    else:
-        newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", True)
+	if str(request.form['isCheckOut']) == 'Yes':
+		newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", False)
+	else:
+		newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", True)
 
-    databaseFunctions.setInventoryCheckStatus(newInventoryItem)
-    return redirect('inventory')
+	databaseFunctions.setInventoryCheckStatus(newInventoryItem)
+	return redirect('inventory')
 
 def inventoryDelete():
 
-    if not session.get('isLoggedIn'):
-        return redirect('login')
+	if not session.get('isLoggedIn'):
+		return redirect('login')
 
-    newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", False)
-    newInventoryItem.id = newInventoryItem.id.strip('"')
-    databaseFunctions.deleteInventoryItem(newInventoryItem)
+	newInventoryItem = InventoryItem(str(request.form['id']), "", "", "", "", False)
+	newInventoryItem.id = newInventoryItem.id.strip('"')
+	databaseFunctions.deleteInventoryItem(newInventoryItem)
 
-    return redirect('inventory')
+	return redirect('inventory')
 
 def inventoryMessageClear():  
   
-    session['inventoryMessage'] = "";
-    return ('Badda bing badda boo', 204)
+	session['inventoryMessage'] = "";
+	return ('Badda bing badda boo', 204)

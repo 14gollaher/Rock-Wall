@@ -14,7 +14,7 @@
                     <ction>
                         <label class="input">
                             <i class="icon-append fa fa-info"></i>
-                            <input type="number" name="patronId" id="patronId" min="0" placeholder="Student or Wellness Center ID">
+                            <input name="patronId" id="patronId" min="0" placeholder="E-Mail or ID">
                             <b class="tooltip tooltip-bottom-right">Needed to verify your account</b>
                         </label>
                         <p id="messageBag" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
@@ -45,12 +45,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        {% if id != "Guest" %}
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">ID</label>
                                 <input type="number" placeholder="Select a item to edit..." class="form-control" id="id" name="patronId2" value={{id}} readonly />
                             </div>
                         </div>
+                        {% endif %}
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">First Name</label>
@@ -72,19 +74,19 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Telephone Number</label>
-                                <input type='tel' data-mask="(999) 999-9999" id="phoneNumber" required class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
+                                <input type='tel' data-mask="(999) 999-9999" id="phoneNumber" class="form-control" placeholder="Phone Number" name="phoneNumber" value="{{phoneNumber}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Address</label>
-                                <input type="text" id="address" required class="form-control" placeholder="Address" name="address" value="{{address}}" />
+                                <input type="text" id="address" class="form-control" placeholder="Address" name="address" value="{{address}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">City</label>
-                                <input type="text" id="city" required class="form-control" placeholder="City" name="city" value="{{city}}" />
+                                <input type="text" id="city" class="form-control" placeholder="City" name="city" value="{{city}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -162,7 +164,7 @@
                         <div class="col-md-12">
                             <div class="form-group">
                                 <label class="control-label">Zip Code</label>
-                                <input type="text" id="zipCode" required class="form-control" placeholder="Zip Code" name="zipCode" value="{{zipCode}}" />
+                                <input type="text" id="zipCode" class="form-control" placeholder="Zip Code" name="zipCode" value="{{zipCode}}" />
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -187,9 +189,9 @@
                                 </select>
                             </section>
                         </div>
-
                         <div class="modal-footer">
                             <div style="padding-top: 15px;">
+                                <a class="btn btn-primary" href="signWaiver" style="margin-top: 20px; margin-right:125px; width:300px">Sign for Minors</a>
                                 <button type="submit" class="btn btn-primary" id="finalCheckIn" style="margin-top: 20px; margin-right:125px; width:300px">
                                     Continue to Check In
                                 </button>
@@ -205,19 +207,8 @@
 
 <script type="text/javascript">
 
-    var number = document.getElementById('patronId');
-
-    number.onkeydown = function (e) {
-        if (!((e.keyCode > 95 && e.keyCode < 106)
-          || (e.keyCode > 47 && e.keyCode < 58)
-          || e.keyCode == 8)) {
-            return false;
-        }
-    }
-
     window.onload = function(){
-
-        var prePass2 = {{pass2|tojson}}
+        var prePass2 = {{pass2|tojson}};
         var pass2 = JSON.parse(prePass2);
         if (pass2[0] == 'T')
         {
@@ -251,21 +242,6 @@
                     required: true,
                     email: true
                 },
-                phoneNumber: {
-                    required: true
-                },
-                address: {
-                    required: true
-                },
-                state: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                zipCode: {
-                    required: true
-                },
                 gender: {
                     required: true
                 },
@@ -286,21 +262,6 @@
                 email: {
                     required: 'Please enter your email address',
                     email: 'Please enter a VALID email address'
-                },
-                phoneNumber: {
-                    tel: 'Please enter a valid phone number'
-                },
-                address: {
-                    required: 'Please enter your address'
-                },
-                state: {
-                    required: 'Please enter the state that you live in'
-                },
-                city: {
-                    required: 'Please enter the city that you live in'
-                },
-                zipCode: {
-                    required: 'Please enter your zip code'
                 },
                 gender: {
                     required: 'Please enter your gender'

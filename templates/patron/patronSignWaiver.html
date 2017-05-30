@@ -6,17 +6,32 @@
 <div id="content" class="container" style="padding-top: 100px;">
     <div class="col-md-8">
         <div class="well no-padding">
-            <form action="createPatronAccountRoute" method="post" id="form-createAccount" class="smart-form client-form sigPad" style="width: 100%">
+            <form action="signWaiverRoute" method="post" id="form-createAccount" class="smart-form client-form sigPad" style="width: 100%">
                 <header style="background-color: yellow; color: gray; font-size: 25px;" align="center">
                     Waiver
                 </header>
                 <fieldset>
                     <div>
-                        <img src="static/img/waiverImages/waiver.png" alt="Waiver" style="width:100%;height:auto;">
+                        <img src="static/img/waiverImages/waiver.png" alt="Waiver" style="width:100%; height:auto;">
                     </div>
                     <div>
-                        <p id="messageBag" style="color: #ffd100; font-weight: bold; font-size: 16px; padding-top: 5px;"></p>
-                        <div id="signature-pad" class="m-signature-pad" style="width: 100%; height:120px; left: 0%; margin-left: 0px;">
+                        <footer>
+                            <div id="minorList">
+                                <input id="addMinors" type="button" class="btn btn-primary patronButton" value="Add Consent for Minor" style="margin-left: 234px; margin-right: auto; float:none; width:200px" />
+                            </div>
+                        </footer>
+                    </div>
+                    <div>
+                        <section>
+                            <br /><br />
+                            <h3>
+                                <label class="control-label">
+                                    <input type="checkbox" name="agreeVerify" id="agreeVerify" value="True">
+                                    I agree to the Terms & Conditions
+                                </label>
+                            </h3>
+                        </section>
+                        <div id="signature-pad" class="m-signature-pad" style="width: 100%; height:120px; left: 0%; margin-left: 0px; margin-top: 0px;">
                             <div class="m-signature-pad--body">
                                 <canvas></canvas>
                             </div>
@@ -28,27 +43,29 @@
                     </div>
                 </fieldset>
                 <footer>
-                    <button id="createAccountButton" type="submit" class="btn btn-primary patronButton" style="float: left">
-                        Create Account
+                    <button id="createAccountButton" name="createAccountButton" type="submit" class="btn btn-primary patronButton" style="float: left">
+                        I Agree
                     </button>
                     <a href="patronCheckIn">
                         <input type="button" class="btn btn-primary patronButton" value="Back to Check In" style="float: right" />
                     </a>
                 </footer>
-
-                <div class="message">
-                    <i class="fa fa-check"></i>
-                    <p>
-                        Thank you for your registration!
-                    </p>
-                </div>
             </form>
         </div>
     </div>
 </div>
 
-
 <script type="text/javascript">
+
+    var minorsAddedCount = 0;
+    $("#addMinors").on("click", function () {
+        if (minorsAddedCount != 0) {
+            $('#minorList').before(" <hr style=\"height:3px;border:none; background-color: yellow; margin-bottom: 10px;\">");
+        }
+        $('#minorList').before(" <section style=\"margin-left: 180px; width: 300px; \";>First Name <label class=\"input control-label\"> <i class=\"icon-append fa fa-user\"></i><input name=\"minorFirstName" + minorsAddedCount + "\" placeholder=\"Minor's First Name\"><b class=\"tooltip tooltip-bottom-right\">Please enter your first name</b></label></section>");
+        $('#minorList').before(" <section style=\"margin-left: 180px; width: 300px; \";>Last Name <label class=\"input control-label\"> <i class=\"icon-append fa fa-user\"></i><input name=\"minorLastName" + minorsAddedCount + "\" placeholder=\"Minor's Last Name\"><b class=\"tooltip tooltip-bottom-right\">Please enter your last name</b></label></section>");
+        minorsAddedCount++;
+    });
 
     var wrapper = document.getElementById("signature-pad"),
     clearButton = wrapper.querySelector("[data-action=clear]"),
@@ -72,7 +89,7 @@
 
     $('#clearButton').click(function () {
         signaturePad.clear();
-    })
+    });
 
     $('#createAccountButton').click(function () {
         let data = signaturePad.toDataURL();
@@ -85,11 +102,17 @@
         return jqXHR.responseText;
     });
 
+    $("#createAccountButton").prop("disabled", true);
 
     $('#form-createAccount').click(function () {
         if (!signaturePad.isEmpty()) {
-            $('#createAccountButton').prop('disabled', false);
-        } 
+            if ($("#agreeVerify").prop("checked")) {
+                $("#createAccountButton").prop("disabled", false);
+            }
+            else {
+                $("#createAccountButton").prop("disabled", true);
+            }
+        }
     });
 
     $(function () {
@@ -124,12 +147,12 @@
                 }
             },
 
-
             errorPlacement: function (error, element) {
                 error.insertAfter(element.parent());
             }
         });
     });
+
 </script>
 
 {% endblock %}
