@@ -1,3 +1,25 @@
+<h3>
+Web application for South Dakota State University - Junior Software Engineering Course.
+</h3>
+
+<h4>
+Developed by: Matthew Gollaher, Kyle Paxton, and Abu Daud Talukder
+
+
+The application was built for the University Wellness Center Climbing Wall. The application features login, inventory management, patron management, user management, chat, calendar and reservations, a patron tablet signature usage. The web application not only fulfilled the requirements, but was the winning and chosen project across three different Junior, Senior, and Graduate level software engineering classes - all implementing this project. The application uses the following:
+
+Python
+Flask
+HTML
+Bootstrap
+CSS
+Javascript
+jQuery
+
+This project was my head-first introduction into one of my favorite things today, web development. There are numerous things I'd do differently with this project if I was starting over, and there are numerous problems and room for refactoring within this application. While it's on my to-do list to refactor some of this project, it's fun to look back at something I developed only months ago and say "wow, I could have done a much better job with this." 
+
+<hr/>
+
 The system includes two independent environments, one desktop environment and one tablet environment. An online
 URL is provided for convenience of demonstration purposes, but it should be noted that Internet is NOT necessary
 to use the application in production. 
@@ -6,7 +28,11 @@ While the application is accessible (but not tested) on other operating systems 
 walktrough the database backup process on a Windows 10 OS - though the instructions will be similar, if not identical,
 to a Windows 7 or 8 OS.
 
-=====================================================================================================================================
+<hr/>
+
+Below are instructions to utilize this application. The example urls given are www.matthewgollaher.com where I am as of time writing this, hosting the web application. Feel free to break this of course! If yuo're just perusing, you can skip to to #6 in DESKTOP ENVIRONMENT and #3 in TABLET ENVIRONMENT
+
+<hr/>
 
 DESKTOP ENVIRONMENT: 
 
@@ -28,7 +54,7 @@ DESKTOP ENVIRONMENT:
 5. The system is best viewed in full screen mode. Failure to utilize full screen mode may result incorrectly rendered browser content.
         a) To activate full-screen mode, from Chrome click "F11".
 
-6. To access the desktop system, proceed to the URL: "www.matthewgollaher.com"
+6. To access the desktop system, proceed to given URL "www.matthewgollaher.com"
 
 7. There are 3 tiers of access - Employee, Master, and Administration. Three different accounts are setup for the system demonstration:
 	a) Employee:
@@ -43,7 +69,7 @@ DESKTOP ENVIRONMENT:
 
 8. The desktop system is now fully accessible.
 
-=====================================================================================================================================
+<hr/>
 
 TABLET ENVIRONMENT: 
 
@@ -54,13 +80,13 @@ TABLET ENVIRONMENT:
 2. As the system is used by multiple patrons, incognito or private browsing is suggested to avoid caching and security issues between patrons.
 	a) Activate private browsing within your mobile browser application's settings.
 
-3. To access the patron's tablet system, proceed to the URL on a supported tablet: "www.matthewgollaher.com/patronCheckIn."
+3. To access the patron's tablet system, proceed to the patron URL on a supported tablet: "www.matthewgollaher.com/patronCheckIn."
 
 4. It is suggested to first create a patron account to be best exercise the patron functionalities. 
 
 5. The desktop system is now fully accessible.
 
-=====================================================================================================================================
+<hr/>
 
 BACKING UP THE DATABASE:
 
