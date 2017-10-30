@@ -6,15 +6,7 @@ Web application for South Dakota State University - Junior Software Engineering 
 Developed by: Matthew Gollaher, Kyle Paxton, and Abu Daud Talukder
 </h4>
 
-The application was built for the University Wellness Center Climbing Wall. The application features login, inventory management, patron management, user management, chat, calendar and reservations, a patron tablet signature usage. The web application not only fulfilled the requirements, but was the winning and chosen project across three different Junior, Senior, and Graduate level software engineering classes - all implementing this project. The application uses the following:
-
-Python
-Flask
-HTML
-Bootstrap
-CSS
-Javascript
-jQuery
+The application was built for the University Wellness Center Climbing Wall. The application features login, inventory management, patron management, user management, chat, calendar and reservations, a patron tablet signature usage. The web application not only fulfilled the requirements, but was the winning and chosen project across three different Junior, Senior, and Graduate level software engineering classes - all implementing this project. The application uses: Python, Flask, HTML, Bootstrap, CSS, Javascript, and jQuery
 
 This project was my head-first introduction into one of my favorite things today, web development. There are numerous things I'd do differently with this project if I was starting over, and there are numerous problems and room for refactoring within this application. While it's on my to-do list to refactor some of this project, it's fun to look back at something I developed only months ago and say "wow, I could have done a much better job with this." 
 
