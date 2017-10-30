@@ -4,7 +4,7 @@ Web application for South Dakota State University - Junior Software Engineering 
 
 <h4>
 Developed by: Matthew Gollaher, Kyle Paxton, and Abu Daud Talukder
-
+</h4>
 
 The application was built for the University Wellness Center Climbing Wall. The application features login, inventory management, patron management, user management, chat, calendar and reservations, a patron tablet signature usage. The web application not only fulfilled the requirements, but was the winning and chosen project across three different Junior, Senior, and Graduate level software engineering classes - all implementing this project. The application uses the following:
 
@@ -18,6 +18,8 @@ jQuery
 
 This project was my head-first introduction into one of my favorite things today, web development. There are numerous things I'd do differently with this project if I was starting over, and there are numerous problems and room for refactoring within this application. While it's on my to-do list to refactor some of this project, it's fun to look back at something I developed only months ago and say "wow, I could have done a much better job with this." 
 
+Below are instructions to utilize this application. The example urls given are www.matthewgollaher.com where I am as of time writing this, hosting the web application. Feel free to break this of course! If yuo're just perusing, you can skip to to #6 in DESKTOP ENVIRONMENT and #3 in TABLET ENVIRONMENT
+
 <hr/>
 
 The system includes two independent environments, one desktop environment and one tablet environment. An online
@@ -28,11 +30,6 @@ While the application is accessible (but not tested) on other operating systems 
 walktrough the database backup process on a Windows 10 OS - though the instructions will be similar, if not identical,
 to a Windows 7 or 8 OS.
 
-<hr/>
-
-Below are instructions to utilize this application. The example urls given are www.matthewgollaher.com where I am as of time writing this, hosting the web application. Feel free to break this of course! If yuo're just perusing, you can skip to to #6 in DESKTOP ENVIRONMENT and #3 in TABLET ENVIRONMENT
-
-<hr/>
 
 DESKTOP ENVIRONMENT: 
 
@@ -69,8 +66,6 @@ DESKTOP ENVIRONMENT:
 
 8. The desktop system is now fully accessible.
 
-<hr/>
-
 TABLET ENVIRONMENT: 
 
 1. The tablet system must be used in Chrome, as other browsers do not have support for some features of the system and some elements are 
@@ -86,7 +81,6 @@ TABLET ENVIRONMENT:
 
 5. The desktop system is now fully accessible.
 
-<hr/>
 
 BACKING UP THE DATABASE:
 
